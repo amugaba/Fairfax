@@ -1,0 +1,13 @@
+.fatlink {
+    background: #97d9b3;
+
+    margin: 5px;
+    padding: 10px;
+}
+
+.borderarea {
+    border-style: solid;
+    border-width: medium;
+    border-color: #1f2746;
+    padding: 10px;
+}
