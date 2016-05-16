@@ -11,3 +11,13 @@
     border-color: #1f2746;
     padding: 10px;
 }
+
+div.bordergrey {
+    border: 1px solid #CCC;
+    padding: 10px;
+    margin: 5px;
+}
+
+.accordion div {
+   padding: 0px 10px;
+}

@@ -6,8 +6,8 @@
  * importing header and footer.
  */
 //include "conn/UserVO.php";//to store the User object properly
-define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] ."/TestSite/");
-define("HTTP_ROOT", "http://".$_SERVER['HTTP_HOST'] ."/TestSite/");
+define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] ."/fairfax/");
+define("HTTP_ROOT", "http://".$_SERVER['HTTP_HOST'] ."/fairfax/");
 define("PAGE_TITLE", "Fairfax Survey");
 
 session_save_path(ROOT_PATH."session");

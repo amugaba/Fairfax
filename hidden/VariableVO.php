@@ -4,6 +4,8 @@ class VariableVO
 	public $autoid;
 	public $code;
 	public $question;
+	public $summary;
+	public $category;
     public $answers;
 	
 	public function __construct()

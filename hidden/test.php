@@ -9,10 +9,13 @@ require_once 'DataService.php';
 
 $ds = new DataService();
 
-$data = $ds->getData('I1');
+//$data = $ds->getDataCutoff('I2',2,2,0,'race');
+//var_dump($data);
+
+$data = $ds->getData('B24', 'B13');
 var_dump($data);
 
-$labels = $ds->getLabels(2);
+$labels = $ds->getLabels('B24');
 var_dump($labels);
 
 //construct new data array using labels
