@@ -20,4 +20,46 @@ div.bordergrey {
 
 .accordion div {
    padding: 0px 10px;
+    font-size: 11pt;
+}
+
+.accordion ul {
+    margin: 0;
+    padding: 0;
+}
+
+.filterbox label {
+    width: 100px;
+    text-align: right;
+    padding-right: 20px;
+}
+
+.filterbox select {
+    width: 100px;
+}
+
+.testcolors {
+    color: #7cc27c;
+    color: #70a1c2;
+    color: #d4d257;
+    color: #ddaf45;
+    color: #c26751;
+    color: #c273bf;
+    color: #c29e88;
+    color: #567ac2;
+}
+
+table.datatable {
+    border: 1px solid black;
+}
+.datatable th {
+    border: 1px solid black;
+    padding: 5px;
+    background-color:grey;
+    color: white;
+    text-align:right;
+}
+.datatable td {
+    border: 1px solid black;
+    padding: 5px;
 }

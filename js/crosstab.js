@@ -3,13 +3,17 @@
  */
 "use strict";
 var questions = [];
-var chart;
+var chart, mainCode = null, groupCode = null;
+//var fillColors = ["#70a1c2","#ddaf45","#c273bf","#d4d257","#7cc27c","#c25844","#c29e88","#567ac2"];
+var fillColors = ["#70a1c2","#7cc27c","#d4d257","#ddaf45","#c26751","#c273bf","#c29e88","#567ac2"];
 
-function init(qs) {
+function init(qs, main, group) {
     questions = qs;
+    mainCode = main;
+    groupCode = group;
 }
 
-function createPercentChart(chartData, groups) {
+function createPercentChart(chartData, groups, mainTitle, groupTitle) {
     AmCharts.ready(function () {
         // SERIAL CHART
         chart = new AmCharts.AmSerialChart();
@@ -29,7 +33,7 @@ function createPercentChart(chartData, groups) {
         categoryAxis.gridPosition = "start";
         categoryAxis.gridAlpha = 0.1;
         categoryAxis.axisAlpha = 0;
-        //categoryAxis.title = "Response";
+        categoryAxis.title = mainTitle;
 
         // Value
         var valueAxis = new AmCharts.ValueAxis();
@@ -71,6 +75,7 @@ function createPercentChart(chartData, groups) {
         // LEGEND
         var legend = new AmCharts.AmLegend();
         legend.position = "top";
+        legend.title = groupTitle;
         chart.addLegend(legend);
 
         chart.creditsPosition = "top-right";
@@ -83,22 +88,21 @@ function createSubGraph(title,field,num) {
     graph1.type = "column";
     graph1.title = title;
     graph1.valueField = field;
-    graph1.balloonText = "[[value]]%";
+    graph1.balloonText = "[[value]]% of "+title;
     graph1.lineAlpha = 0;
-    if(num==1)
-        graph1.fillColors = "#e7dc8e";
-    else if(num==2)
-        graph1.fillColors = "#e7b88e";
-    else
-        graph1.fillColors = "#e78ea2";
+        graph1.fillColors = fillColors[num];
     graph1.fillAlphas = 1;
     return graph1;
 }
 
-function createVariablesByCategory(div,category) {
-    var list = $("<ul></ul>").appendTo(div);
+function createVariablesByCategory(div1,div2,category) {
+    var list1 = $("<ul></ul>").appendTo(div1);
+    var list2 = $("<ul></ul>").appendTo(div2);
+
     for(var i=0; i<questions.length; i++) {
-        if(questions[i].category == category)
-            $("<li></li>").appendTo(list).append("<a href='graphs.php?q1="+questions[i].code+"'>"+questions[i].summary+"</a>");
+        if(questions[i].category == category) {
+            $("<li></li>").appendTo(list1).append("<a href='graphs.php?q1="+questions[i].code+"'>"+questions[i].summary+"</a>");
+            $("<li></li>").appendTo(list2).append("<a href='graphs.php?q1="+mainCode+"&grp="+questions[i].code+"'>"+questions[i].summary+"</a>");
+        }
     }
 }

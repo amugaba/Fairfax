@@ -9,96 +9,65 @@ $isGrouped = $grp != 'none';
 
 $variables = $ds->getVariables();
 $newdata = [];
-$mainTitle = "";
-$groupTitle = "";
+$mainVar = null;
+$groupVar = null;
 
 //check that codes for the main variable and the grouping variable are valid
-$mainvalid = false;
-$groupvalid = !$isGrouped;
 foreach($variables as $var) {
     if($var->code == $q1) {
-        $mainvalid = true;
-        $mainTitle = $var->question;
+        $mainVar = $var;
     }
     if($var->code == $grp) {
-        $groupvalid = true;
-        $groupTitle = $var->question;
+        $groupVar = $var;
     }
 }
 
-if($mainvalid && $groupvalid) {
+if($mainVar != null && ($groupVar != null || !$isGrouped))
+{
     $labels = $ds->getLabels($q1);
-    if($isGrouped)
+    $labels[] = 'No Response';
+
+    if($isGrouped) {
         $grouplabels = $ds->getLabels($grp);
+    }
     else
         $grouplabels = ['Total'];
 
-    $data = $ds->getData($q1, $grp);
-    $newdata = [];
+    $rawCounts = $ds->getData($q1, $grp);
+    $totals = $ds->getGroupTotals($grp);
+    $rawPercents = $ds->converToPercents($rawCounts,$totals,$isGrouped);
+
+    $finalPercents = [];
+    $finalCounts = [];
 
     //For each answer to the main question, create a new object
     //with a label and a value for each answer to the grouping question.
-    //e.g. [ ['answer' => label1, 'v1' => num1-1, 'v2' => num1-2, ... ],
-    //       ['answer' => label2, 'v1' => num2-1, 'v2' => num2-2, ... ], ... ]
-    //num1-2 = number of students who chose 1st answer to main question and chose 2nd answer to grouping question
-    for($i=1; $i<=count($labels); $i++)
+    for($i=0; $i<count($labels); $i++)
     {
-        $label = $labels[$i-1];
-
-        //find this label in the data
-        $index = 0;
-        for($j=0; $j<count($data); $j++)
-            if($data[$j]['answer'] == $i) {
-                $index = $j;
-                break;
-            }
-
-
-        $obj = ['answer' => $label];
+        $obj1 = ['answer' => $labels[$i]];
+        $obj2 = ['answer' => $labels[$i]];
 
         //insert values into object
-        for($j=0; $j<count($grouplabels); $j++) {
-            $obj['v'.$j] = $data[$index+$j]['num'] * 100;
+        for($j=0; $j<count($grouplabels); $j++)
+        {
+            $answer = $labels[$i] == 'No Response' ? null : $i+1;
+            $group = $grouplabels[$j] == 'No Response' ? null : $j+1;
+
+            $num = $ds->findData($rawPercents,$answer,$group,$isGrouped);
+            $obj1['v'.$j] = $num * 100;
+
+            $num = $ds->findData($rawCounts,$answer,$group,$isGrouped);
+            $obj2['v'.$j] = $num;
         }
 
-
-        $newdata[] = $obj;
-
-        /*if($grp == 'I2') {
-            $newdata[] = ['answer' => $label, 'grade8' => $data[$j]['num'] * 100, 'grade10' => $data[$j+1]['num'] * 100, 'grade12' => $data[$j+2]['num'] * 100];
-        }
-        else if($grp == 'I3') {
-            //$newdata[] = ['answer' => $label, 'female' => $data[$j+1]['num'] * 100, 'male' => $data[$j+2]['num'] * 100, 'unknown' => $data[$j]['num'] * 100];
-            $newdata[] = ['answer' => $label, 'female' => $data[$j]['num'] * 100, 'male' => $data[$j+1]['num'] * 100];
-        }
-        else if($grp == 'race') {
-            $newdata[] = ['answer' => $label, 'white' => $data[$j]['num'] * 100, 'nonwhite' => $data[$j+1]['num'] * 100];
-        }
-        else {
-            $newdata[] = ['answer'=>$label, 'total'=>$data[$j]['num']*100];
-        }*/
+        $finalPercents[] = $obj1;
+        $finalCounts[] = $obj2;
     }
-
-    //add No response if there are any null values
-    /*if($data[0]['answer'] == null) {
-        if($grp == 'I2') {
-            $newdata[] = ['answer' =>'No Response', 'grade8' => $data[0]['num'] * 100, 'grade10' => $data[1]['num'] * 100, 'grade12' => $data[2]['num'] * 100];
-        }
-        else if($grp == 'I3') {
-            //$newdata[] = ['answer' =>'No Response', 'female' => $data[1]['num'] * 100, 'male' => $data[2]['num'] * 100, 'unknown' => $data[0]['num'] * 100];
-            $newdata[] = ['answer' =>'No Response', 'female' => $data[0]['num'] * 100, 'male' => $data[1]['num'] * 100];
-        }
-        else if($grp == 'race') {
-            $newdata[] = ['answer' =>'No Response', 'white' => $data[0]['num'] * 100, 'nonwhite' => $data[1]['num'] * 100];
-        }
-        else {
-            $newdata[] = ['answer'=>'No Response', 'total'=>$data[0]['num']*100];
-        }
-    }*/
-
 }
-//var_dump($newdata);
+//height is (labels*(labels+spacing)*bar height + header height
+$graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,67 +81,168 @@ if($mainvalid && $groupvalid) {
     <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css'>
     <script>
         $(function() {
-            init(<?php echo json_encode($variables); ?>);
-            createPercentChart(<?php echo json_encode($newdata); ?>, <?php echo json_encode($grouplabels); ?>);
+            init(<?php echo json_encode($variables); ?>, <?php echo json_encode($q1); ?>, <?php echo json_encode($grp); ?>);
+            createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,
+                <?php echo json_encode($mainVar->summary); ?>, <?php echo json_encode($groupVar->summary); ?>);
 
-            createVariablesByCategory($("#alcohol"),1);
-            createVariablesByCategory($("#bullying"),2);
-            createVariablesByCategory($("#sexual"),3);
-            //createVariablesByCategory($("#schoolacts"),'C');
+            createVariablesByCategory($("#demo1"),$("#demo2"),99);
+            createVariablesByCategory($("#alcohol1"),$("#alcohol2"),1);
+            createVariablesByCategory($("#drugs1"),$("#drugs2"),5);
+            createVariablesByCategory($("#bullying1"),$("#bullying2"),2);
+            createVariablesByCategory($("#sexual1"),$("#sexual2"),3);
+            createVariablesByCategory($("#school1"),$("#school2"),4);
 
-            $( "#accordion" ).accordion({
+            $( "#accordion1" ).accordion({
+                collapsible: true,
+                active: false,
+                heightStyle: "content"
+            });
+            $( "#accordion2" ).accordion({
+                collapsible: true,
+                active: false,
+                heightStyle: "content"
+            });
+            $( "#interpret" ).accordion({
                 collapsible: true,
                 active: false,
                 heightStyle: "content"
             });
 
-            $('#grouping :input[value=<?php echo $grp;?>]').prop("checked",true);
-            $('#grouping').buttonset();
-            $('#grouping :input').click(function() {
-                window.location = "graphs.php?q1=<?php echo $q1;?>&grp="+this.value;
+            $("#btnExport").click(function (e) {
+                window.open('data:application/vnd.ms-excel,' + $('#datatable').html().replace(/ /g, '%20'));
+                e.preventDefault();
             });
+
+
         });
+        var tableToExcel = (function () {
+            var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+                , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+                , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+            return function (table, name, filename) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+                document.getElementById("dlink").href = uri + base64(format(template, ctx));
+                document.getElementById("dlink").download = filename;
+                document.getElementById("dlink").click();
+
+            }
+        })();
     </script>
 </head>
 <body>
 <?php include_header(); ?>
-<div class="container">
-    <div class="h2" style="margin: 0 auto;">Graphs by Category</div>
+<div class="container" style="width:90%;">
     <div class="row">
-        <div class="col-md-12">
-            Click on a category to show all questions in that category.<br>
-            Select a question to view data.<br>
-            You may select a second question to crosstabulate with the first.
-            <div id="accordion">
-                <h3>Alcohol</h3>
-                <div id="alcohol"></div>
-
-                <h3>Bullying</h3>
-                <div id="bullying"> </div>
-
-                <h3>Sex and Relationships</h3>
-                <div id="sexual"> </div>
-
-                <h3>School Activities</h3>
-                <div id="schoolacts"></div>
+        <div class="col-md-3">
+            <div class="h4">1. Select a Question</div>
+            <div id="accordion1" class="accordion">
+                <h3>Demographics</h3><div id="demo1"></div>
+                <h3>Alcohol</h3><div id="alcohol1"></div>
+                <h3>Drugs</h3><div id="drugs1"></div>
+                <h3>Bullying</h3><div id="bullying1"> </div>
+                <h3>Sex and Relationships</h3><div id="sexual1"></div>
+                <h3>School and Work</h3><div id="school1"></div>
             </div>
 
-            <input type="button" value="Start Over" onclick="window.location='graphs.php'">
-            <div id="grouping" class="bordergrey" style="width:500px; margin: 0 auto">
-                <label class="searchLabel">Group data by:</label>
-                <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
-                <input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label>
-                <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
-                <input id="race" name="grouping" type="radio" value="race"/><label for="race">Race</label>
+            <div class="h4">2. (Optional) Compare to Another Question</div>
+            <div id="accordion2" class="accordion">
+                <h3>Demographics</h3><div id="demo2"></div>
+                <h3>Alcohol</h3><div id="alcohol2"></div>
+                <h3>Drugs</h3><div id="drugs2"></div>
+                <h3>Bullying</h3><div id="bullying2"> </div>
+                <h3>Sex and Relationships</h3><div id="sexual2"></div>
+                <h3>School and Work</h3><div id="school2"></div>
             </div>
 
-            <div style="text-align: center; font-weight:bold; font-size:14pt;">
-                <?php echo $mainTitle;
-                if($isGrouped) {
-                    echo "<br><span style='font-weight: normal; font-style: italic;'>separated by</span><br>$groupTitle";
+            <div class="h4">3. (Optional) Filter Results by...</div>
+            <div class="bordergrey filterbox">
+                <label for="filteryear">Year: </label>
+                <select id="filteryear">
+                    <option value="all">All</option>
+                    <option value="2015">2015</option>
+                </select><br>
+                <label for="filtergrade">Grade: </label>
+                <select id="filtergrade">
+                    <option value="all">All</option>
+                    <option value="1">8th</option>
+                    <option value="2">10th</option>
+                    <option value="3">12th</option>
+                </select>
+                <label for="filtergrade">Gender: </label>
+                <select id="filtergender">
+                    <option value="all">All</option>
+                    <option value="1">8th</option>
+                    <option value="2">10th</option>
+                    <option value="3">12th</option>
+                </select>
+            </div>
+            <div id="accordion2" class="accordion">
+
+                <h3>Alcohol</h3><div id="alcohol2"></div>
+                <h3>Drugs</h3><div id="drugs2"></div>
+                <h3>Bullying</h3><div id="bullying2"> </div>
+                <h3>Sex and Relationships</h3><div id="sexual2"></div>
+                <h3>School and Work</h3><div id="school2"></div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div style="text-align: center;">
+                <h4><?php echo $mainVar->question;?></h4>
+                <?php if($isGrouped) {
+                    echo "<span style='font-style: italic;'>compared to</span>";
                 }?>
+                <h4><?php echo $groupVar->question;?></h4>
             </div>
-            <div id="chartdiv" style="width100%; height:600px;"></div>
+
+
+            <?php if($isGrouped) { ?>
+            <div id="interpret" class="accordion" style="width: 70%; margin: 0 auto; padding: 10px 0;">
+                <h3>How to interpret this graph</h3>
+                <div style="font-size:10pt">
+                    <p>Out of all of the students who answered <b><?php echo $grouplabels[0];?></b> to <b><?php echo $groupVar->summary;?></b>, the <span style="color: #70a1c2; font-weight: bold">blue bar</span> shows what percentage choose each answer to <b><?php echo $mainVar->summary;?></b>.</p>
+                    <p>For example, out of all of the students who answered <?php echo $grouplabels[0];?> to <?php echo $groupVar->summary;?>, <?php echo number_format($finalPercents[0]['v0'],1);?>% of them answered <?php echo $labels[0];?> to <?php echo $mainVar->summary;?>, and <?php echo number_format($finalPercents[1]['v0'],1);?>% of them answered <?php echo $labels[1];?>.</p>
+                    <p>Each color's bars should add up to 100%.</p>
+                </div>
+            </div>
+            <?php } ?>
+
+            <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
+
+            <div style="text-align: center;"><h4>Cross-tabulated Frequencies</h4>
+            <table id="datatable" class="datatable" style="margin: 0 auto;">
+                <tr>
+                    <th rowspan="<?php echo count($labels)+2;?>" style="width: 80px;"><?php echo $mainVar->summary;?></th>
+                    <?php if($isGrouped) { ?><th colspan="<?php echo count($grouplabels)+1;?>"><?php echo $groupVar->summary;?></th><?php }?>
+                </tr>
+                <tr>
+                    <th></th>
+                    <?php foreach($grouplabels as $label) {
+                        echo "<th>$label</th>";
+                    }?>
+                </tr>
+                <?php for($i=0; $i<count($finalCounts); $i++) {
+                    echo "<tr>";
+                    for($j=0; $j<count($finalCounts[$i]); $j++) {
+                        if($j == 0) {
+                            $val = $finalCounts[$i]['answer'];
+                            echo "<th>$val</th>";
+                        }
+                        else {
+                            $val = number_format($finalCounts[$i]['v'.($j-1)], 0);
+                            echo "<td>$val</td>";
+                        }
+                    }
+                    echo "</tr>";
+                    }?>
+            </table>
+                <a id="dlink"  style="display:none;"></a>
+
+                <input type="button" onclick="tableToExcel('datatable', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+            </div>
         </div>
     </div>
 </div>

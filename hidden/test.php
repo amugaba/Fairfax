@@ -12,7 +12,7 @@ $ds = new DataService();
 //$data = $ds->getDataCutoff('I2',2,2,0,'race');
 //var_dump($data);
 
-$data = $ds->getData('B24', 'B13');
+$data = $ds->getData('A4', 'B13');
 var_dump($data);
 
 $labels = $ds->getLabels('B24');

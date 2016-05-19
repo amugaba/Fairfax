@@ -72,6 +72,7 @@ class DataService {
     /**
      * Get data for one question. Data is returned as array of associative arrays: [['answer' => key1, 'num' => value1], ['answer' => key2, 'num' => value2], ...]
      * @param string $varcode
+     * @param string $groupcode
      * @return array
      */
     public function getData($varcode, $groupcode)
@@ -80,28 +81,65 @@ class DataService {
         $groupcode = $this->connection->escape_string($groupcode);
 
         if($groupcode != 'none') {
+            //$stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $varcode, $groupcode");
+            //$stmt2 = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
             $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $varcode, $groupcode");
-            $stmt2 = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
         }
         else {
             $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer FROM data GROUP BY $varcode");
-            $stmt2 = $this->connection->query("SELECT SUM(wgt) as num FROM data");
         }
         $this->throwExceptionOnError();
 
-        $data = $stmt->fetch_all(MYSQLI_ASSOC);
-        $totals = $stmt2->fetch_all(MYSQLI_ASSOC);
+        return $stmt->fetch_all(MYSQLI_ASSOC);
+    }
 
-        //percentage = num/total
-        for($i=0;$i<count($data);$i++) {
-            if($groupcode != 'none')
+    public function converToPercents($data, $totals, $doGrouping)
+    {
+        $newdata = [];
+        for($i=0; $i<count($data); $i++) {
+            if($doGrouping)
                 $subgroup = intval($data[$i]['subgroup'])-1;
             else
                 $subgroup = 0;
 
-            $data[$i]['num'] /= $totals[$subgroup]['num'];
+            $newdata[$i] = $data[$i];
+            $newdata[$i]['num'] /= $totals[$subgroup]['num'];
         }
-        return $data;
+        return $newdata;
+    }
+
+    /**
+     * @param $data
+     * @param $answer
+     * @param $group
+     * @return float
+     */
+    public function findData($data, $answer, $group, $isGrouped)
+    {
+        foreach($data as $row) {
+            if($row['answer'] == $answer && (!$isGrouped || $row['subgroup'] == $group))
+                return $row['num'];
+        }
+    }
+
+
+    /**
+     * Get data for one question. Data is returned as array of associative arrays: [['answer' => key1, 'num' => value1], ['answer' => key2, 'num' => value2], ...]
+     * @param string $groupcode
+     * @return array
+     */
+    public function getGroupTotals($groupcode)
+    {
+        $groupcode = $this->connection->escape_string($groupcode);
+
+        if($groupcode != 'none')
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
+        else
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data");
+        $this->throwExceptionOnError();
+
+        $totals = $stmt->fetch_all(MYSQLI_ASSOC);
+        return $totals;
     }
 
     /**
