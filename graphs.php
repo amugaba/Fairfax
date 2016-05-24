@@ -8,7 +8,6 @@ $grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
 $isGrouped = $grp != 'none';
 
 $variables = $ds->getVariables();
-$newdata = [];
 $mainVar = null;
 $groupVar = null;
 
@@ -112,9 +111,8 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 window.open('data:application/vnd.ms-excel,' + $('#datatable').html().replace(/ /g, '%20'));
                 e.preventDefault();
             });
-
-
         });
+
         var tableToExcel = (function () {
             var uri = 'data:application/vnd.ms-excel;base64,'
                 , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
@@ -159,33 +157,34 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 
             <div class="h4">3. (Optional) Filter Results by...</div>
             <div class="bordergrey filterbox">
-                <label for="filteryear">Year: </label>
-                <select id="filteryear">
-                    <option value="all">All</option>
-                    <option value="2015">2015</option>
-                </select><br>
-                <label for="filtergrade">Grade: </label>
-                <select id="filtergrade">
-                    <option value="all">All</option>
-                    <option value="1">8th</option>
-                    <option value="2">10th</option>
-                    <option value="3">12th</option>
-                </select>
-                <label for="filtergrade">Gender: </label>
-                <select id="filtergender">
-                    <option value="all">All</option>
-                    <option value="1">8th</option>
-                    <option value="2">10th</option>
-                    <option value="3">12th</option>
-                </select>
-            </div>
-            <div id="accordion2" class="accordion">
-
-                <h3>Alcohol</h3><div id="alcohol2"></div>
-                <h3>Drugs</h3><div id="drugs2"></div>
-                <h3>Bullying</h3><div id="bullying2"> </div>
-                <h3>Sex and Relationships</h3><div id="sexual2"></div>
-                <h3>School and Work</h3><div id="school2"></div>
+                <form action="graphs.php" method="post">
+                    <input type="hidden" name="filter" value="1">
+                    <label for="filteryear">Year: </label>
+                    <select id="filteryear">
+                        <option value="all">All</option>
+                        <option value="2015">2015</option>
+                    </select><br>
+                    <label for="filtergrade">Grade: </label>
+                    <select id="filtergrade">
+                        <option value="all">All</option>
+                        <option value="1">8th</option>
+                        <option value="2">10th</option>
+                        <option value="3">12th</option>
+                    </select><br>
+                    <label for="filtergrade">Gender: </label>
+                    <select id="filtergender">
+                        <option value="all">All</option>
+                        <option value="1">Female</option>
+                        <option value="2">Male</option>
+                    </select><br>
+                    <label for="filterrace">Race: </label>
+                    <select id="filterrace">
+                        <option value="all">All</option>
+                        <option value="1">Non-white</option>
+                        <option value="2">White</option>
+                    </select><br>
+                    <input type="submit" value="Filter" style="margin: 0px 0px 0px 103px; width: 100px;">
+                </form>
             </div>
         </div>
 

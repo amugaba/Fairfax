@@ -147,14 +147,25 @@ class DataService {
      * Data is returned as array of associative arrays: [['cutoff' => null, 'num' => value1], ['answer' => 0, 'num' => value2], ['answer' => 1, 'num' => value3]]
      * The answer=1 is the number of cases in the cutoff range.
      * @param string $varcode
+     * @param string $groupcode
      * @param int $low
      * @param int $high
      * @return int
      */
-    public function getDataCutoff($varcode, $low, $high, $totalCutoff, $grouping)
+    public function getDataCutoff($varcode, $groupcode, $low, $high)
     {
-        if($grouping == 'grade') {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, I2 as grade FROM data WHERE $varcode >= $low AND $varcode <= $high GROUP BY I2");
+        $varcode = $this->connection->escape_string($varcode);
+        $groupcode = $this->connection->escape_string($groupcode);
+
+        if($groupcode != 'none') {
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $varcode >= $low AND $varcode <= $high AND $groupcode IS NOT NULL GROUP BY $groupcode");
+        }
+        else {
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode >= $low AND $varcode <= $high");
+        }
+
+        /*if($grouping == 'grade') {
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as grade FROM data WHERE $varcode >= $low AND $varcode <= $high AND $groupcode IS NOT NULL GROUP BY $groupcode");
             $stmt2 = $this->connection->query("SELECT SUM(wgt) as num, I2 as grade FROM data WHERE $varcode > $totalCutoff GROUP BY I2");
         }
         else if($grouping == 'gender') {
@@ -168,10 +179,10 @@ class DataService {
         else {
             $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode >= $low AND $varcode <= $high");
             $stmt2 = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode > $totalCutoff");
-        }
+        }*/
         $this->throwExceptionOnError();
 
-        $data = $stmt->fetch_all(MYSQLI_ASSOC);
+        /*$data = $stmt->fetch_all(MYSQLI_ASSOC);
         $totals = $stmt2->fetch_all(MYSQLI_ASSOC);
 
         //percentage = num/total
@@ -179,7 +190,22 @@ class DataService {
             $data[$i]['num'] /= $totals[$i]['num'];
         }
 
-        return $data;
+        return $data;*/
+        return $stmt->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function getGroupTotalsCutoff($varcode, $groupcode, $totalCutoff)
+    {
+        $groupcode = $this->connection->escape_string($groupcode);
+
+        if($groupcode != 'none')
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $varcode > $totalCutoff AND $groupcode IS NOT NULL GROUP BY $groupcode");
+        else
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode > $totalCutoff");
+        $this->throwExceptionOnError();
+
+        $totals = $stmt->fetch_all(MYSQLI_ASSOC);
+        return $totals;
     }
 
     /**

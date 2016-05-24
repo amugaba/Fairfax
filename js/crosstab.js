@@ -49,28 +49,6 @@ function createPercentChart(chartData, groups, mainTitle, groupTitle) {
         for(var i = 0; i < groups.length; i++) {
             chart.addGraph(createSubGraph(groups[i],'v'+i,i));
         }
-        /*if(group == 'I2')
-        {
-            chart.addGraph(createSubGraph('Grade 8','grade8',1));
-            chart.addGraph(createSubGraph('Grade 10','grade10',2));
-            chart.addGraph(createSubGraph('Grade 12','grade12',3));
-        }
-        else if(group == 'I3')
-        {
-            chart.addGraph(createSubGraph('Female','female',1));
-            chart.addGraph(createSubGraph('Male','male',2));
-            //chart.addGraph(createSubGraph('Unknown','unknown',3));
-        }
-        else if(group == 'race')
-        {
-            chart.addGraph(createSubGraph('White','white',1));
-            chart.addGraph(createSubGraph('Non-white','nonwhite',2));
-            //chart.addGraph(createSubGraph('Unknown','unknown',3));
-        }
-        else {
-            chart.addGraph(createSubGraph('Total','total',1));
-        }*/
-
 
         // LEGEND
         var legend = new AmCharts.AmLegend();

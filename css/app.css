@@ -38,6 +38,15 @@ div.bordergrey {
     width: 100px;
 }
 
+.categorybox a {
+    color: #222222;
+    font-size: 11pt;
+}
+
+.categorybox ul {
+    padding-left: 20px;
+}
+
 .testcolors {
     color: #7cc27c;
     color: #70a1c2;
