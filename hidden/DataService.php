@@ -8,6 +8,8 @@ require_once 'VariableVO.php';
 class DataService {
 
     public $connection;
+    public $vartable = "variables_2015";
+    public $datatable = "data_2015_8to12";
 
     public function __construct ()
     {
@@ -22,7 +24,7 @@ class DataService {
      */
     public function getVariables()
     {
-        $stmt = $this->connection->prepare("SELECT autoid, code, question, summary, category FROM variables");
+        $stmt = $this->connection->prepare("SELECT autoid, code, question, summary, category FROM $this->vartable");
         $this->throwExceptionOnError();
 
         $stmt->execute();
@@ -53,7 +55,7 @@ class DataService {
 
         $stmt = $this->connection->query("SELECT answer1,answer2,answer3,answer4,answer5,answer6,answer7,answer8,answer9,
             answer10,answer11,answer12,answer13,answer14,answer15,answer16,answer17,answer18,answer19,answer20,answer21,
-            answer22,answer23,answer24,answer25,answer26 FROM variables WHERE code='$varcode'");
+            answer22,answer23,answer24,answer25,answer26 FROM $this->vartable WHERE code='$varcode'");
         $this->throwExceptionOnError();
 
         $labels = $stmt->fetch_row();
@@ -83,10 +85,10 @@ class DataService {
         if($groupcode != 'none') {
             //$stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $varcode, $groupcode");
             //$stmt2 = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $varcode, $groupcode");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL GROUP BY $varcode, $groupcode");
         }
         else {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer FROM data GROUP BY $varcode");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer FROM $this->datatable GROUP BY $varcode");
         }
         $this->throwExceptionOnError();
 
@@ -133,9 +135,9 @@ class DataService {
         $groupcode = $this->connection->escape_string($groupcode);
 
         if($groupcode != 'none')
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
         else
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM $this->datatable");
         $this->throwExceptionOnError();
 
         $totals = $stmt->fetch_all(MYSQLI_ASSOC);
@@ -157,40 +159,32 @@ class DataService {
         $varcode = $this->connection->escape_string($varcode);
         $groupcode = $this->connection->escape_string($groupcode);
 
+        $query = "SELECT SUM(wgt) as num";
         if($groupcode != 'none') {
+            $query .= ", $groupcode as subgroup";
+        }
+
+        $query .= " FROM $this->datatable WHERE 1";
+
+        if($low != null) {
+            $query .= " AND $varcode >= $low";
+        }
+        if($high != null) {
+            $query .= " AND $varcode <= $high";
+        }
+        if($groupcode != 'none') {
+            $query .= " AND $groupcode IS NOT NULL GROUP BY $groupcode";
+        }
+
+        /*if($groupcode != 'none') {
             $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $varcode >= $low AND $varcode <= $high AND $groupcode IS NOT NULL GROUP BY $groupcode");
         }
         else {
             $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode >= $low AND $varcode <= $high");
-        }
-
-        /*if($grouping == 'grade') {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as grade FROM data WHERE $varcode >= $low AND $varcode <= $high AND $groupcode IS NOT NULL GROUP BY $groupcode");
-            $stmt2 = $this->connection->query("SELECT SUM(wgt) as num, I2 as grade FROM data WHERE $varcode > $totalCutoff GROUP BY I2");
-        }
-        else if($grouping == 'gender') {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, I3 as gender FROM data WHERE $varcode >= $low AND $varcode <= $high GROUP BY I3");
-            $stmt2 = $this->connection->query("SELECT SUM(wgt) as num, I3 as gender FROM data WHERE $varcode > $totalCutoff GROUP BY I3");
-        }
-        else if($grouping == 'race') {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, race FROM data WHERE $varcode >= $low AND $varcode <= $high GROUP BY race");
-            $stmt2 = $this->connection->query("SELECT SUM(wgt) as num, race FROM data WHERE $varcode > $totalCutoff GROUP BY race");
-        }
-        else {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode >= $low AND $varcode <= $high");
-            $stmt2 = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode > $totalCutoff");
         }*/
+        $stmt = $this->connection->query($query);
         $this->throwExceptionOnError();
 
-        /*$data = $stmt->fetch_all(MYSQLI_ASSOC);
-        $totals = $stmt2->fetch_all(MYSQLI_ASSOC);
-
-        //percentage = num/total
-        for($i=0;$i<count($data);$i++) {
-            $data[$i]['num'] /= $totals[$i]['num'];
-        }
-
-        return $data;*/
         return $stmt->fetch_all(MYSQLI_ASSOC);
     }
 
@@ -198,14 +192,29 @@ class DataService {
     {
         $groupcode = $this->connection->escape_string($groupcode);
 
-        if($groupcode != 'none')
+        $query = "SELECT SUM(wgt) as num";
+        if($groupcode != 'none') {
+            $query .= ", $groupcode as subgroup";
+        }
+
+        $query .= " FROM $this->datatable WHERE $varcode IS NOT NULL";
+
+        if($totalCutoff != null) {
+            $query .= " AND $varcode >= $totalCutoff";
+        }
+        if($groupcode != 'none') {
+            $query .= " AND $groupcode IS NOT NULL GROUP BY $groupcode";
+        }
+
+        /*if($groupcode != 'none')
             $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $varcode > $totalCutoff AND $groupcode IS NOT NULL GROUP BY $groupcode");
         else
             $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode > $totalCutoff");
+        */
+        $stmt = $this->connection->query($query);
         $this->throwExceptionOnError();
 
-        $totals = $stmt->fetch_all(MYSQLI_ASSOC);
-        return $totals;
+        return $stmt->fetch_all(MYSQLI_ASSOC);
     }
 
     /**

@@ -10,7 +10,7 @@ define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] ."/fairfax/");
 define("HTTP_ROOT", "http://".$_SERVER['HTTP_HOST'] ."/fairfax/");
 define("PAGE_TITLE", "Fairfax Survey");
 
-//error_reporting(E_ERROR);
+error_reporting(E_ERROR);
 
 session_save_path(ROOT_PATH."session");
 ini_set("session.cache_expire", 12000); //3+h

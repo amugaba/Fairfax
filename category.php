@@ -8,11 +8,11 @@ $grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
 
 if($cat == 1) {
     $title = "Substance Use";
-    $qCodes = ['A3A','A4','D3A'];
-    $labels = ['Past-Year Alcohol','Binge Drinking','Past-Year Marijuana'];
-    $lowCutoffs = [2,2,2];
-    $highCutoffs = [2,2,2];
-    $totalCutoffs = [0,0,0];
+    $qCodes = ['A2A','A3A','A4','D2A'];
+    $labels = ['Lifetime Alcohol','Past-Month Alcohol','Binge Drinking','Lifetime Marijuana'];
+    $lowCutoffs = [2,2,2,2];
+    $highCutoffs = [null,null,null,null];
+    $totalCutoffs = [null,null,null,null];
     $explanation = "<p>The Youth Survey asks whether students have ever used alcohol, marijuana, and cigarettes. A
         summary of selected data in this category is available here for <b>2015</b>.</p>
         <p>To learn about other substances, past-month substance use, and binge drinking, along with data for other years,
@@ -20,11 +20,108 @@ if($cat == 1) {
 }
 else if($cat == 2) {
     $title = "Sexual Activity";
-    $qCodes = ['X1','X6','X8'];
-    $labels = ['Lifetime Sexual Intercourse','Condom Use','Lifetime Oral Sex'];
-    $lowCutoffs = [1,2,1];
-    $highCutoffs = [1,2,1];
-    $totalCutoffs = [0,1,0];
+    $qCodes = ['X1','X8'];
+    $labels = ['Lifetime Sexual Intercourse','Lifetime Oral Sex'];
+    $lowCutoffs = [1,1];
+    $highCutoffs = [1,1];
+    $totalCutoffs = [null,null];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 3) {
+    $title = "Vehicle Safety";
+    $qCodes = ['A5','S3'];
+    $labels = ['Driving after Drinking','Texting while Driving'];
+    $lowCutoffs = [3,3];
+    $highCutoffs = [null,null];
+    $totalCutoffs = [2,2];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 4) {
+    $title = "Bullying and Cyberbullying";
+    $qCodes = ['B20','B22','CB3','CB2'];
+    $labels = ['Bullied Someone at School','Been Bullied at School','Cyberbullied Someone at School','Been Cyberbullied at School'];
+    $lowCutoffs = [1,1,2,2];
+    $highCutoffs = [1,1,null,null];
+    $totalCutoffs = [null,null,null,null];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 5) {
+    $title = "Dating Aggression";
+    $qCodes = ['B15','B25'];
+    $labels = ['Partner always wants to know whereabouts','Partner physically forces sex'];
+    $lowCutoffs = [1,3];
+    $highCutoffs = [1,null];
+    $totalCutoffs = [null,2];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 6) {
+    $title = "Other Aggression";
+    $qCodes = ['B2A','B10A','W5'];
+    $labels = ["Insulted someone's race or culture",'Had race or culture insulted','Carried a Weapon'];
+    $lowCutoffs = [2,2,2];
+    $highCutoffs = [null,null,null];
+    $totalCutoffs = [null,null,null];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 7) {
+    $title = "Physical Activity and Reset";
+    $qCodes = ['H3','H3','H20','H1','H2'];
+    $labels = ['One hour of physical activity<br>for 1+ days/week','One hour of physical activity<br>for 5+ days/week',
+        'Eight or more hours of sleep','Three or more hours of TV','Three or more hours of video games'];
+    $lowCutoffs = [2,6,5,5,5];
+    $highCutoffs = [null,null,null,null,null];
+    $totalCutoffs = [null,null,null,null,null];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 8) {
+    $title = "Nutrition";
+    $qCodes = ['fruitveg','H7','RF31'];
+    $labels = ['Ate fruits and vegetables<br>5+ times/day','Drank no soda during past week','Went hungry during past month'];
+    $lowCutoffs = [5,1,3];
+    $highCutoffs = [null,1,null];
+    $totalCutoffs = [null,null,null];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 9) {
+    $title = "Mental Health";
+    $qCodes = ['M5','M1','M2'];
+    $labels = ['High Stress','Felt sad or hopeless<br>Two or more weeks in a row','Attempted suicide'];
+    $lowCutoffs = [8,1,1];
+    $highCutoffs = [null,1,1];
+    $totalCutoffs = [null,null,null];
+    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
+        summary of selected data in this category is available here for <b>2015</b>.</p>
+        <p>To learn about other sexual behaviors, along with data for other years,
+        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+}
+else if($cat == 10) {
+    $title = "Extracurriculars";
+    $qCodes = ['C13','C11','C12','C2'];
+    $labels = ['Did extra curriculars<br>for 1+ hour on average','Did homework for 1+ hour on average','Did work for 1+ hour on average','Volunteered for community service'];
+    $lowCutoffs = [4,4,4,3];
+    $highCutoffs = [null,null,null,null];
+    $totalCutoffs = [null,null,null,null];
     $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
         summary of selected data in this category is available here for <b>2015</b>.</p>
         <p>To learn about other sexual behaviors, along with data for other years,
@@ -83,6 +180,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
             $('#grouping :input').click(function() {
                 window.location = "category.php?cat=<?php echo $cat;?>&grp="+this.value;
             });
+            $( "#freqtabs" ).tabs();
 
             $("#btnExport").click(function (e) {
                 window.open('data:application/vnd.ms-excel,' + $('#datatable').html().replace(/ /g, '%20'));
@@ -109,7 +207,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 </head>
 <body>
 <?php include_header(); ?>
-<div class="container" style="width:90%;">
+<div class="container" style="width:95%;">
     <div class="row">
         <div class="col-md-2">
             <div class="h4">Select a Category</div>
@@ -118,15 +216,13 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                     <li><a href='?cat=1'>Substance Use</a></li>
                     <li><a href='?cat=2'>Sexual Activity</a></li>
                     <li><a href='?cat=3'>Vehicle Safety</a></li>
-                    <li><a href='?cat=4'>Bullying</a></li>
-                    <li><a href='?cat=5'>Other Aggression</a></li>
-                    <li><a href='?cat=6'>Physical Activity</a></li>
-                    <li><a href='?cat=7'>Nutrition</a></li>
-                    <li><a href='?cat=8'>Mental Health</a></li>
-                    <li><a href='?cat=9'>Extracurriculars</a></li>
-                    <li><a href='?cat=10'>Civic Behavior</a></li>
-                    <li><a href='?cat=11'>Risk/Protective Factors</a></li>
-                    <li><a href='?cat=12'>Three to Succeed</a></li>
+                    <li><a href='?cat=4'>Bullying and Cyberbullying</a></li>
+                    <li><a href='?cat=5'>Dating Aggression</a></li>
+                    <li><a href='?cat=6'>Other Aggressive Behaviors</a></li>
+                    <li><a href='?cat=7'>Physical Activity and Rest</a></li>
+                    <li><a href='?cat=8'>Nutrition and Weight Loss Behaviors</a></li>
+                    <li><a href='?cat=9'>Mental Health</a></li>
+                    <li><a href='?cat=10'>Extracurricular Activities and Civic Behaviors</a></li>
                 </ul>
             </div>
         </div>
@@ -141,39 +237,78 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
                 <input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
-                <input id="race" name="grouping" type="radio" value="race"/><label for="race">Race</label>
+                <input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
             </div>
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
-            <div style="text-align: center;"><h4>Cross-tabulated Frequencies</h4>
-                <table id="datatable" class="datatable" style="margin: 0 auto;">
-                    <tr>
-                        <th colspan="<?php echo count($grouplabels)+1;?>" style="text-align: center;"><?php echo $title;?></th>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <?php foreach($grouplabels as $label) {
-                            echo "<th>$label</th>";
-                        }?>
-                    </tr>
-                    <?php for($i=0; $i<count($finalCounts); $i++) {
-                        echo "<tr>";
-                        for($j=0; $j<count($finalCounts[$i]); $j++) {
-                            if($j == 0) {
-                                $val = $finalCounts[$i]['answer'];
-                                echo "<th>$val</th>";
-                            }
-                            else {
-                                $val = number_format($finalCounts[$i]['v'.($j-1)], 0);
-                                echo "<td>$val</td>";
-                            }
-                        }
-                        echo "</tr>";
-                    }?>
-                </table>
-                <a id="dlink"  style="display:none;"></a>
 
-                <input type="button" onclick="tableToExcel('datatable', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+
+            <div style="text-align: center;">
+                <h4>Cross-tabulated Frequencies</h4>
+                <div id="freqtabs" style="display: inline-block;">
+                    <ul>
+                        <li><a href="#freqtabs-1">Percents</a></li>
+                        <li><a href="#freqtabs-2">Counts</a></li>
+                    </ul>
+                    <div id="freqtabs-1">
+                        <table id="datatable-count" class="datatable" style="margin: 0 auto; font-size:10pt;">
+                            <tr>
+                                <th colspan="<?php echo count($grouplabels)+1;?>" style="text-align: center;"><?php echo $title;?></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <?php foreach($grouplabels as $label) {
+                                    echo "<th>$label</th>";
+                                }?>
+                            </tr>
+                            <?php for($i=0; $i<count($finalPercents); $i++) {
+                                echo "<tr>";
+                                for($j=0; $j<count($finalPercents[$i]); $j++) {
+                                    if($j == 0) {
+                                        $val = $finalPercents[$i]['answer'];
+                                        echo "<th>$val</th>";
+                                    }
+                                    else {
+                                        $val = number_format($finalPercents[$i]['v'.($j-1)], 1);
+                                        echo "<td>$val%</td>";
+                                    }
+                                }
+                                echo "</tr>";
+                            }?>
+                        </table>
+                        <a id="dlink"  style="display:none;"></a>
+                        <input type="button" onclick="tableToExcel('datatable-count', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                    </div>
+                    <div id="freqtabs-2">
+                        <table id="datatable-percent" class="datatable" style="margin: 0 auto; font-size:10pt;">
+                            <tr>
+                                <th colspan="<?php echo count($grouplabels)+1;?>" style="text-align: center;"><?php echo $title;?></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <?php foreach($grouplabels as $label) {
+                                    echo "<th>$label</th>";
+                                }?>
+                            </tr>
+                            <?php for($i=0; $i<count($finalCounts); $i++) {
+                                echo "<tr>";
+                                for($j=0; $j<count($finalCounts[$i]); $j++) {
+                                    if($j == 0) {
+                                        $val = $finalCounts[$i]['answer'];
+                                        echo "<th>$val</th>";
+                                    }
+                                    else {
+                                        $val = number_format($finalCounts[$i]['v'.($j-1)], 0);
+                                        echo "<td>$val</td>";
+                                    }
+                                }
+                                echo "</tr>";
+                            }?>
+                        </table>
+                        <a id="dlink"  style="display:none;"></a>
+                        <input type="button" onclick="tableToExcel('datatable-percent', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

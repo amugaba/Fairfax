@@ -106,6 +106,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 active: false,
                 heightStyle: "content"
             });
+            $( "#freqtabs" ).tabs();
 
             $("#btnExport").click(function (e) {
                 window.open('data:application/vnd.ms-excel,' + $('#datatable').html().replace(/ /g, '%20'));
@@ -211,36 +212,74 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
-            <div style="text-align: center;"><h4>Cross-tabulated Frequencies</h4>
-            <table id="datatable" class="datatable" style="margin: 0 auto;">
-                <tr>
-                    <th rowspan="<?php echo count($labels)+2;?>" style="width: 80px;"><?php echo $mainVar->summary;?></th>
-                    <?php if($isGrouped) { ?><th colspan="<?php echo count($grouplabels)+1;?>"><?php echo $groupVar->summary;?></th><?php }?>
-                </tr>
-                <tr>
-                    <th></th>
-                    <?php foreach($grouplabels as $label) {
-                        echo "<th>$label</th>";
-                    }?>
-                </tr>
-                <?php for($i=0; $i<count($finalCounts); $i++) {
-                    echo "<tr>";
-                    for($j=0; $j<count($finalCounts[$i]); $j++) {
-                        if($j == 0) {
-                            $val = $finalCounts[$i]['answer'];
-                            echo "<th>$val</th>";
-                        }
-                        else {
-                            $val = number_format($finalCounts[$i]['v'.($j-1)], 0);
-                            echo "<td>$val</td>";
-                        }
-                    }
-                    echo "</tr>";
-                    }?>
-            </table>
-                <a id="dlink"  style="display:none;"></a>
-
-                <input type="button" onclick="tableToExcel('datatable', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+            <div style="text-align: center;">
+                <h4>Cross-tabulated Frequencies</h4>
+                <div id="freqtabs" style="display: inline-block;">
+                    <ul>
+                        <li><a href="#freqtabs-1">Percents</a></li>
+                        <li><a href="#freqtabs-2">Counts</a></li>
+                    </ul>
+                    <div id="freqtabs-1">
+                        <table id="datatable-count" class="datatable" style="margin: 0 auto; font-size:10pt;">
+                            <tr>
+                                <th rowspan="<?php echo count($labels)+2;?>" style="width: 80px;"><?php echo $mainVar->summary;?></th>
+                                <?php if($isGrouped) { ?><th colspan="<?php echo count($grouplabels)+1;?>"><?php echo $groupVar->summary;?></th><?php }?>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <?php foreach($grouplabels as $label) {
+                                    echo "<th>$label</th>";
+                                }?>
+                            </tr>
+                            <?php for($i=0; $i<count($finalPercents); $i++) {
+                                echo "<tr>";
+                                for($j=0; $j<count($finalPercents[$i]); $j++) {
+                                    if($j == 0) {
+                                        $val = $finalPercents[$i]['answer'];
+                                        echo "<th>$val</th>";
+                                    }
+                                    else {
+                                        $val = number_format($finalPercents[$i]['v'.($j-1)], 1);
+                                        echo "<td>$val%</td>";
+                                    }
+                                }
+                                echo "</tr>";
+                            }?>
+                        </table>
+                        <a id="dlink"  style="display:none;"></a>
+                        <input type="button" onclick="tableToExcel('datatable-count', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                    </div>
+                    <div id="freqtabs-2">
+                        <table id="datatable-percent" class="datatable" style="margin: 0 auto; font-size:10pt;">
+                            <tr>
+                                <th rowspan="<?php echo count($labels)+2;?>" style="width: 80px;"><?php echo $mainVar->summary;?></th>
+                                <?php if($isGrouped) { ?><th colspan="<?php echo count($grouplabels)+1;?>"><?php echo $groupVar->summary;?></th><?php }?>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <?php foreach($grouplabels as $label) {
+                                    echo "<th>$label</th>";
+                                }?>
+                            </tr>
+                            <?php for($i=0; $i<count($finalCounts); $i++) {
+                                echo "<tr>";
+                                for($j=0; $j<count($finalCounts[$i]); $j++) {
+                                    if($j == 0) {
+                                        $val = $finalCounts[$i]['answer'];
+                                        echo "<th>$val</th>";
+                                    }
+                                    else {
+                                        $val = number_format($finalCounts[$i]['v'.($j-1)], 0);
+                                        echo "<td>$val</td>";
+                                    }
+                                }
+                                echo "</tr>";
+                            }?>
+                        </table>
+                        <a id="dlink"  style="display:none;"></a>
+                        <input type="button" onclick="tableToExcel('datatable-percent', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
