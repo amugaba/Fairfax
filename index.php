@@ -12,10 +12,8 @@ include_once "config/config.php";
     <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#slider').slick({
-                dots: true,
-                infinite: false,
-                speed: 300
+            $('#carousel').carousel({
+                interval: 6000
             });
         });
     </script>
@@ -27,28 +25,69 @@ include_once "config/config.php";
     }
 </style>
 <?php include_header(); ?>
-<div class="container" style="width:90%;">
-    <div class="row" >
-        <div class="h2">Welcome to the Fairfax Youth Survey</div>
-        <div class="col-md-5">
-            <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in grades six (6) through twelve (12).</p>
-            <p>The survey is co-sponsored by the Fairfax County Board of Supervisors and the Fairfax County School Board, and has been administered for the past ten (10) years.</p>
-            <p>This website allows you to learn more about Fairfax County youth – including things that put them at risk for alcohol and illicit drug use, called risk and protective factors.</p>
-            <p>For more information, please see:</p>
-            <ul>
-                <li><a href="#">Survey Highlights Video</a></li>
-                <li><a href="#">Written Survey Report</a></li>
-                <li><a href="#">Highlights</a></li>
-            </ul>
+<div class="container" id="main">
+    <div class="row" style="height:630px;background-color: #2e6da4">
+        <div style="width:550px; margin: -10px auto 10px;">
+            <img src="img/fairfax-logo3.png" height="100px" style="float: left; padding-right:20px">
+            <div class="h1 shadow" style="color:#ffffff; padding: 10px 0 10px 0;">2015 Survey Results and Highlights</span></div>
         </div>
-        <div class="col-md-7">
-            <div style="background-color:gray; padding: 0 30px;">
-                <div id="slider" style="align-content: center; text-align: center">
 
-                    <div><a href="category.php"><img src="img/kids-at-school.jpg" height="500px" style="margin: 0 auto;"></a></div>
-                    <div><a href="graphs.php"><img src="img/highschool.jpg" height="500px" style="margin: 0 auto;"></a></div>
-                    <div><img src="img/survey_cropped.png" height="500px" style="margin: 0 auto;"></div>
+        <div id="carousel" class="carousel slide" data-ride="carousel" >
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel" data-slide-to="1"></li>
+                <li data-target="#carousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <a href="category.php"><img src="img/youngkids.jpg"></a>
+                    <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the 2015 survey!</div>
                 </div>
+                <div class="item">
+                    <a href="graphs.php"><img src="img/olderkids.jpg"></a>
+                    <div class="carousel-caption">Explore individual question data!</div>
+                </div>
+                <div class="item">
+                    <a href="http://www.fairfaxcounty.gov/demogrph/youth_survey/pdfs/sy2014_15_youth_survey_report.pdf" target="_blank"><img src="img/survey2014.jpg"></a>
+                    <div class="carousel-caption">Access the full written report.</div>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#carousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#carousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </a>
+        </div>
+    </div>
+    <div style="max-width: 1000px; margin: 20px auto;">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="h2 " style="color:#767676">Fairfax Youth Survey Interactive Data Explorer</div>
+            </div>
+            <div class="col-md-7">
+                <p>The <b>interactive data explorer</b> allows you to generate custom graphs and data tables on the questions and demographics that you find most interesting.</p>
+                <ul>
+                    <li>Head to <b><a href="category.php">Survey Highlights</a></b> to see a hand-picked selection of the most important findings.</li>
+                    <li>Or <b><a href="graphs.php">Explore All Questions</a></b> to create and export your own graphs from any questions in the survey.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="h2 " style="color:#767676">Learn More About the Survey</div>
+            </div>
+            <div class="col-md-7">
+                <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in grades six through twelve.
+                    It examines behaviors, experiences, and other factors that influence the health and well-being of the county's youth.
+                    The survey is co-sponsored by the Fairfax County Board of Supervisors and the Fairfax County School Board, and has been administered for the past ten (10) years.</p>
+                <p>For more information, please see the <a href="http://www.fairfaxcounty.gov/demogrph/youth_survey_results.htm" target="_blank">Youth Survey homepage</a>.</p>
             </div>
         </div>
     </div>
