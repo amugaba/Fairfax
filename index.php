@@ -27,9 +27,9 @@ include_once "config/config.php";
 <?php include_header(); ?>
 <div class="container" id="main">
     <div class="row" style="height:630px;background-color: #2e6da4">
-        <div style="width:550px; margin: -10px auto 10px;">
+        <div style="width:570px; margin: -10px auto 10px;">
             <img src="img/fairfax-logo3.png" height="100px" style="float: left; padding-right:20px">
-            <div class="h1 shadow" style="color:#ffffff; padding: 10px 0 10px 0;">2015 Survey Results and Highlights</span></div>
+            <div class="h1 shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2015 Survey Highlights and Data Explorer</span></div>
         </div>
 
         <div id="carousel" class="carousel slide" data-ride="carousel" >

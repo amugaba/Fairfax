@@ -14,7 +14,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="category.php">Survey Highlights</a></li>
+                <li><a href="category.php">2015 Highlights</a></li>
                 <li><a href="graphs.php">Explore All Questions</a></li>
             </ul>
 

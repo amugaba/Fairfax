@@ -21,13 +21,13 @@ function include_styles() {
     $root = HTTP_ROOT;
     echo "
     <link rel='stylesheet' href='$root/css/app.css'>
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
+    <link rel='stylesheet' href='//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'>
+    <script src='//code.jquery.com/jquery-1.10.2.js'></script>
     <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
     <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
-    <script src='$root/bower_components/bootstrap/js/dropdown.js'></script>
-    <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css'>
+    <script src='//code.jquery.com/ui/1.11.4/jquery-ui.js'></script>
     ";
+    //<script src='$root/bower_components/bootstrap/js/dropdown.js'></script>
 }
 function include_header() {
     include ROOT_PATH."inc/navbar.php";

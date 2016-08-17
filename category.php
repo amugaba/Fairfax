@@ -13,22 +13,20 @@ if($cat == 1) {
     $lowCutoffs = [2,2,2,2];
     $highCutoffs = [null,null,null,null];
     $totalCutoffs = [null,null,null,null];
-    $explanation = "<p>The Youth Survey asks whether students have ever used alcohol, marijuana, and cigarettes. A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other substances, past-month substance use, and binge drinking, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances. The highlights page
+        focuses on two of the most-commonly-used psychoactive substances among youth: alcohol (including data on binge drinking) and marijuana.</p>
+        <p>To learn about other substances or to compare substance use with other behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 2) {
     $title = "Sexual Activity";
     $qCodes = ['X1','X8'];
-    $labels = ['Lifetime Sexual Intercourse','Lifetime Oral Sex'];
+    $labels = ['Lifetime Sexual<br>Intercourse','Lifetime Oral Sex'];
     $lowCutoffs = [1,1];
     $highCutoffs = [1,1];
     $totalCutoffs = [null,null];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth survey asks about students' sexual behavior, including preventive behaviors (condom use).
+        Related questions addressing aggression in relationships are reported in the <a href='category.php?cat=5'>Dating Aggression</a> category.</p>
+        <p>To learn about other sexual behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 3) {
     $title = "Vehicle Safety";
@@ -37,95 +35,87 @@ else if($cat == 3) {
     $lowCutoffs = [3,3];
     $highCutoffs = [null,null];
     $totalCutoffs = [2,2];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
+        after drinking and texting while driving..</p>
+        <p>To learn more about vehicle safety, <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 4) {
     $title = "Bullying and Cyberbullying";
     $qCodes = ['B20','B22','CB3','CB2'];
-    $labels = ['Bullied Someone at School','Been Bullied at School','Cyberbullied Someone at School','Been Cyberbullied at School'];
+    $labels = ['Bullied Someone<br>at School','Been Bullied at School','Cyberbullied<br>Someone at School','Been Cyberbullied<br>at School'];
     $lowCutoffs = [1,1,2,2];
     $highCutoffs = [1,1,null,null];
     $totalCutoffs = [null,null,null,null];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth Survey asks questions about both bullying in-person and bullying online (called cyberbullying).</p>
+        <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 5) {
     $title = "Dating Aggression";
     $qCodes = ['B15','B25'];
-    $labels = ['Partner always wants to know whereabouts','Partner physically forces sex'];
+    $labels = ['Partner Always Wants<br>to Know Whereabouts','Partner Physically<br>Forces Sex'];
     $lowCutoffs = [1,3];
     $highCutoffs = [1,null];
     $totalCutoffs = [null,2];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>There are a variety of behaviors that might be classified as dating aggression, or that might signify a risk of dating aggression.
+        These range from a partner physically forcing someone to have sexual intercourse to someone always wanting to know his or her partner’s whereabouts.</p>
+        <p>To learn more about behaviors related to dating aggression, <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 6) {
     $title = "Other Aggression";
     $qCodes = ['B2A','B10A','W5'];
-    $labels = ["Insulted someone's race or culture",'Had race or culture insulted','Carried a Weapon'];
+    $labels = ["Insulted Someone's<br>Race or Culture",'Had Race or<br>Culture Insulted','Carried a Weapon'];
     $lowCutoffs = [2,2,2];
     $highCutoffs = [null,null,null];
     $totalCutoffs = [null,null,null];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>Aggression can take on a variety of forms, both verbal and physical. The highlights page provides information both on youth
+        who had their race or culture insulted, and those who insulted others’ race or culture.  It also provides information on youth who carried a weapon.</p>
+        <p>Data about additional behaviors or experiences indicating aggression are available: <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 7) {
-    $title = "Physical Activity and Reset";
+    $title = "Physical Activity and Rest";
     $qCodes = ['H3','H3','H20','H1','H2'];
-    $labels = ['One hour of physical activity<br>for 1+ days/week','One hour of physical activity<br>for 5+ days/week',
-        'Eight or more hours of sleep','Three or more hours of TV','Three or more hours of video games'];
+    $labels = ['One Hour of Physical Activity<br>at least 1 Day per Week','One Hour of Physical Activity<br>at least 5 Days per Week',
+        'Eight or More Hours of Sleep','Watches TV for<br> 3+ Hours per Day','Uses Computer or Plays Video<br>Games for 3+ Hours per Day'];
     $lowCutoffs = [2,6,5,5,5];
     $highCutoffs = [null,null,null,null,null];
     $totalCutoffs = [null,null,null,null,null];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth Survey provides data on a variety of interlinked health behaviors related to physical activity and rest.
+        Highlights include both frequency of physical activity across selected timeframes as well as indicators of inactivity and information about adequate sleep.</p>
+        <p>Additional data are available in this category by choosing to <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 8) {
     $title = "Nutrition";
     $qCodes = ['fruitveg','H7','RF31'];
-    $labels = ['Ate fruits and vegetables<br>5+ times/day','Drank no soda during past week','Went hungry during past month'];
+    $labels = ['Ate Fruits and Vegetables<br>at least 5 Times per Day','Drank No Soda<br>during Past Week','Went Hungry at least Once<br>during Past Month'];
     $lowCutoffs = [5,1,3];
     $highCutoffs = [null,1,null];
     $totalCutoffs = [null,null,null];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth Survey provides data on a variety of interlinked health behaviors related to physical activity and rest.
+        Highlights include both frequency of physical activity across selected timeframes as well as indicators of inactivity and information about adequate sleep.</p>
+        <p>Additional data are available in this category by choosing to <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 9) {
     $title = "Mental Health";
     $qCodes = ['M5','M1','M2'];
-    $labels = ['High Stress','Felt sad or hopeless<br>Two or more weeks in a row','Attempted suicide'];
+    $labels = ['High Stress','Felt Sad or Hopeless for<br>Two or More Weeks in a Row','Attempted Suicide'];
     $lowCutoffs = [8,1,1];
     $highCutoffs = [null,1,1];
     $totalCutoffs = [null,null,null];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth Survey provides data about a variety of different aspects related to mental health. This page highlights
+        students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row (which may indicate risk for depression), and those who attempted suicide.</p>
+        <p>Additional data on this topic are available at <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 10) {
-    $title = "Extracurriculars";
+    $title = "Extracurricular Activities and Civic Behaviors";
     $qCodes = ['C13','C11','C12','C2'];
-    $labels = ['Did extra curriculars<br>for 1+ hour on average','Did homework for 1+ hour on average','Did work for 1+ hour on average','Volunteered for community service'];
+    $labels = ['Did Extra Curriculars<br>for 1+ Hour per Day','Did Homework<br>for 1+ Hour per Day','Went to Work<br>for 1+ hour per Day','Volunteered for<br>Community Service'];
     $lowCutoffs = [4,4,4,3];
     $highCutoffs = [null,null,null,null];
     $totalCutoffs = [null,null,null,null];
-    $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use). A
-        summary of selected data in this category is available here for <b>2015</b>.</p>
-        <p>To learn about other sexual behaviors, along with data for other years,
-        <a href='graphs.php'>See Data by Individual Question</a>.</p>";
+    $explanation = "<p>The Youth Survey asks about a variety of behaviors that indicate civic engagement or diligence, including
+        completion of homework, working at a job, volunteering in the community, and participating in extracurricular activities.
+        This page shows the percentage of students with a moderate level of engagement (1+ hour of work or at least one time volunteering).</p>
+        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 
 $finalPercents = []; //for each question, what percent of cases fell within the cutoff range
@@ -169,11 +159,13 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
     <?php include_styles() ?>
     <script src="js/amcharts/amcharts.js" type="text/javascript"></script>
     <script src="js/amcharts/serial.js" type="text/javascript"></script>
+    <script src="js/amcharts/plugins/export/export.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
     <script src="js/crosstab.js" type="application/javascript"></script>
     <link rel="stylesheet" href="css/app.css">
     <script>
         $(function() {
-            createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,'', '');
+            createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,'', '',true);
 
             $('#grouping :input[value=<?php echo $grp;?>]').prop("checked",true);
             $('#grouping').buttonset();
@@ -207,12 +199,11 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 </head>
 <body>
 <?php include_header(); ?>
-<div class="container" style="width:95%;">
+<div class="container" id="main">
     <div class="row">
-        <div class="col-md-2">
-            <div class="h4">Select a Category</div>
-            <div class="bordergrey categorybox">
-                <ul>
+        <div class="col-md-3 sidebar">
+            <div class="h2 shadowdeep">Select a Category</div>
+                <ul class="categories shadow">
                     <li><a href='?cat=1'>Substance Use</a></li>
                     <li><a href='?cat=2'>Sexual Activity</a></li>
                     <li><a href='?cat=3'>Vehicle Safety</a></li>
@@ -224,15 +215,14 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                     <li><a href='?cat=9'>Mental Health</a></li>
                     <li><a href='?cat=10'>Extracurricular Activities and Civic Behaviors</a></li>
                 </ul>
-            </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-9 mainbar">
             <div style="text-align: center;">
                 <h3><?php echo $title;?></h3>
                 <?php echo $explanation;?>
             </div>
 
-            <div id="grouping" class="bordergrey" style="width:500px; margin: 20px auto 0">
+            <div id="grouping" class="groupbox" style="width:500px; margin: 20px auto 0">
                 <label class="searchLabel">Group data by:</label>
                 <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
                 <input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label>

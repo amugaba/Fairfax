@@ -1,6 +1,6 @@
 # amCharts Export
 
-Version: 1.4.18
+Version: 1.4.34
 
 
 ## Description
@@ -147,6 +147,8 @@ drawing | {} | Object which holds all possible settings for the annotation mode 
 overflow | true | Flag to overwrite the css attribute 'overflow' of the chart container to avoid cropping the menu on small container
 border | {} | An object of key/value pairs to define the overlaying border
 processData | | A function which can be used to change the dataProvider when exporting to CSV, XLSX, or JSON
+pageOrigin | true | A flag to show / hide the origin of the generated PDF ( pdf export only )
+forceRemoveImages | false | If true export removes all images
 
 
 ## Configuring export menu
@@ -598,7 +600,7 @@ your exported images.
         top: 50,
         left: 100,
         family: this.setup.chart.fontFamily,
-        size: this.setup.chart.fontSize * 2
+        fontSize: this.setup.chart.fontSize * 2
       });
       this.setup.fabric.add(text);
   },
@@ -613,11 +615,36 @@ your exported images.
           top: 50,
           left: 100,
           family: this.setup.chart.fontFamily,
-          size: this.setup.chart.fontSize * 2
+          fontSize: this.setup.chart.fontSize * 2
         });
         this.setup.fabric.add(text);
     }
-  }]
+  }],
+```
+
+Since version 1.4.29 we have added the `onReady` callback to get your stuff done
+right after the plugin or specific dependency is ready to use. Ensure to check the
+`timedout` flag to be sure the dependency got fully loaded.
+
+```
+"export": {
+  "onReady": function( type, timedout ) {
+
+    // Plugin ready for data exports
+    if ( type == "data" ) {
+      this.toCSV( {}, function( data ) {
+        // Exported to CSV
+      } );
+
+    // Plugin ready for image exports
+    } else if ( type == "fabric" && !timedout ) {
+      this.capture( {}, function() {
+        this.toPNG( {}, function( data ) {
+          // Exported to PNG
+        } );
+      } );
+    }
+  }
 }
 ```
 
@@ -659,6 +686,7 @@ exportSelection | Exports the current data selection only ( data export only )
 dataDateFormat | Format to convert date strings to date objects, uses by default charts dataDateFormat ( data export only )
 dateFormat | Formats the category field in given date format ( data export only )
 border | An object of key/value pairs to define the overlaying border
+pageOrigin | A flag to show / hide the origin of the generated PDF ( pdf export only )
 
 Available `format` values:
 
@@ -820,6 +848,40 @@ toCanvas | (object) options, (function) callback | Prepares a Canvas and passes 
 toArray | (object) options, (function) callback | Prepares an Array and passes the data to the callback function
 toImage | (object) options, (function) callback | Generates an image element which holds the output in an embedded base64 data url
 
+## Annotation API
+
+Since version 1.4.27 we've introduced the functionality to manage the annotations on the fly. The setter returns an array of objects, where each element represents an annotation.
+On the other hand the setter processes the given annotations within options (options.data). Both methods support the reviver callback which allows you to modify the annotations if needed.
+
+Function | Parameters | Description
+-------- | ---------- | -----------
+getAnnotations | (object) options, (function) callback | Returns an array of objects where each element represents an annotation.
+setAnnotations | (object) options, (function) callback | Draws the given annotations (options.data).
+
+Here's an example how to insert annotations, please ensure your chart is in annotation mode:
+
+```
+chart.export.setAnnotations({
+
+  // Array of annotations, accepts this simple handwritten format or the detailed output of the getter
+  data: [{
+    top: 200,
+    left: 200,
+    text: "Test annotation",
+    type: "text"
+  }],
+
+  // Allows you to modify the annotation before it's being added into the canvas.
+  reviver: function(obj,index) {
+    obj.fill = "#FF00FF";
+  }
+
+
+},function() {
+  // Callback when finished 
+});
+```
+
 ## Fallback for IE9
 
 Unfortunately, Internet Explorer 9 has restrictions in place that prevent the
@@ -908,6 +970,70 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 
 ## Changelog
+
+### 1.4.34
+* Fixed: Data shifting issue in data exports with compared graphs (stock only)
+* Fixed: Shallow copy of compared graphs in data exports (stock only)
+
+### 1.4.33
+* Fixed: fill/stroke polyfilling issue on svg elements with color validation/preparation for fabric 
+
+### 1.4.32
+* Fixed: Issue polyfilling the color attributes with "rgba" color codes
+
+### 1.4.31
+* Changed: Included independent IE detection to handle specific IE10, IE11 svg image in canvas issue
+
+### 1.4.30
+* Fixed: Pattern loading, positioning issue, supports x,y offset now
+
+### 1.4.29
+* Added: `libs.loadTimeout` dependency namespace timeout used within onReady handler
+* Added: `fabric.loadTimeout` loading image timeout to avoid blocking the export process
+* Added: [onReady](#events) ready callback handler to get notified when the export or specific dependency is ready to use
+* Fixed: fill/stroke issue on SVG elements which caused a crash within the export process
+* Fixed: Image loader which freezed occasionally and caused an unexpected behaviour
+
+### 1.4.28
+* Fixed: Positioning / handling issue on multiline labels (injected modifed fabricJS snippet to handle it)
+* Fixed: Cursor issue on regular exports which flashed the crosshair cursor for a moment
+
+### 1.4.27
+* Added: [Annotations API](#annotations-api) to get or set annotations within drawing mode.
+
+### 1.4.26
+* Fixed: IE10 SVG image handing issue, caused by an internal bug of IE10 (removes SVGs automatically to avoid triggering the security policy)
+
+### 1.4.25
+* Fixed: `export.config.advanced.js` sample config issue with drawing callbacks
+* Fixed: `delay` property reset issue, did not get considered after first usage
+* Fixed: `drawing.enabled` propery issue after first usage, stayed on true
+* Changed: Updated fabric.js source to `1.6.2`
+* Added: Advanced sample using the advanced config
+
+### 1.4.24
+* Fixed: Issue with external legends in maps
+* Fixed: Resource dependency issue of xlsx with jszip
+* Fixed: Issue with `forceRemoveImages` in local enviroment (includes all ":\" and "file://" sources)
+* Changed: Resource loading order according to it's priority
+* Changed: Loading minified resource versions by default to improve the payload significantly
+
+### 1.4.23
+* Fixed: Issue with `forceRemoveImages` in local enviroment
+
+### 1.4.22
+* Fixed: Local time offset issue on XLSX exports
+* Added: `forceRemoveImages` to remove images regardless if they are tainted or not
+* Added: Used config ([processData](#changing-the-dataprovider-when-exporting)) as additional given parameter.
+
+### 1.4.21
+* Fixed: Issue with file:// image origin, forced removal as it does not fit to the CORS policy and blocks the image export.
+
+### 1.4.20
+* Fixed: Issue with disappearing images in PDFs caused by exceeding boundary box for images
+
+### 1.4.19
+* Fixed: Issue with radial gradient
 
 ### 1.4.18
 * Fixed: Issue with the legend positioning on the left side

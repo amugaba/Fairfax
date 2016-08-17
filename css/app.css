@@ -12,10 +12,13 @@
     padding: 10px;
 }
 
-div.bordergrey {
+div.groupbox {
     border: 1px solid #CCC;
+    border-radius: 6px;
     padding: 10px;
     margin: 5px;
+    /*background-color: #2e6da4;
+    color: #ffffff;*/
 }
 
 .accordion div {
@@ -116,11 +119,52 @@ table.datatable {
     text-align: center;
 }
 
-.shadow {
-    font-size: 30px;
+.shadowdeep {
     text-shadow: 0px 2px 1px rgba(0,0,0,.6);
+}
+
+.shadow {
+    text-shadow: 0px 1px 1px rgba(0,0,0,.6);
 }
 
 .navbar-nav > li > a {
     font-size: 13pt;
+}
+
+.sidebar {
+    margin-bottom: -9999px;
+    padding-bottom: 9999px;
+    background-color: #2e6da4;
+    color: #ffffff;
+}
+
+.sidebar a {
+    color: #ffffff;
+    font-size: 13pt;
+}
+
+.categories li {
+    margin: 0 0 10px 0;
+}
+
+.row {
+    overflow: hidden;
+}
+
+@media (min-width: 1200px) {
+    .sidebar {
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 991px) {
+    .sidebar {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        margin-top: -20px;
+        text-align: center;
+    }
+    .categories li {
+        margin: 0 0 4px 0;
+    }
 }

@@ -82,7 +82,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
         $(function() {
             init(<?php echo json_encode($variables); ?>, <?php echo json_encode($q1); ?>, <?php echo json_encode($grp); ?>);
             createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,
-                <?php echo json_encode($mainVar->summary); ?>, <?php echo json_encode($groupVar->summary); ?>);
+                <?php echo json_encode($mainVar->summary); ?>, <?php echo json_encode($groupVar->summary); ?>,false);
 
             createVariablesByCategory($("#demo1"),$("#demo2"),99);
             createVariablesByCategory($("#alcohol1"),$("#alcohol2"),1);
@@ -133,10 +133,10 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 </head>
 <body>
 <?php include_header(); ?>
-<div class="container" style="width:90%;">
+<div class="container" id="main">
     <div class="row">
-        <div class="col-md-3">
-            <div class="h4">1. Select a Question</div>
+        <div class="col-md-3 sidebar">
+            <div class="h2 shadowdeep">1. Select a Question</div>
             <div id="accordion1" class="accordion">
                 <h3>Demographics</h3><div id="demo1"></div>
                 <h3>Alcohol</h3><div id="alcohol1"></div>
@@ -146,7 +146,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 <h3>School and Work</h3><div id="school1"></div>
             </div>
 
-            <div class="h4">2. (Optional) Compare to Another Question</div>
+            <div class="h2 shadowdeep">2. (Optional) Compare to Another Question</div>
             <div id="accordion2" class="accordion">
                 <h3>Demographics</h3><div id="demo2"></div>
                 <h3>Alcohol</h3><div id="alcohol2"></div>
@@ -156,7 +156,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 <h3>School and Work</h3><div id="school2"></div>
             </div>
 
-            <div class="h4">3. (Optional) Filter Results by...</div>
+            <div class="h2 shadowdeep">3. (Optional) Filter Results by...</div>
             <div class="bordergrey filterbox">
                 <form action="graphs.php" method="post">
                     <input type="hidden" name="filter" value="1">

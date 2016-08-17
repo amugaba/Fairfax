@@ -13,7 +13,7 @@ function init(qs, main, group) {
     groupCode = group;
 }
 
-function createPercentChart(chartData, groups, mainTitle, groupTitle) {
+function createPercentChart(chartData, groups, mainTitle, groupTitle, isCategory) {
     AmCharts.ready(function () {
         // SERIAL CHART
         chart = new AmCharts.AmSerialChart();
@@ -47,7 +47,8 @@ function createPercentChart(chartData, groups, mainTitle, groupTitle) {
 
         // GRAPHS
         for(var i = 0; i < groups.length; i++) {
-            chart.addGraph(createSubGraph(groups[i],'v'+i,i));
+            //chart.addGraph(createSubGraph(groups[i],'v'+i,i));
+            chart.addGraph(createSubGraph(groups[i],'v'+i,i,groupTitle,mainTitle,isCategory));
         }
 
         // LEGEND
@@ -57,18 +58,42 @@ function createPercentChart(chartData, groups, mainTitle, groupTitle) {
         chart.addLegend(legend);
 
         chart.creditsPosition = "top-right";
+        chart.export = {
+            enabled: true
+        };
         chart.write("chartdiv");
     });
 }
 
-function createSubGraph(title,field,num) {
+function createSubGraph(title,field,num,q1Title,q2Title,isCategory) {
     var graph1 = new AmCharts.AmGraph();
     graph1.type = "column";
     graph1.title = title;
     graph1.valueField = field;
-    graph1.balloonText = "[[value]]% of "+title;
+    if(isCategory) {
+        if(title == "Total")
+            graph1.balloonText = "[[value]]% of students were positive for [[category]]";
+        else
+            graph1.balloonText = "[[value]]% of "+title+" students were positive for [[category]]";
+    }
+    else if(q1Title == null)
+        graph1.balloonText = "[[value]]% of students answered '[[category]]' to '"+q2Title+"'";
+    else
+        graph1.balloonText = "[[value]]% of students who answered <i>'"+title+"'</i> to '"+q1Title+"' also answered '[[category]]' to '"+q2Title+"'";
     graph1.lineAlpha = 0;
         graph1.fillColors = fillColors[num];
+    graph1.fillAlphas = 1;
+    return graph1;
+}
+
+function createCategorySubGraph(title,field,num) {
+    var graph1 = new AmCharts.AmGraph();
+    graph1.type = "column";
+    graph1.title = title;
+    graph1.valueField = field;
+    graph1.balloonText = "[[value]]% of "+title+" students used alcohol";
+    graph1.lineAlpha = 0;
+    graph1.fillColors = fillColors[num];
     graph1.fillAlphas = 1;
     return graph1;
 }
