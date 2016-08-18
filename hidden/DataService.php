@@ -9,7 +9,7 @@ class DataService {
 
     public $connection;
     public $vartable = "variables_2015";
-    public $datatable = "data_2015_8to12";
+    public $datatable = "data_2015_merged";
 
     public function __construct ()
     {
@@ -185,7 +185,21 @@ class DataService {
         $stmt = $this->connection->query($query);
         $this->throwExceptionOnError();
 
-        return $stmt->fetch_all(MYSQLI_ASSOC);
+        $results = $stmt->fetch_all(MYSQLI_ASSOC);
+
+        if($groupcode != 'none') {
+            //get group values
+            $groupAnswers = $this->getLabels($groupcode);
+
+            //check if any group values are missing from data
+            for ($i = 0; $i < count($groupAnswers); $i++) {
+                if($results[$i]['subgroup'] != $i+1) {
+                    array_splice($results,$i,0, array(array('num' => "0", 'subgroup' => "".($i+1))));
+                }
+            }
+        }
+
+        return $results;
     }
 
     public function getGroupTotalsCutoff($varcode, $groupcode, $totalCutoff)
@@ -214,7 +228,21 @@ class DataService {
         $stmt = $this->connection->query($query);
         $this->throwExceptionOnError();
 
-        return $stmt->fetch_all(MYSQLI_ASSOC);
+        $results = $stmt->fetch_all(MYSQLI_ASSOC);
+
+        if($groupcode != 'none') {
+            //get group values
+            $groupAnswers = $this->getLabels($groupcode);
+
+            //check if any group values are missing from data
+            for ($i = 0; $i < count($groupAnswers); $i++) {
+                if($results[$i]['subgroup'] != $i+1) {
+                    array_splice($results,$i,0, array(array('num' => "0", 'subgroup' => "".($i+1))));
+                }
+            }
+        }
+
+        return $results;
     }
 
     /**

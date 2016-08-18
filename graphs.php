@@ -86,10 +86,18 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 
             createVariablesByCategory($("#demo1"),$("#demo2"),99);
             createVariablesByCategory($("#alcohol1"),$("#alcohol2"),1);
+            createVariablesByCategory($("#tobacco1"),$("#tobacco2"),12);
             createVariablesByCategory($("#drugs1"),$("#drugs2"),5);
+            createVariablesByCategory($("#mental1"),$("#mental2"),9);
+            createVariablesByCategory($("#school1"),$("#school2"),4);
             createVariablesByCategory($("#bullying1"),$("#bullying2"),2);
             createVariablesByCategory($("#sexual1"),$("#sexual2"),3);
-            createVariablesByCategory($("#school1"),$("#school2"),4);
+            createVariablesByCategory($("#family1"),$("#family2"),11);
+            createVariablesByCategory($("#community1"),$("#community2"),10);
+            createVariablesByCategory($("#safety1"),$("#safety2"),13);
+            createVariablesByCategory($("#physical1"),$("#physical2"),6);
+            createVariablesByCategory($("#nutrition1"),$("#nutrition2"),7);
+            createVariablesByCategory($("#perception1"),$("#perception2"),8);
 
             $( "#accordion1" ).accordion({
                 collapsible: true,
@@ -140,20 +148,36 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
             <div id="accordion1" class="accordion">
                 <h3>Demographics</h3><div id="demo1"></div>
                 <h3>Alcohol</h3><div id="alcohol1"></div>
+                <h3>Tobacco</h3><div id="tobacco1"></div>
                 <h3>Drugs</h3><div id="drugs1"></div>
+                <h3>Mental Health</h3><div id="mental1"></div>
+                <h3>School</h3><div id="school1"></div>
                 <h3>Bullying</h3><div id="bullying1"> </div>
                 <h3>Sex and Relationships</h3><div id="sexual1"></div>
-                <h3>School and Work</h3><div id="school1"></div>
+                <h3>Family</h3><div id="family1"></div>
+                <h3>Community Support</h3><div id="community1"></div>
+                <h3>Safety and Violence</h3><div id="safety1"></div>
+                <h3>Physical Activity</h3><div id="physical1"></div>
+                <h3>Nutrition</h3><div id="nutrition1"></div>
+                <h3>Self/Peer Perception</h3><div id="perception1"></div>
             </div>
 
             <div class="h2 shadowdeep">2. (Optional) Compare to Another Question</div>
             <div id="accordion2" class="accordion">
                 <h3>Demographics</h3><div id="demo2"></div>
                 <h3>Alcohol</h3><div id="alcohol2"></div>
+                <h3>Tobacco</h3><div id="tobacco2"></div>
                 <h3>Drugs</h3><div id="drugs2"></div>
+                <h3>Mental Health</h3><div id="mental2"></div>
+                <h3>School</h3><div id="school2"></div>
                 <h3>Bullying</h3><div id="bullying2"> </div>
                 <h3>Sex and Relationships</h3><div id="sexual2"></div>
-                <h3>School and Work</h3><div id="school2"></div>
+                <h3>Family</h3><div id="family2"></div>
+                <h3>Community Support</h3><div id="community2"></div>
+                <h3>Safety and Violence</h3><div id="safety2"></div>
+                <h3>Physical Activity</h3><div id="physical2"></div>
+                <h3>Nutrition</h3><div id="nutrition2"></div>
+                <h3>Self/Peer Perception</h3><div id="perception2"></div>
             </div>
 
             <div class="h2 shadowdeep">3. (Optional) Filter Results by...</div>
