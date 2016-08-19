@@ -32,8 +32,17 @@ if($mainVar != null && ($groupVar != null || !$isGrouped))
     else
         $grouplabels = ['Total'];
 
-    $rawCounts = $ds->getData($q1, $grp);
-    $totals = $ds->getGroupTotals($grp);
+    //construct filter
+    $filter = " 1 ";
+    if(isset($_GET['grade']))
+        $filter .= " AND I2 = " . $_GET['grade'];
+    if(isset($_GET['gender']))
+        $filter .= " AND I3 = " . $_GET['gender'];
+    if(isset($_GET['race']))
+        $filter .= " AND race_eth = " . $_GET['race'];
+
+    $rawCounts = $ds->getData($q1, $grp, $filter);
+    $totals = $ds->getGroupTotals($grp, $filter);
     $rawPercents = $ds->converToPercents($rawCounts,$totals,$isGrouped);
 
     $finalPercents = [];
@@ -75,11 +84,17 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
     <?php include_styles() ?>
     <script src="js/amcharts/amcharts.js" type="text/javascript"></script>
     <script src="js/amcharts/serial.js" type="text/javascript"></script>
+    <script src="js/amcharts/plugins/export/export.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
     <script src="js/crosstab.js" type="application/javascript"></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
-    <link rel='stylesheet' href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css'>
+    <script src="js/exporttable.js" type="text/javascript"></script>
     <script>
         $(function() {
+            finalCounts = <?php echo json_encode($finalCounts); ?>;
+            finalPercents = <?php echo json_encode($finalPercents); ?>;
+            groupLabels = <?php echo json_encode($grouplabels); ?>;
+            answerLables = <?php echo json_encode($labels); ?>;
+
             init(<?php echo json_encode($variables); ?>, <?php echo json_encode($q1); ?>, <?php echo json_encode($grp); ?>);
             createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,
                 <?php echo json_encode($mainVar->summary); ?>, <?php echo json_encode($groupVar->summary); ?>,false);
@@ -115,28 +130,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 heightStyle: "content"
             });
             $( "#freqtabs" ).tabs();
-
-            $("#btnExport").click(function (e) {
-                window.open('data:application/vnd.ms-excel,' + $('#datatable').html().replace(/ /g, '%20'));
-                e.preventDefault();
-            });
         });
-
-        var tableToExcel = (function () {
-            var uri = 'data:application/vnd.ms-excel;base64,'
-                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-                , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
-                , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-            return function (table, name, filename) {
-                if (!table.nodeType) table = document.getElementById(table)
-                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
-
-                document.getElementById("dlink").href = uri + base64(format(template, ctx));
-                document.getElementById("dlink").download = filename;
-                document.getElementById("dlink").click();
-
-            }
-        })();
     </script>
 </head>
 <body>
@@ -181,35 +175,36 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
             </div>
 
             <div class="h2 shadowdeep">3. (Optional) Filter Results by...</div>
-            <div class="bordergrey filterbox">
-                <form action="graphs.php" method="post">
-                    <input type="hidden" name="filter" value="1">
-                    <label for="filteryear">Year: </label>
-                    <select id="filteryear">
-                        <option value="all">All</option>
-                        <option value="2015">2015</option>
-                    </select><br>
-                    <label for="filtergrade">Grade: </label>
-                    <select id="filtergrade">
-                        <option value="all">All</option>
-                        <option value="1">8th</option>
-                        <option value="2">10th</option>
-                        <option value="3">12th</option>
-                    </select><br>
-                    <label for="filtergrade">Gender: </label>
-                    <select id="filtergender">
-                        <option value="all">All</option>
-                        <option value="1">Female</option>
-                        <option value="2">Male</option>
-                    </select><br>
-                    <label for="filterrace">Race: </label>
-                    <select id="filterrace">
-                        <option value="all">All</option>
-                        <option value="1">Non-white</option>
-                        <option value="2">White</option>
-                    </select><br>
-                    <input type="submit" value="Filter" style="margin: 0px 0px 0px 103px; width: 100px;">
-                </form>
+            <div class="bordergrey filterbox" style="color: black">
+                <label for="filteryear">Year: </label>
+                <select id="filteryear">
+                    <option value="0">All</option>
+                    <option value="2015">2015</option>
+                </select><br>
+                <label for="filtergrade">Grade: </label>
+                <select id="filtergrade">
+                    <option value="0">All</option>
+                    <option value="1">6th</option>
+                    <option value="2">8th</option>
+                    <option value="3">10th</option>
+                    <option value="4">12th</option>
+                </select><br>
+                <label for="filtergrade">Gender: </label>
+                <select id="filtergender">
+                    <option value="0">All</option>
+                    <option value="1">Female</option>
+                    <option value="2">Male</option>
+                </select><br>
+                <label for="filterrace">Race: </label>
+                <select id="filterrace">
+                    <option value="0">All</option>
+                    <option value="1">White</option>
+                    <option value="2">Black</option>
+                    <option value="3">Hispanic</option>
+                    <option value="4">Asian/Pacific Islander</option>
+                    <option value="5">Other/Multiple</option>
+                </select><br>
+                <input type="button" onclick="filter()" value="Filter" style="margin: 0px 0px 0px 103px; width: 100px;">
             </div>
         </div>
 
@@ -217,9 +212,18 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
             <div style="text-align: center;">
                 <h4><?php echo $mainVar->question;?></h4>
                 <?php if($isGrouped) {
-                    echo "<span style='font-style: italic;'>compared to</span>";
+                    echo "<span style='font-style: italic;'>compared to</span><h4>$groupVar->question</h4>";
                 }?>
-                <h4><?php echo $groupVar->question;?></h4>
+                <?php if(strlen($filter) > 3) {
+                    echo "<span style='font-style: italic;'>filtered by</span><h4>";
+                    if(isset($_GET['grade']))
+                        echo "Grade ";
+                    if(isset($_GET['gender']))
+                        echo "Gender ";
+                    if(isset($_GET['race']))
+                        echo "Race/Ethnicity ";
+                    echo "</h4>";
+                }?>
             </div>
 
 
@@ -236,7 +240,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
-            <div style="text-align: center;">
+            <div style="text-align: center; margin-bottom: 20px;">
                 <h4>Cross-tabulated Frequencies</h4>
                 <div id="freqtabs" style="display: inline-block;">
                     <ul>
@@ -270,8 +274,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                                 echo "</tr>";
                             }?>
                         </table>
-                        <a id="dlink"  style="display:none;"></a>
-                        <input type="button" onclick="tableToExcel('datatable-count', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                        <input type="button" onclick="tableToExcel(true)" value="Export to CSV">
                     </div>
                     <div id="freqtabs-2">
                         <table id="datatable-percent" class="datatable" style="margin: 0 auto; font-size:10pt;">
@@ -300,8 +303,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                                 echo "</tr>";
                             }?>
                         </table>
-                        <a id="dlink"  style="display:none;"></a>
-                        <input type="button" onclick="tableToExcel('datatable-percent', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                        <input type="button" onclick="tableToExcel(false)" value="Export to CSV">
                     </div>
                 </div>
             </div>

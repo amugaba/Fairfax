@@ -77,18 +77,16 @@ class DataService {
      * @param string $groupcode
      * @return array
      */
-    public function getData($varcode, $groupcode)
+    public function getData($varcode, $groupcode, $filter)
     {
         $varcode = $this->connection->escape_string($varcode);
         $groupcode = $this->connection->escape_string($groupcode);
 
         if($groupcode != 'none') {
-            //$stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $varcode, $groupcode");
-            //$stmt2 = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL GROUP BY $varcode, $groupcode");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL AND $filter GROUP BY $varcode, $groupcode");
         }
         else {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer FROM $this->datatable GROUP BY $varcode");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer FROM $this->datatable WHERE $filter GROUP BY $varcode");
         }
         $this->throwExceptionOnError();
 
@@ -130,14 +128,14 @@ class DataService {
      * @param string $groupcode
      * @return array
      */
-    public function getGroupTotals($groupcode)
+    public function getGroupTotals($groupcode, $filter)
     {
         $groupcode = $this->connection->escape_string($groupcode);
 
         if($groupcode != 'none')
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL GROUP BY $groupcode");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL AND $filter GROUP BY $groupcode");
         else
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM $this->datatable");
+            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM $this->datatable WHERE $filter");
         $this->throwExceptionOnError();
 
         $totals = $stmt->fetch_all(MYSQLI_ASSOC);

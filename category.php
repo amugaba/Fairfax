@@ -90,9 +90,8 @@ else if($cat == 8) {
     $lowCutoffs = [5,1,3];
     $highCutoffs = [null,1,null];
     $totalCutoffs = [null,null,null];
-    $explanation = "<p>The Youth Survey provides data on a variety of interlinked health behaviors related to physical activity and rest.
-        Highlights include both frequency of physical activity across selected timeframes as well as indicators of inactivity and information about adequate sleep.</p>
-        <p>Additional data are available in this category by choosing to <a href='graphs.php'>Explore All Questions</a>.</p>";
+    $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sugared drinks, and hunger.</p>
+        <p>To see additional nutrition data, including weight loss behaviors, go to <a href='graphs.php'>Explore All Questions</a>.</p>";
 }
 else if($cat == 9) {
     $title = "Mental Health";
@@ -162,9 +161,15 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
     <script src="js/amcharts/plugins/export/export.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
     <script src="js/crosstab.js" type="application/javascript"></script>
+    <script src="js/exporttable.js" type="text/javascript"></script>
     <link rel="stylesheet" href="css/app.css">
     <script>
         $(function() {
+            finalCounts = <?php echo json_encode($finalCounts); ?>;
+            finalPercents = <?php echo json_encode($finalPercents); ?>;
+            groupLabels = <?php echo json_encode($grouplabels); ?>;
+            answerLables = <?php echo json_encode($labels); ?>;
+
             createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,'', '',true);
 
             $('#grouping :input[value=<?php echo $grp;?>]').prop("checked",true);
@@ -173,28 +178,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 window.location = "category.php?cat=<?php echo $cat;?>&grp="+this.value;
             });
             $( "#freqtabs" ).tabs();
-
-            $("#btnExport").click(function (e) {
-                window.open('data:application/vnd.ms-excel,' + $('#datatable').html().replace(/ /g, '%20'));
-                e.preventDefault();
-            });
         });
-
-        var tableToExcel = (function () {
-            var uri = 'data:application/vnd.ms-excel;base64,'
-                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-                , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
-                , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-            return function (table, name, filename) {
-                if (!table.nodeType) table = document.getElementById(table)
-                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
-
-                document.getElementById("dlink").href = uri + base64(format(template, ctx));
-                document.getElementById("dlink").download = filename;
-                document.getElementById("dlink").click();
-
-            }
-        })();
     </script>
 </head>
 <body>
@@ -233,8 +217,8 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 
 
 
-            <div style="text-align: center;">
-                <h4>Cross-tabulated Frequencies</h4>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h4>Data Table</h4>
                 <div id="freqtabs" style="display: inline-block;">
                     <ul>
                         <li><a href="#freqtabs-1">Percents</a></li>
@@ -266,8 +250,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                                 echo "</tr>";
                             }?>
                         </table>
-                        <a id="dlink"  style="display:none;"></a>
-                        <input type="button" onclick="tableToExcel('datatable-count', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                        <input type="button" onclick="tableToExcel(true)" value="Export to CSV">
                     </div>
                     <div id="freqtabs-2">
                         <table id="datatable-percent" class="datatable" style="margin: 0 auto; font-size:10pt;">
@@ -295,8 +278,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                                 echo "</tr>";
                             }?>
                         </table>
-                        <a id="dlink"  style="display:none;"></a>
-                        <input type="button" onclick="tableToExcel('datatable-percent', 'name', 'fairfaxdata.xls')" value="Export to Excel">
+                        <input type="button" onclick="tableToExcel(false)" value="Export to CSV">
                     </div>
                 </div>
             </div>

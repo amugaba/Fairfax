@@ -4,6 +4,7 @@
 "use strict";
 var questions = [];
 var chart, mainCode = null, groupCode = null;
+
 //var fillColors = ["#70a1c2","#ddaf45","#c273bf","#d4d257","#7cc27c","#c25844","#c29e88","#567ac2"];
 var fillColors = ["#70a1c2","#7cc27c","#d4d257","#ddaf45","#c26751","#c273bf","#c29e88","#567ac2"];
 
@@ -108,4 +109,19 @@ function createVariablesByCategory(div1,div2,category) {
             $("<li></li>").appendTo(list2).append("<a href='graphs.php?q1="+mainCode+"&grp="+questions[i].code+"'>"+questions[i].summary+"</a>");
         }
     }
+}
+
+function filter() {
+    var url = "http://www.angstrom-software.com/fairfax/graphs.php?q1=" + mainCode;
+    if(groupCode != null)
+        url += "&grp="+groupCode;
+
+    if($("#filtergrade option:selected").val() > 0)
+        url += "&grade=" + $("#filtergrade option:selected").val();
+    if($("#filtergender option:selected").val() > 0)
+        url += "&gender=" + $("#filtergender option:selected").val();
+    if($("#filterrace option:selected").val() > 0)
+        url += "&race=" + $("#filterrace option:selected").val();
+
+    window.location.href = url;
 }
