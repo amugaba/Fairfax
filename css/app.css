@@ -168,3 +168,23 @@ table.datatable {
         margin: 0 0 4px 0;
     }
 }
+
+button.tipbutton {
+    border-radius: 8px;
+    border: 1px solid #CCC;
+    text-shadow: 0px 1px 1px rgba(0,0,0,.6);
+    color:black;
+}
+
+div.tipbutton {
+    background-image: url(../img/tooltip-sm.png);
+    background-repeat: no-repeat;
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.filterbox select, .filterbox input {
+    color: black;
+}

@@ -130,6 +130,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 heightStyle: "content"
             });
             $( "#freqtabs" ).tabs();
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 </head>
@@ -138,7 +139,9 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 <div class="container" id="main">
     <div class="row">
         <div class="col-md-3 sidebar">
-            <div class="h2 shadowdeep">1. Select a Question</div>
+            <div class="h2 shadowdeep">1. Select a Question
+                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Click a category below to expand the box and display all questions in that category. Select a question to display its graph."></div>
+            </div>
             <div id="accordion1" class="accordion">
                 <h3>Demographics</h3><div id="demo1"></div>
                 <h3>Alcohol</h3><div id="alcohol1"></div>
@@ -156,7 +159,9 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 <h3>Self/Peer Perception</h3><div id="perception1"></div>
             </div>
 
-            <div class="h2 shadowdeep">2. (Optional) Compare to Another Question</div>
+            <div class="h2 shadowdeep">2. (Optional) Compare to Another Question
+                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="After selecting the primary question above, you may select a second question to look at subgroups. For example, select 'Alcohol>Binge Drinking' above, then select 'Demographics>Age' here to see how binge drinking varies with age."></div>
+            </div>
             <div id="accordion2" class="accordion">
                 <h3>Demographics</h3><div id="demo2"></div>
                 <h3>Alcohol</h3><div id="alcohol2"></div>
@@ -174,8 +179,10 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 <h3>Self/Peer Perception</h3><div id="perception2"></div>
             </div>
 
-            <div class="h2 shadowdeep">3. (Optional) Filter Results by...</div>
-            <div class="bordergrey filterbox" style="color: black">
+            <div class="h2 shadowdeep">3. (Optional) Filter Results by...
+                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="You can focus your query on specific populations. After selecting question(s) above, choose which groups you want to include here. For example, choosing 'Mental Health>Considered suicide' and then filtering for 'Male' will show suicide data only for male students."></div>
+            </div>
+            <div class="bordergrey filterbox" style="margin-bottom: 20px;">
                 <label for="filteryear">Year: </label>
                 <select id="filteryear">
                     <option value="0">All</option>
@@ -241,7 +248,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
             <div style="text-align: center; margin-bottom: 20px;">
-                <h4>Cross-tabulated Frequencies</h4>
+                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="Here the data is shown in table format. Click on the tabs below to switch between percentages and raw numbers."></div></h3>
                 <div id="freqtabs" style="display: inline-block;">
                     <ul>
                         <li><a href="#freqtabs-1">Percents</a></li>

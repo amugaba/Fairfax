@@ -9,7 +9,7 @@ $grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
 if($cat == 1) {
     $title = "Substance Use";
     $qCodes = ['A2A','A3A','A4','D2A'];
-    $labels = ['Lifetime Alcohol','Past-Month Alcohol','Binge Drinking','Lifetime Marijuana'];
+    $labels = ['Lifetime Alcohol','Past-Month Alcohol','Binge Drinking<br>(5+ Drinks in a Row)','Lifetime Marijuana'];
     $lowCutoffs = [2,2,2,2];
     $highCutoffs = [null,null,null,null];
     $totalCutoffs = [null,null,null,null];
@@ -162,7 +162,6 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
     <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
     <script src="js/crosstab.js" type="application/javascript"></script>
     <script src="js/exporttable.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="css/app.css">
     <script>
         $(function() {
             finalCounts = <?php echo json_encode($finalCounts); ?>;
@@ -178,6 +177,7 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 window.location = "category.php?cat=<?php echo $cat;?>&grp="+this.value;
             });
             $( "#freqtabs" ).tabs();
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 </head>
@@ -186,7 +186,9 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 <div class="container" id="main">
     <div class="row">
         <div class="col-md-3 sidebar">
-            <div class="h2 shadowdeep">Select a Category</div>
+            <div class="h2 shadowdeep">Select a Category
+                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
+            </div>
                 <ul class="categories shadow">
                     <li><a href='?cat=1'>Substance Use</a></li>
                     <li><a href='?cat=2'>Sexual Activity</a></li>
@@ -212,13 +214,14 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 <input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
+                <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
             </div>
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
 
 
             <div style="text-align: center; margin-bottom: 20px;">
-                <h4>Data Table</h4>
+                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="Here the data is shown in table format. Click on the tabs below to switch between percentages and raw numbers."></div></h3>
                 <div id="freqtabs" style="display: inline-block;">
                     <ul>
                         <li><a href="#freqtabs-1">Percents</a></li>
