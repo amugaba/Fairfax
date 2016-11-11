@@ -3,13 +3,14 @@
  * Provide service function to access data from database
  */
 require_once 'ConnectionManager.php';
-require_once 'VariableVO.php';
+require_once 'Variable.php';
+require_once 'Answer.php';
 
 class DataService {
 
     public $connection;
     public $vartable = "variables_2015";
-    public $datatable = "data_2015_merged";
+    public $datatable = "data_2015_8to12";
 
     public function __construct ()
     {
@@ -19,8 +20,52 @@ class DataService {
     }
 
     /**
+     * Get variable by code
+     * @param string $code
+     * @return Variable
+     */
+    public function getVariableByCode($code)
+    {
+        $stmt = $this->connection->prepare("SELECT autoid, code, question, summary, category FROM $this->vartable WHERE code=?");
+        $this->throwExceptionOnError();
+        $stmt->bind_param('s',$code);
+        $this->throwExceptionOnError();
+        $stmt->execute();
+        $this->throwExceptionOnError();
+
+        $var = new Variable();
+        $stmt->bind_result($var->autoid, $var->code, $var->question, $var->summary, $var->category);
+        if(!$stmt->fetch()){
+            return null;
+        }
+        $stmt->free_result();
+
+        //Get Answers to the Question
+        $stmt = $this->connection->prepare("SELECT answer1,answer2,answer3,answer4,answer5,answer6,answer7,answer8,answer9,
+            answer10,answer11,answer12,answer13,answer14,answer15,answer16,answer17,answer18,answer19,answer20,answer21,
+            answer22,answer23,answer24,answer25,answer26 FROM $this->vartable WHERE code=?");
+        $this->throwExceptionOnError();
+        $stmt->bind_param('s',$code);
+        $this->throwExceptionOnError();
+        $stmt->execute();
+        $this->throwExceptionOnError();
+
+        $result = $stmt->get_result();
+        $labels = $result->fetch_row();
+
+        //add Answers to Question
+        for($i=0; $i<count($labels); $i++)
+        {
+            $label = $labels[$i];
+            if($label != null && $label != '')
+                $var->addAnswer($i+1,$label);
+        }
+        return $var;
+    }
+
+    /**
      * Get all variables
-     * @return VariableVO[]
+     * @return Variable[]
      */
     public function getVariables()
     {
@@ -31,13 +76,13 @@ class DataService {
         $this->throwExceptionOnError();
 
         $vars = [];
-        $var = new VariableVO();
+        $var = new Variable();
         $stmt->bind_result($var->autoid, $var->code, $var->question, $var->summary, $var->category);
 
         while ($stmt->fetch())
         {
             $vars[] = $var;
-            $var = new VariableVO();
+            $var = new Variable();
             $stmt->bind_result($var->autoid, $var->code, $var->question, $var->summary, $var->category);
         }
 
@@ -45,202 +90,154 @@ class DataService {
     }
 
     /**
-     * Get answer labels of one questions
-     * @param int $varid
-     * @return string[]
+     * Get the weighted count of students that chose each answer for the given question.     *
+     * @param Variable $mainVar
+     * @param Variable $groupVar
+     * @param string $filter
+     * @return array
      */
-    public function getLabels($varcode)
+    public function getData($mainVar, $groupVar, $filter)
     {
-        $varcode = $this->connection->escape_string($varcode);
+        $varcode = $mainVar->code;
 
-        $stmt = $this->connection->query("SELECT answer1,answer2,answer3,answer4,answer5,answer6,answer7,answer8,answer9,
-            answer10,answer11,answer12,answer13,answer14,answer15,answer16,answer17,answer18,answer19,answer20,answer21,
-            answer22,answer23,answer24,answer25,answer26 FROM $this->vartable WHERE code='$varcode'");
-        $this->throwExceptionOnError();
-
-        $labels = $stmt->fetch_row();
-
-        //remove empty labels
-        $newlabels = [];
-        for($i=0; $i<count($labels); $i++)
+        if($groupVar != null)
         {
-            $label = $labels[$i];
-            if($label != null && $label != '')
-                $newlabels[] = $label;
+            $groupcode = $groupVar->code;
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $varcode as answer, $groupcode as subgroup 
+                FROM $this->datatable 
+                WHERE $varcode IS NOT NULL AND $groupcode IS NOT NULL AND $filter 
+                GROUP BY $varcode, $groupcode");
         }
-        return $newlabels;
+        else {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $varcode as answer 
+                FROM $this->datatable 
+                WHERE $varcode IS NOT NULL AND $filter 
+                GROUP BY $varcode");
+        }
+        $this->throwExceptionOnError();
+
+        while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+            $answer = $mainVar->getAnswer($row['answer']);
+            $subgroup = $groupVar == null ? 1 : $row['subgroup'];
+            $answer->addCount($subgroup, $row['num']);
+        }
+
+        return $mainVar;
     }
 
     /**
-     * Get data for one question. Data is returned as array of associative arrays: [['answer' => key1, 'num' => value1], ['answer' => key2, 'num' => value2], ...]
-     * @param string $varcode
-     * @param string $groupcode
+     * Get the total number of students that answered the given question (non-null response).
+     * @param Variable $mainVar
+     * @param Variable $groupVar
+     * @param string $filter
      * @return array
      */
-    public function getData($varcode, $groupcode, $filter)
+    public function getGroupTotals($mainVar, $groupVar, $filter)
+    {
+        $varcode = $mainVar->code;
+
+        if($groupVar != null)
+        {
+            $groupcode = $groupVar->code;
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupcode as subgroup 
+                FROM $this->datatable 
+                WHERE $groupcode IS NOT NULL AND $filter AND $varcode IS NOT NULL 
+                GROUP BY $groupcode");
+        }
+        else {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num 
+                FROM $this->datatable 
+                WHERE $filter AND $varcode IS NOT NULL");
+        }
+        $this->throwExceptionOnError();
+
+        while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+            $subgroup = $groupVar == null ? 1 : $row['subgroup'];
+            $mainVar->addTotal($subgroup, $row['num']);
+        }
+
+        return $mainVar;
+    }
+
+    /**
+     * Get the number of students that selected an answer within the cutoff points.
+     * @param Answer $answer
+     * @param Variable $groupVar
+     */
+    public function getDataCutoff($answer, $groupVar)
+    {
+        $cutoffQuery = "1";
+        if($answer->lowCutoff != null) {
+            $cutoffQuery .= " AND $answer->code >= $answer->lowCutoff";
+        }
+        if($answer->highCutoff != null) {
+            $cutoffQuery .= " AND $answer->code <= $answer->highCutoff";
+        }
+
+        if($groupVar != null) {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupVar->code as subgroup
+                FROM $this->datatable 
+                WHERE $groupVar->code IS NOT NULL AND $cutoffQuery
+                GROUP BY $groupVar->code");
+        }
+        else {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num
+                FROM $this->datatable 
+                WHERE $cutoffQuery");
+        }
+        $this->throwExceptionOnError();
+
+        while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+            $subgroup = $groupVar == null ? 1 : $row['subgroup'];
+            $answer->addCount($subgroup, $row['num']);
+        }
+    }
+
+    /**
+     * Get the total number of students within the cutoff points. Then calculate the percentage using the count and total values.
+     * @param Answer $answer
+     * @param Variable $groupVar
+     */
+    public function getGroupTotalsCutoff($answer, $groupVar)
+    {
+        $cutoffQuery = "1";
+        if($answer->totalCutoff != null) {
+            $cutoffQuery .= " AND $answer->code >= $answer->totalCutoff";
+        }
+
+        if($groupVar != null) {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupVar->code as subgroup
+                FROM $this->datatable 
+                WHERE $answer->code IS NOT NULL AND $groupVar->code IS NOT NULL AND $cutoffQuery
+                GROUP BY $groupVar->code");
+        }
+        else {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num
+                FROM $this->datatable 
+                WHERE $answer->code IS NOT NULL AND $cutoffQuery");
+        }
+        $this->throwExceptionOnError();
+
+        while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+            $subgroup = $groupVar == null ? 1 : $row['subgroup'];
+            $answer->addTotal($subgroup, $row['num']);
+        }
+    }
+
+    public function getNoResponseCount($varcode, $groupcode)
     {
         $varcode = $this->connection->escape_string($varcode);
         $groupcode = $this->connection->escape_string($groupcode);
 
+        $query = "SELECT SUM(wgt) as num FROM $this->datatable WHERE $varcode IS NULL";
         if($groupcode != 'none') {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL AND $filter GROUP BY $varcode, $groupcode");
-        }
-        else {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $varcode as answer FROM $this->datatable WHERE $filter GROUP BY $varcode");
-        }
-        $this->throwExceptionOnError();
-
-        return $stmt->fetch_all(MYSQLI_ASSOC);
-    }
-
-    public function converToPercents($data, $totals, $doGrouping)
-    {
-        $newdata = [];
-        for($i=0; $i<count($data); $i++) {
-            if($doGrouping)
-                $subgroup = intval($data[$i]['subgroup'])-1;
-            else
-                $subgroup = 0;
-
-            $newdata[$i] = $data[$i];
-            $newdata[$i]['num'] /= $totals[$subgroup]['num'];
-        }
-        return $newdata;
-    }
-
-    /**
-     * @param $data
-     * @param $answer
-     * @param $group
-     * @return float
-     */
-    public function findData($data, $answer, $group, $isGrouped)
-    {
-        foreach($data as $row) {
-            if($row['answer'] == $answer && (!$isGrouped || $row['subgroup'] == $group))
-                return $row['num'];
-        }
-    }
-
-
-    /**
-     * Get data for one question. Data is returned as array of associative arrays: [['answer' => key1, 'num' => value1], ['answer' => key2, 'num' => value2], ...]
-     * @param string $groupcode
-     * @return array
-     */
-    public function getGroupTotals($groupcode, $filter)
-    {
-        $groupcode = $this->connection->escape_string($groupcode);
-
-        if($groupcode != 'none')
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM $this->datatable WHERE $groupcode IS NOT NULL AND $filter GROUP BY $groupcode");
-        else
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM $this->datatable WHERE $filter");
-        $this->throwExceptionOnError();
-
-        $totals = $stmt->fetch_all(MYSQLI_ASSOC);
-        return $totals;
-    }
-
-    /**
-     * Get the number of cases between the cutoff points for the given question
-     * Data is returned as array of associative arrays: [['cutoff' => null, 'num' => value1], ['answer' => 0, 'num' => value2], ['answer' => 1, 'num' => value3]]
-     * The answer=1 is the number of cases in the cutoff range.
-     * @param string $varcode
-     * @param string $groupcode
-     * @param int $low
-     * @param int $high
-     * @return int
-     */
-    public function getDataCutoff($varcode, $groupcode, $low, $high)
-    {
-        $varcode = $this->connection->escape_string($varcode);
-        $groupcode = $this->connection->escape_string($groupcode);
-
-        $query = "SELECT SUM(wgt) as num";
-        if($groupcode != 'none') {
-            $query .= ", $groupcode as subgroup";
+            $query .= " OR $groupcode IS NULL";
         }
 
-        $query .= " FROM $this->datatable WHERE 1";
-
-        if($low != null) {
-            $query .= " AND $varcode >= $low";
-        }
-        if($high != null) {
-            $query .= " AND $varcode <= $high";
-        }
-        if($groupcode != 'none') {
-            $query .= " AND $groupcode IS NOT NULL GROUP BY $groupcode";
-        }
-
-        /*if($groupcode != 'none') {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $varcode >= $low AND $varcode <= $high AND $groupcode IS NOT NULL GROUP BY $groupcode");
-        }
-        else {
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode >= $low AND $varcode <= $high");
-        }*/
         $stmt = $this->connection->query($query);
         $this->throwExceptionOnError();
 
-        $results = $stmt->fetch_all(MYSQLI_ASSOC);
-
-        if($groupcode != 'none') {
-            //get group values
-            $groupAnswers = $this->getLabels($groupcode);
-
-            //check if any group values are missing from data
-            for ($i = 0; $i < count($groupAnswers); $i++) {
-                if($results[$i]['subgroup'] != $i+1) {
-                    array_splice($results,$i,0, array(array('num' => "0", 'subgroup' => "".($i+1))));
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    public function getGroupTotalsCutoff($varcode, $groupcode, $totalCutoff)
-    {
-        $groupcode = $this->connection->escape_string($groupcode);
-
-        $query = "SELECT SUM(wgt) as num";
-        if($groupcode != 'none') {
-            $query .= ", $groupcode as subgroup";
-        }
-
-        $query .= " FROM $this->datatable WHERE $varcode IS NOT NULL";
-
-        if($totalCutoff != null) {
-            $query .= " AND $varcode >= $totalCutoff";
-        }
-        if($groupcode != 'none') {
-            $query .= " AND $groupcode IS NOT NULL GROUP BY $groupcode";
-        }
-
-        /*if($groupcode != 'none')
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num, $groupcode as subgroup FROM data WHERE $varcode > $totalCutoff AND $groupcode IS NOT NULL GROUP BY $groupcode");
-        else
-            $stmt = $this->connection->query("SELECT SUM(wgt) as num FROM data WHERE $varcode > $totalCutoff");
-        */
-        $stmt = $this->connection->query($query);
-        $this->throwExceptionOnError();
-
-        $results = $stmt->fetch_all(MYSQLI_ASSOC);
-
-        if($groupcode != 'none') {
-            //get group values
-            $groupAnswers = $this->getLabels($groupcode);
-
-            //check if any group values are missing from data
-            for ($i = 0; $i < count($groupAnswers); $i++) {
-                if($results[$i]['subgroup'] != $i+1) {
-                    array_splice($results,$i,0, array(array('num' => "0", 'subgroup' => "".($i+1))));
-                }
-            }
-        }
-
-        return $results;
+        return $stmt->fetch_row()[0];
     }
 
     /**

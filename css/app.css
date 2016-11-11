@@ -185,6 +185,20 @@ div.tipbutton {
     vertical-align: bottom;
 }
 
+th.clearcell {
+    border: none;
+    background: none;
+}
+
 .filterbox select, .filterbox input {
     color: black;
+}
+
+.amcharts-category-axis .amcharts-axis-label {
+    font-size: 13px;
+    display: block;
+}
+
+.ui-widget {
+    font-size: 14px !important;
 }

@@ -3,77 +3,49 @@ require_once "config/config.php";
 require_once 'hidden/DataService.php';
 
 $ds = new DataService();
+$variables = $ds->getVariables();
+
+//Process user input
 $q1 = isset($_GET['q1'])? $_GET['q1'] : 'A4';
 $grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
-$isGrouped = $grp != 'none';
+$grade = isset($_GET['grade']) ? $ds->connection->real_escape_string($_GET['grade']) : null;
+$gender = isset($_GET['gender']) ? $ds->connection->real_escape_string($_GET['gender']) : null;
+$race = isset($_GET['race']) ? $ds->connection->real_escape_string($_GET['race']) : null;
 
-$variables = $ds->getVariables();
-$mainVar = null;
-$groupVar = null;
+//Get Variables
+$mainVar = $ds->getVariableByCode($q1);
+$groupVar = $ds->getVariableByCode($grp);
+if ($mainVar == null)
+    die("User input was invalid.");
+$mainVar->initAnswers($groupVar);
 
-//check that codes for the main variable and the grouping variable are valid
-foreach($variables as $var) {
-    if($var->code == $q1) {
-        $mainVar = $var;
-    }
-    if($var->code == $grp) {
-        $groupVar = $var;
-    }
+//Construct filter
+$filter = " 1 ";
+if ($grade != null)
+    $filter .= " AND I2 = $grade";
+if ($gender != null)
+    $filter .= " AND I3 = $gender";
+if ($race != null)
+    $filter .= " AND race_eth = $race";
+
+//Load data into main Variable
+$ds->getData($mainVar, $groupVar, $filter);
+$ds->getGroupTotals($mainVar, $groupVar, $filter);
+$mainVar->calculatePercents();
+
+//Group variables
+if($groupVar != null){
+    $groupLabels = $groupVar->getLabels();
+    $groupSummary = $groupVar->summary;
+    $groupQuestion = $groupVar->question;
 }
-
-if($mainVar != null && ($groupVar != null || !$isGrouped))
-{
-    $labels = $ds->getLabels($q1);
-    $labels[] = 'No Response';
-
-    if($isGrouped) {
-        $grouplabels = $ds->getLabels($grp);
-    }
-    else
-        $grouplabels = ['Total'];
-
-    //construct filter
-    $filter = " 1 ";
-    if(isset($_GET['grade']))
-        $filter .= " AND I2 = " . $_GET['grade'];
-    if(isset($_GET['gender']))
-        $filter .= " AND I3 = " . $_GET['gender'];
-    if(isset($_GET['race']))
-        $filter .= " AND race_eth = " . $_GET['race'];
-
-    $rawCounts = $ds->getData($q1, $grp, $filter);
-    $totals = $ds->getGroupTotals($grp, $filter);
-    $rawPercents = $ds->converToPercents($rawCounts,$totals,$isGrouped);
-
-    $finalPercents = [];
-    $finalCounts = [];
-
-    //For each answer to the main question, create a new object
-    //with a label and a value for each answer to the grouping question.
-    for($i=0; $i<count($labels); $i++)
-    {
-        $obj1 = ['answer' => $labels[$i]];
-        $obj2 = ['answer' => $labels[$i]];
-
-        //insert values into object
-        for($j=0; $j<count($grouplabels); $j++)
-        {
-            $answer = $labels[$i] == 'No Response' ? null : $i+1;
-            $group = $grouplabels[$j] == 'No Response' ? null : $j+1;
-
-            $num = $ds->findData($rawPercents,$answer,$group,$isGrouped);
-            $obj1['v'.$j] = $num * 100;
-
-            $num = $ds->findData($rawCounts,$answer,$group,$isGrouped);
-            $obj2['v'.$j] = $num;
-        }
-
-        $finalPercents[] = $obj1;
-        $finalCounts[] = $obj2;
-    }
+else {
+    $groupLabels = ['Total'];
+    $groupSummary = null;
+    $groupQuestion = null;
 }
-//height is (labels*(labels+spacing)*bar height + header height
-$graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
+$graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabels())*30+100));//height is (labels*(labels+spacing)*bar height + header height
+$noresponse = $ds->getNoResponseCount($q1, $grp);
 ?>
 
 <!DOCTYPE html>
@@ -87,32 +59,50 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
     <script src="js/amcharts/plugins/export/export.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
     <script src="js/crosstab.js" type="application/javascript"></script>
-    <script src="js/exporttable.js" type="text/javascript"></script>
     <script>
         $(function() {
-            finalCounts = <?php echo json_encode($finalCounts); ?>;
-            finalPercents = <?php echo json_encode($finalPercents); ?>;
-            groupLabels = <?php echo json_encode($grouplabels); ?>;
-            answerLables = <?php echo json_encode($labels); ?>;
+            mainCode = <?php echo json_encode($q1); ?>;
+            groupCode = <?php echo json_encode($grp); ?>;
+            questions = <?php echo json_encode($variables); ?>;
 
-            init(<?php echo json_encode($variables); ?>, <?php echo json_encode($q1); ?>, <?php echo json_encode($grp); ?>);
-            createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,
-                <?php echo json_encode($mainVar->summary); ?>, <?php echo json_encode($groupVar->summary); ?>,false);
+            mainQuestion = <?php echo json_encode($mainVar->question); ?>;
+            groupQuestion = <?php echo json_encode($groupQuestion); ?>;
+            mainTotals = <?php echo json_encode($mainVar->getMainTotals()); ?>;
+            groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
+            sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
 
-            createVariablesByCategory($("#demo1"),$("#demo2"),99);
-            createVariablesByCategory($("#alcohol1"),$("#alcohol2"),1);
-            createVariablesByCategory($("#tobacco1"),$("#tobacco2"),12);
-            createVariablesByCategory($("#drugs1"),$("#drugs2"),5);
-            createVariablesByCategory($("#mental1"),$("#mental2"),9);
-            createVariablesByCategory($("#school1"),$("#school2"),4);
-            createVariablesByCategory($("#bullying1"),$("#bullying2"),2);
-            createVariablesByCategory($("#sexual1"),$("#sexual2"),3);
-            createVariablesByCategory($("#family1"),$("#family2"),11);
-            createVariablesByCategory($("#community1"),$("#community2"),10);
-            createVariablesByCategory($("#safety1"),$("#safety2"),13);
-            createVariablesByCategory($("#physical1"),$("#physical2"),6);
-            createVariablesByCategory($("#nutrition1"),$("#nutrition2"),7);
-            createVariablesByCategory($("#perception1"),$("#perception2"),8);
+            createPercentChart(<?php echo json_encode($mainVar->getCountArray()); ?>, <?php echo json_encode($mainVar->getPercentArray()); ?>,
+                <?php echo json_encode($mainVar->getLabels()); ?>, <?php echo json_encode($groupLabels); ?>,
+                <?php echo json_encode($mainVar->summary); ?>,  <?php echo json_encode($groupSummary); ?>,
+                false, null);
+
+            if(groupLabels.length == 1)
+                createSimpleTable($('#datatable'));
+            else
+                createCrosstabTable($('#datatable'));
+
+            filterString = makeFilterString(<?php echo json_encode($grade); ?>,<?php echo json_encode($gender); ?>,<?php echo json_encode($race); ?>);
+            var titleString = "<h4>"+mainQuestion+"</h4>";
+            if(groupQuestion != null)
+                titleString += "<i>compared to</i><h4>" + groupQuestion + "</h4>";
+            if(filterString != null)
+                titleString += "<i>" + filterString + "</i>";
+            $("#graphTitle").html(titleString);
+
+            createVariablesByCategory("Demographics",99);
+            createVariablesByCategory("Alcohol",1);
+            createVariablesByCategory("Tobacco",12);
+            createVariablesByCategory("Drugs",5);
+            createVariablesByCategory("Mental Health",9);
+            createVariablesByCategory("School",4);
+            createVariablesByCategory("Bullying",2);
+            createVariablesByCategory("Sex and Relationships",3);
+            createVariablesByCategory("Family",11);
+            createVariablesByCategory("Community Support",10);
+            createVariablesByCategory("Safety and Violence",13);
+            createVariablesByCategory("Physical Activity",6);
+            createVariablesByCategory("Nutrition",7);
+            createVariablesByCategory("Self/Peer Perception",8);
 
             $( "#accordion1" ).accordion({
                 collapsible: true,
@@ -124,12 +114,6 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 active: false,
                 heightStyle: "content"
             });
-            $( "#interpret" ).accordion({
-                collapsible: true,
-                active: false,
-                heightStyle: "content"
-            });
-            $( "#freqtabs" ).tabs();
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
@@ -139,47 +123,17 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 <div class="container" id="main">
     <div class="row">
         <div class="col-md-3 sidebar">
-            <div class="h2 shadowdeep">1. Select a Question
+            <div class="h3 shadowdeep">1. Select a Question
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Click a category below to expand the box and display all questions in that category. Select a question to display its graph."></div>
             </div>
-            <div id="accordion1" class="accordion">
-                <h3>Demographics</h3><div id="demo1"></div>
-                <h3>Alcohol</h3><div id="alcohol1"></div>
-                <h3>Tobacco</h3><div id="tobacco1"></div>
-                <h3>Drugs</h3><div id="drugs1"></div>
-                <h3>Mental Health</h3><div id="mental1"></div>
-                <h3>School</h3><div id="school1"></div>
-                <h3>Bullying</h3><div id="bullying1"> </div>
-                <h3>Sex and Relationships</h3><div id="sexual1"></div>
-                <h3>Family</h3><div id="family1"></div>
-                <h3>Community Support</h3><div id="community1"></div>
-                <h3>Safety and Violence</h3><div id="safety1"></div>
-                <h3>Physical Activity</h3><div id="physical1"></div>
-                <h3>Nutrition</h3><div id="nutrition1"></div>
-                <h3>Self/Peer Perception</h3><div id="perception1"></div>
-            </div>
+            <div id="accordion1" class="accordion"></div>
 
-            <div class="h2 shadowdeep">2. (Optional) Compare to Another Question
+            <div class="h3 shadowdeep">2. (Optional) Compare to Another Question
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="After selecting the primary question above, you may select a second question to look at subgroups. For example, select 'Alcohol>Binge Drinking' above, then select 'Demographics>Age' here to see how binge drinking varies with age."></div>
             </div>
-            <div id="accordion2" class="accordion">
-                <h3>Demographics</h3><div id="demo2"></div>
-                <h3>Alcohol</h3><div id="alcohol2"></div>
-                <h3>Tobacco</h3><div id="tobacco2"></div>
-                <h3>Drugs</h3><div id="drugs2"></div>
-                <h3>Mental Health</h3><div id="mental2"></div>
-                <h3>School</h3><div id="school2"></div>
-                <h3>Bullying</h3><div id="bullying2"> </div>
-                <h3>Sex and Relationships</h3><div id="sexual2"></div>
-                <h3>Family</h3><div id="family2"></div>
-                <h3>Community Support</h3><div id="community2"></div>
-                <h3>Safety and Violence</h3><div id="safety2"></div>
-                <h3>Physical Activity</h3><div id="physical2"></div>
-                <h3>Nutrition</h3><div id="nutrition2"></div>
-                <h3>Self/Peer Perception</h3><div id="perception2"></div>
-            </div>
+            <div id="accordion2" class="accordion"></div>
 
-            <div class="h2 shadowdeep">3. (Optional) Filter Results by...
+            <div class="h3 shadowdeep">3. (Optional) Filter Results
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="You can focus your query on specific populations. After selecting question(s) above, choose which groups you want to include here. For example, choosing 'Mental Health>Considered suicide' and then filtering for 'Male' will show suicide data only for male students."></div>
             </div>
             <div class="bordergrey filterbox" style="margin-bottom: 20px;">
@@ -191,10 +145,9 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
                 <label for="filtergrade">Grade: </label>
                 <select id="filtergrade">
                     <option value="0">All</option>
-                    <option value="1">6th</option>
-                    <option value="2">8th</option>
-                    <option value="3">10th</option>
-                    <option value="4">12th</option>
+                    <option value="1">8th</option>
+                    <option value="2">10th</option>
+                    <option value="3">12th</option>
                 </select><br>
                 <label for="filtergrade">Gender: </label>
                 <select id="filtergender">
@@ -217,102 +170,17 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
 
         <div class="col-md-9">
             <div style="text-align: center;">
-                <h4><?php echo $mainVar->question;?></h4>
-                <?php if($isGrouped) {
-                    echo "<span style='font-style: italic;'>compared to</span><h4>$groupVar->question</h4>";
-                }?>
-                <?php if(strlen($filter) > 3) {
-                    echo "<span style='font-style: italic;'>filtered by</span><h4>";
-                    if(isset($_GET['grade']))
-                        echo "Grade ";
-                    if(isset($_GET['gender']))
-                        echo "Gender ";
-                    if(isset($_GET['race']))
-                        echo "Race/Ethnicity ";
-                    echo "</h4>";
-                }?>
+                <div id="graphTitle"></div>
             </div>
-
-
-            <?php if($isGrouped) { ?>
-            <div id="interpret" class="accordion" style="width: 70%; margin: 0 auto; padding: 10px 0;">
-                <h3>How to interpret this graph</h3>
-                <div style="font-size:10pt">
-                    <p>Out of all of the students who answered <b><?php echo $grouplabels[0];?></b> to <b><?php echo $groupVar->summary;?></b>, the <span style="color: #70a1c2; font-weight: bold">blue bar</span> shows what percentage choose each answer to <b><?php echo $mainVar->summary;?></b>.</p>
-                    <p>For example, out of all of the students who answered <?php echo $grouplabels[0];?> to <?php echo $groupVar->summary;?>, <?php echo number_format($finalPercents[0]['v0'],1);?>% of them answered <?php echo $labels[0];?> to <?php echo $mainVar->summary;?>, and <?php echo number_format($finalPercents[1]['v0'],1);?>% of them answered <?php echo $labels[1];?>.</p>
-                    <p>Each color's bars should add up to 100%.</p>
-                </div>
-            </div>
-            <?php } ?>
 
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
             <div style="text-align: center; margin-bottom: 20px;">
-                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="Here the data is shown in table format. Click on the tabs below to switch between percentages and raw numbers."></div></h3>
-                <div id="freqtabs" style="display: inline-block;">
-                    <ul>
-                        <li><a href="#freqtabs-1">Percents</a></li>
-                        <li><a href="#freqtabs-2">Counts</a></li>
-                    </ul>
-                    <div id="freqtabs-1">
-                        <table id="datatable-count" class="datatable" style="margin: 0 auto; font-size:10pt;">
-                            <tr>
-                                <th rowspan="<?php echo count($labels)+2;?>" style="width: 80px;"><?php echo $mainVar->summary;?></th>
-                                <?php if($isGrouped) { ?><th colspan="<?php echo count($grouplabels)+1;?>"><?php echo $groupVar->summary;?></th><?php }?>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <?php foreach($grouplabels as $label) {
-                                    echo "<th>$label</th>";
-                                }?>
-                            </tr>
-                            <?php for($i=0; $i<count($finalPercents); $i++) {
-                                echo "<tr>";
-                                for($j=0; $j<count($finalPercents[$i]); $j++) {
-                                    if($j == 0) {
-                                        $val = $finalPercents[$i]['answer'];
-                                        echo "<th>$val</th>";
-                                    }
-                                    else {
-                                        $val = number_format($finalPercents[$i]['v'.($j-1)], 1);
-                                        echo "<td>$val%</td>";
-                                    }
-                                }
-                                echo "</tr>";
-                            }?>
-                        </table>
-                        <input type="button" onclick="tableToExcel(true)" value="Export to CSV">
-                    </div>
-                    <div id="freqtabs-2">
-                        <table id="datatable-percent" class="datatable" style="margin: 0 auto; font-size:10pt;">
-                            <tr>
-                                <th rowspan="<?php echo count($labels)+2;?>" style="width: 80px;"><?php echo $mainVar->summary;?></th>
-                                <?php if($isGrouped) { ?><th colspan="<?php echo count($grouplabels)+1;?>"><?php echo $groupVar->summary;?></th><?php }?>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <?php foreach($grouplabels as $label) {
-                                    echo "<th>$label</th>";
-                                }?>
-                            </tr>
-                            <?php for($i=0; $i<count($finalCounts); $i++) {
-                                echo "<tr>";
-                                for($j=0; $j<count($finalCounts[$i]); $j++) {
-                                    if($j == 0) {
-                                        $val = $finalCounts[$i]['answer'];
-                                        echo "<th>$val</th>";
-                                    }
-                                    else {
-                                        $val = number_format($finalCounts[$i]['v'.($j-1)], 0);
-                                        echo "<td>$val</td>";
-                                    }
-                                }
-                                echo "</tr>";
-                            }?>
-                        </table>
-                        <input type="button" onclick="tableToExcel(false)" value="Export to CSV">
-                    </div>
-                </div>
+                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
+                <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
+                </table>
+                <div>No Reponse: <?php echo number_format($noresponse,0);?></div>
+                <input type="button" onclick="tableToExcel()" value="Export to CSV">
             </div>
         </div>
     </div>

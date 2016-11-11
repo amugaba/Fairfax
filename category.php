@@ -1,154 +1,36 @@
 <?php
 require_once "config/config.php";
 require_once 'hidden/DataService.php';
+require_once 'hidden/CategoryData.php';
 
 $ds = new DataService();
 $cat = isset($_GET['cat'])? $_GET['cat'] : 1;
 $grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
 
-if($cat == 1) {
-    $title = "Substance Use";
-    $qCodes = ['A2A','A3A','A4','D2A'];
-    $labels = ['Lifetime Alcohol','Past-Month Alcohol','Binge Drinking<br>(5+ Drinks in a Row)','Lifetime Marijuana'];
-    $lowCutoffs = [2,2,2,2];
-    $highCutoffs = [null,null,null,null];
-    $totalCutoffs = [null,null,null,null];
-    $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances. The highlights page
-        focuses on two of the most-commonly-used psychoactive substances among youth: alcohol (including data on binge drinking) and marijuana.</p>
-        <p>To learn about other substances or to compare substance use with other behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 2) {
-    $title = "Sexual Activity";
-    $qCodes = ['X1','X8'];
-    $labels = ['Lifetime Sexual<br>Intercourse','Lifetime Oral Sex'];
-    $lowCutoffs = [1,1];
-    $highCutoffs = [1,1];
-    $totalCutoffs = [null,null];
-    $explanation = "<p>The Youth survey asks about students' sexual behavior, including preventive behaviors (condom use).
-        Related questions addressing aggression in relationships are reported in the <a href='category.php?cat=5'>Dating Aggression</a> category.</p>
-        <p>To learn about other sexual behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 3) {
-    $title = "Vehicle Safety";
-    $qCodes = ['A5','S3'];
-    $labels = ['Driving after Drinking','Texting while Driving'];
-    $lowCutoffs = [3,3];
-    $highCutoffs = [null,null];
-    $totalCutoffs = [2,2];
-    $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
-        after drinking and texting while driving..</p>
-        <p>To learn more about vehicle safety, <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 4) {
-    $title = "Bullying and Cyberbullying";
-    $qCodes = ['B20','B22','CB3','CB2'];
-    $labels = ['Bullied Someone<br>at School','Been Bullied at School','Cyberbullied<br>Someone at School','Been Cyberbullied<br>at School'];
-    $lowCutoffs = [1,1,2,2];
-    $highCutoffs = [1,1,null,null];
-    $totalCutoffs = [null,null,null,null];
-    $explanation = "<p>The Youth Survey asks questions about both bullying in-person and bullying online (called cyberbullying).</p>
-        <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 5) {
-    $title = "Dating Aggression";
-    $qCodes = ['B15','B25'];
-    $labels = ['Partner Always Wants<br>to Know Whereabouts','Partner Physically<br>Forces Sex'];
-    $lowCutoffs = [1,3];
-    $highCutoffs = [1,null];
-    $totalCutoffs = [null,2];
-    $explanation = "<p>There are a variety of behaviors that might be classified as dating aggression, or that might signify a risk of dating aggression.
-        These range from a partner physically forcing someone to have sexual intercourse to someone always wanting to know his or her partner’s whereabouts.</p>
-        <p>To learn more about behaviors related to dating aggression, <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 6) {
-    $title = "Other Aggression";
-    $qCodes = ['B2A','B10A','W5'];
-    $labels = ["Insulted Someone's<br>Race or Culture",'Had Race or<br>Culture Insulted','Carried a Weapon'];
-    $lowCutoffs = [2,2,2];
-    $highCutoffs = [null,null,null];
-    $totalCutoffs = [null,null,null];
-    $explanation = "<p>Aggression can take on a variety of forms, both verbal and physical. The highlights page provides information both on youth
-        who had their race or culture insulted, and those who insulted others’ race or culture.  It also provides information on youth who carried a weapon.</p>
-        <p>Data about additional behaviors or experiences indicating aggression are available: <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 7) {
-    $title = "Physical Activity and Rest";
-    $qCodes = ['H3','H3','H20','H1','H2'];
-    $labels = ['One Hour of Physical Activity<br>at least 1 Day per Week','One Hour of Physical Activity<br>at least 5 Days per Week',
-        'Eight or More Hours of Sleep','Watches TV for<br> 3+ Hours per Day','Uses Computer or Plays Video<br>Games for 3+ Hours per Day'];
-    $lowCutoffs = [2,6,5,5,5];
-    $highCutoffs = [null,null,null,null,null];
-    $totalCutoffs = [null,null,null,null,null];
-    $explanation = "<p>The Youth Survey provides data on a variety of interlinked health behaviors related to physical activity and rest.
-        Highlights include both frequency of physical activity across selected timeframes as well as indicators of inactivity and information about adequate sleep.</p>
-        <p>Additional data are available in this category by choosing to <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 8) {
-    $title = "Nutrition";
-    $qCodes = ['fruitveg','H7','RF31'];
-    $labels = ['Ate Fruits and Vegetables<br>at least 5 Times per Day','Drank No Soda<br>during Past Week','Went Hungry at least Once<br>during Past Month'];
-    $lowCutoffs = [5,1,3];
-    $highCutoffs = [null,1,null];
-    $totalCutoffs = [null,null,null];
-    $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sugared drinks, and hunger.</p>
-        <p>To see additional nutrition data, including weight loss behaviors, go to <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 9) {
-    $title = "Mental Health";
-    $qCodes = ['M5','M1','M2'];
-    $labels = ['High Stress','Felt Sad or Hopeless for<br>Two or More Weeks in a Row','Attempted Suicide'];
-    $lowCutoffs = [8,1,1];
-    $highCutoffs = [null,1,1];
-    $totalCutoffs = [null,null,null];
-    $explanation = "<p>The Youth Survey provides data about a variety of different aspects related to mental health. This page highlights
-        students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row (which may indicate risk for depression), and those who attempted suicide.</p>
-        <p>Additional data on this topic are available at <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
-else if($cat == 10) {
-    $title = "Extracurricular Activities and Civic Behaviors";
-    $qCodes = ['C13','C11','C12','C2'];
-    $labels = ['Did Extra Curriculars<br>for 1+ Hour per Day','Did Homework<br>for 1+ Hour per Day','Went to Work<br>for 1+ hour per Day','Volunteered for<br>Community Service'];
-    $lowCutoffs = [4,4,4,3];
-    $highCutoffs = [null,null,null,null];
-    $totalCutoffs = [null,null,null,null];
-    $explanation = "<p>The Youth Survey asks about a variety of behaviors that indicate civic engagement or diligence, including
-        completion of homework, working at a job, volunteering in the community, and participating in extracurricular activities.
-        This page shows the percentage of students with a moderate level of engagement (1+ hour of work or at least one time volunteering).</p>
-        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore All Questions</a>.</p>";
-}
+$mainVar = getCategoryVariable($cat);
+$groupVar = $ds->getVariableByCode($grp);
 
-$finalPercents = []; //for each question, what percent of cases fell within the cutoff range
-$finalCounts = [];
-
-$isGrouped = $grp != 'none';
-if($isGrouped) {
-    $grouplabels = $ds->getLabels($grp);
-}
-else
-    $grouplabels = ['Total'];
-
-//get data for each question and combine at cutoff points
-for($i=0; $i<count($qCodes); $i++)
+//get data for each question
+foreach($mainVar->answers as $answer)
 {
-    $rawCounts = $ds->getDataCutoff($qCodes[$i], $grp, $lowCutoffs[$i],$highCutoffs[$i]);
-    $totals = $ds->getGroupTotalsCutoff($qCodes[$i], $grp, $totalCutoffs[$i]);
-    $rawPercents = $ds->converToPercents($rawCounts,$totals,$isGrouped);
-
-    $obj1 = ['answer' => $labels[$i]];
-    $obj2 = ['answer' => $labels[$i]];
-
-    //insert values into object
-    for($j=0; $j<count($grouplabels); $j++)
-    {
-        $obj1['v'.$j] = $rawPercents[$j]['num'] * 100;
-        $obj2['v'.$j] = $rawCounts[$j]['num'];
-    }
-
-    $finalPercents[] = $obj1;
-    $finalCounts[] = $obj2;
+    $ds->getDataCutoff($answer, $groupVar);
+    $ds->getGroupTotalsCutoff($answer, $groupVar);
 }
-//height is (labels*(labels+spacing)*bar height + header height
-$graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
+$mainVar->calculatePercents();
+
+//Group variables
+if($groupVar != null){
+    $groupLabels = $groupVar->getLabels();
+    $groupSummary = $groupVar->summary;
+    $groupQuestion = $groupVar->question;
+}
+else {
+    $groupLabels = ['Total'];
+    $groupSummary = null;
+    $groupQuestion = null;
+}
+$sumTotal = $mainVar->getSumTotal();
+$graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabels())*30+100));//height is (labels*(labels+spacing)*bar height + header height
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,22 +43,31 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
     <script src="js/amcharts/plugins/export/export.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
     <script src="js/crosstab.js" type="application/javascript"></script>
-    <script src="js/exporttable.js" type="text/javascript"></script>
     <script>
         $(function() {
-            finalCounts = <?php echo json_encode($finalCounts); ?>;
-            finalPercents = <?php echo json_encode($finalPercents); ?>;
-            groupLabels = <?php echo json_encode($grouplabels); ?>;
-            answerLables = <?php echo json_encode($labels); ?>;
+            mainQuestion = <?php echo json_encode($mainVar->question); ?>;
+            groupQuestion = <?php echo json_encode($groupQuestion); ?>;
+            mainTotals = <?php echo json_encode($mainVar->getMainTotals()); ?>;
+            categoryDivisors = <?php echo json_encode($mainVar->getCategoryDivisors()); ?>;
+            groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
+            sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
 
-            createPercentChart(<?php echo json_encode($finalPercents); ?>, <?php echo json_encode($grouplabels); ?>,'', '',true);
+            createPercentChart(<?php echo json_encode($mainVar->getCountArray()); ?>, <?php echo json_encode($mainVar->getPercentArray()); ?>,
+                <?php echo json_encode($mainVar->getLabels()); ?>, <?php echo json_encode($groupLabels); ?>,
+                <?php echo json_encode($mainVar->question); ?>,  <?php echo json_encode($groupSummary); ?>,
+                true, <?php echo json_encode($mainVar->tooltips); ?>);
 
+            if(groupLabels.length == 1)
+                createSimpleTable($('#datatable'));
+            else
+                createCrosstabTable($('#datatable'));
+
+            $("#graphTitle").html(mainQuestion);
             $('#grouping :input[value=<?php echo $grp;?>]').prop("checked",true);
             $('#grouping').buttonset();
             $('#grouping :input').click(function() {
                 window.location = "category.php?cat=<?php echo $cat;?>&grp="+this.value;
             });
-            $( "#freqtabs" ).tabs();
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
@@ -204,8 +95,9 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
         </div>
         <div class="col-md-9 mainbar">
             <div style="text-align: center;">
-                <h3><?php echo $title;?></h3>
-                <?php echo $explanation;?>
+                <h2 id="graphTitle"></h2>
+                <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $mainVar->explanation;?></div>
+                <p><b>Mouse over</b> the graph's labels and bars to see in more detail what each element represents.</p>
             </div>
 
             <div id="grouping" class="groupbox" style="width:500px; margin: 20px auto 0">
@@ -218,72 +110,11 @@ $graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
             </div>
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
-
-
             <div style="text-align: center; margin-bottom: 20px;">
-                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="Here the data is shown in table format. Click on the tabs below to switch between percentages and raw numbers."></div></h3>
-                <div id="freqtabs" style="display: inline-block;">
-                    <ul>
-                        <li><a href="#freqtabs-1">Percents</a></li>
-                        <li><a href="#freqtabs-2">Counts</a></li>
-                    </ul>
-                    <div id="freqtabs-1">
-                        <table id="datatable-count" class="datatable" style="margin: 0 auto; font-size:10pt;">
-                            <tr>
-                                <th colspan="<?php echo count($grouplabels)+1;?>" style="text-align: center;"><?php echo $title;?></th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <?php foreach($grouplabels as $label) {
-                                    echo "<th>$label</th>";
-                                }?>
-                            </tr>
-                            <?php for($i=0; $i<count($finalPercents); $i++) {
-                                echo "<tr>";
-                                for($j=0; $j<count($finalPercents[$i]); $j++) {
-                                    if($j == 0) {
-                                        $val = $finalPercents[$i]['answer'];
-                                        echo "<th>$val</th>";
-                                    }
-                                    else {
-                                        $val = number_format($finalPercents[$i]['v'.($j-1)], 1);
-                                        echo "<td>$val%</td>";
-                                    }
-                                }
-                                echo "</tr>";
-                            }?>
-                        </table>
-                        <input type="button" onclick="tableToExcel(true)" value="Export to CSV">
-                    </div>
-                    <div id="freqtabs-2">
-                        <table id="datatable-percent" class="datatable" style="margin: 0 auto; font-size:10pt;">
-                            <tr>
-                                <th colspan="<?php echo count($grouplabels)+1;?>" style="text-align: center;"><?php echo $title;?></th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <?php foreach($grouplabels as $label) {
-                                    echo "<th>$label</th>";
-                                }?>
-                            </tr>
-                            <?php for($i=0; $i<count($finalCounts); $i++) {
-                                echo "<tr>";
-                                for($j=0; $j<count($finalCounts[$i]); $j++) {
-                                    if($j == 0) {
-                                        $val = $finalCounts[$i]['answer'];
-                                        echo "<th>$val</th>";
-                                    }
-                                    else {
-                                        $val = number_format($finalCounts[$i]['v'.($j-1)], 0);
-                                        echo "<td>$val</td>";
-                                    }
-                                }
-                                echo "</tr>";
-                            }?>
-                        </table>
-                        <input type="button" onclick="tableToExcel(false)" value="Export to CSV">
-                    </div>
-                </div>
+                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
+                <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
+                </table>
+                <input type="button" onclick="tableToExcel()" value="Export to CSV">
             </div>
         </div>
     </div>

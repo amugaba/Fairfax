@@ -10,12 +10,9 @@ define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] ."/fairfax/");
 define("HTTP_ROOT", "http://".$_SERVER['HTTP_HOST'] ."/fairfax/");
 define("PAGE_TITLE", "Fairfax Survey");
 
-error_reporting(E_ERROR);
-
-session_save_path(ROOT_PATH."session");
-ini_set("session.cache_expire", 12000); //3+h
-ini_set("session.gc_maxlifetime", 12000); //3+h
-session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 function include_styles() {
     $root = HTTP_ROOT;
@@ -38,26 +35,3 @@ function include_footer() {
 function echo_self() {
     echo htmlspecialchars($_SERVER["PHP_SELF"]);
 }
-/*
-function include_menu() {
-    include ROOT_PATH."include/training-top.php";
-}
-
-function check_login() {
-    if(!isset($_SESSION['user']))
-    {
-        header("Location: login-redir.php");
-        return false;
-    }
-    return true;
-}
-function getUserID()
-{
-    if(isset($_SESSION['user_sn']))
-        return $_SESSION['user_sn'];
-    return null;
-}
-function getUser()
-{
-    return $_SESSION['user'];
-}*/
