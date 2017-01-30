@@ -8,7 +8,7 @@ function getCategoryVariable($cat)
     if ($cat == 1) {
         $title = "Substance Use";
         $qCodes = ['A2A', 'A3A', 'A4', 'D2A'];
-        $labels = ['Lifetime Alcohol Use', 'Past-Month Alcohol Use', 'Binge Drinking<br>(5+ Drinks in a Row)', 'Lifetime Marijuana Use'];
+        $labels = ['Lifetime Alcohol Use', 'Past-Month Alcohol Use', 'Binge Drinking (5+ Drinks in a Row)', 'Lifetime Marijuana Use'];
         $tooltips = ['The % of students who reported at least 1 occasion of alcohol use ever in their lives.',
             'The % of students who reported at least 1 occasion of alcohol use in the past 30 days.',
             'The % of students who reported at least 1 occasion of drinking 5 or more drinks in a row in the past two weeks.',
@@ -22,7 +22,7 @@ function getCategoryVariable($cat)
     } else if ($cat == 2) {
         $title = "Sexual Activity";
         $qCodes = ['X1', 'X8'];
-        $labels = ['Lifetime Sexual<br>Intercourse', 'Lifetime Oral Sex'];
+        $labels = ['Lifetime Sexual Intercourse', 'Lifetime Oral Sex'];
         $tooltips = ['The % of students who reported having sexual intercourse at least once in their lives.',
             'The % of students who reported having oral sex at least once in their lives.'];
         $lowCutoffs = [1, 1];
@@ -60,7 +60,7 @@ function getCategoryVariable($cat)
     } else if ($cat == 5) {
         $title = "Dating Aggression";
         $qCodes = ['B15', 'B25'];
-        $labels = ['Partner Always Wants<br>to Know Whereabouts', 'Partner Physically<br>Forces Sex'];
+        $labels = ['Partner Always Wants to Know Whereabouts', 'Partner Physically Forces Sex'];
         $tooltips = ['The % of students who reported ever having a partner in a dating or serious relationship who always wanted to know their whereabouts.',
             'The % of students who reported that someone with whom they were going out or were dating forced them to do sexual things they did not want to do in the past 12 months.'];
         $lowCutoffs = [1, 3];
@@ -69,10 +69,11 @@ function getCategoryVariable($cat)
         $explanation = "<p>There are a variety of behaviors that might be classified as dating aggression, or that might signify a risk of dating aggression.
         These range from a partner physically forcing someone to have sexual intercourse to someone always wanting to know his or her partner’s whereabouts.</p>
         <p>To learn more about behaviors related to dating aggression, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        $connector = "their ";
     } else if ($cat == 6) {
         $title = "Other Aggressive Behaviors";
         $qCodes = ['B2A', 'B10A', 'W5'];
-        $labels = ["Insulted Someone's<br>Race or Culture", 'Had Race or<br>Culture Insulted', 'Carried a Weapon'];
+        $labels = ["Insulted Someone's Race or Culture", 'Had Race or Culture Insulted', 'Carried a Weapon'];
         $tooltips = ['The % of students who reported that they had said something bad about someone’s race or culture in the past year.',
             'The % of students who reported that someone had said something bad about their race or culture in the past year.',
             'The % of students who reported carrying a weapon such as a gun, knife, or club in the past 30 days.'];
@@ -82,11 +83,12 @@ function getCategoryVariable($cat)
         $explanation = "<p>Aggression can take on a variety of forms, both verbal and physical. The highlights page provides information both on youth
         who had their race or culture insulted, and those who insulted others’ race or culture.  It also provides information on youth who carried a weapon.</p>
         <p>Data about additional behaviors or experiences indicating aggression are available: <a href='graphs.php'>Explore All Questions</a>.</p>";
+        $connector = "they ";
     } else if ($cat == 7) {
         $title = "Physical Activity and Rest";
         $qCodes = ['H3', 'H3', 'H20', 'H1', 'H2'];
-        $labels = ['One Hour of Physical Activity<br>at least 1 Day per Week', 'One Hour of Physical Activity<br>at least 5 Days per Week',
-            'Eight or More Hours of Sleep', 'Watches TV for<br> 3+ Hours per Day', 'Uses Computer or Plays Video<br>Games for 3+ Hours per Day'];
+        $labels = ['One Hour of Physical Activity at least 1 Day per Week', 'One Hour of Physical Activity at least 5 Days per Week',
+            'Eight or More Hours of Sleep', 'Watching TV for  3+ Hours per Day', 'Using Computer or Playing Video Games for 3+ Hours per Day'];
         $tooltips = ['The % of students who reported being physically active for at least 60 minutes on at least 1 day in the past 7 days.',
             'The % of students who reported being physically active for at least 60 minutes on at least 5 days in the past 7 days.',
             'The % of students who reported getting at least 8 hours of sleep on an average school night.',
@@ -101,7 +103,7 @@ function getCategoryVariable($cat)
     } else if ($cat == 8) {
         $title = "Nutrition and Weight Loss Behaviors";
         $qCodes = ['fruitveg', 'H7', 'RF31'];
-        $labels = ['Ate Fruits and Vegetables<br>at least 5 Times per Day', 'Drank No Soda<br>during Past Week', 'Went Hungry at least Once<br>during Past Month'];
+        $labels = ['Ate Fruits and Vegetables at least 5 Times per Day', 'Drank No Soda during Past Week', 'Went Hungry at least Once during Past Month'];
         $tooltips = ['The % of students who ate fruits (excluding juice) and vegetables an average of 5 times per day over the past week.',
             'The % of students who did not drink soda (pop) in the past 7 days, not including diet soda.',
             'The % of students who went hungry in the past month (sometimes, most of the time, or always) because there was not enough food in the home.'];
@@ -110,10 +112,11 @@ function getCategoryVariable($cat)
         $totalCutoffs = [null, null, null];
         $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sugared drinks, and hunger.</p>
         <p>To see additional nutrition data, including weight loss behaviors, go to <a href='graphs.php'>Explore All Questions</a>.</p>";
+        $connector = "they ";
     } else if ($cat == 9) {
         $title = "Mental Health";
         $qCodes = ['M5', 'M1', 'M2'];
-        $labels = ['High Stress', 'Felt Sad or Hopeless for<br>Two or More Weeks in a Row', 'Attempted Suicide'];
+        $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
         $tooltips = ['The % of students who reported a stress level in the past month of 8 or higher on a scale from 1 to 10.',
             'The % of students who reported, during the past year, having felt so sad or hopeless almost every day for two weeks or more in a row that they stopped doing some usual activities.',
             'The % of students who reported having actually attempted suicide in the past 12 months.'];
@@ -123,10 +126,11 @@ function getCategoryVariable($cat)
         $explanation = "<p>The Youth Survey provides data about a variety of different aspects related to mental health. This page highlights
         students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row (which may indicate risk for depression), and those who attempted suicide.</p>
         <p>Additional data on this topic are available at <a href='graphs.php'>Explore All Questions</a>.</p>";
+        $connector = "they ";
     } else if ($cat == 10) {
         $title = "Extracurricular Activities and Civic Behaviors";
         $qCodes = ['C13', 'C11', 'C12', 'C2'];
-        $labels = ['Did Extracurriculars<br>for 1+ Hour per Day', 'Did Homework<br>for 1+ Hour per Day', 'Went to Work<br>for 1+ hour per Day', 'Volunteered for<br>Community Service'];
+        $labels = ['Did Extracurriculars for 1+ Hour per Day', 'Did Homework for 1+ Hour per Day', 'Went to Work for 1+ hour per Day', 'Volunteered for Community Service'];
         $tooltips = ['The % of students who reported staying after school to participate in a team, club, or program for at least 1 hour on an average school day.',
             'The % of students who reported doing at least 1 hour of homework outside of school on an average school day.',
             'The % of students who reported going to work (e.g., a job) for at least 1 hour on an average school day.',
@@ -138,6 +142,7 @@ function getCategoryVariable($cat)
         completion of homework, working at a job, volunteering in the community, and participating in extracurricular activities.
         This page shows the percentage of students with a moderate level of engagement (1+ hour of work or at least one time volunteering).</p>
         <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        $connector = "they ";
     } else {
         die("Category chosen is invalid.");
     }

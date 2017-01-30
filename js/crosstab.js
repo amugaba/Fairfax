@@ -38,11 +38,10 @@ function createPercentChart(counts, percents, mLabels, gLabels, mTitle, gTitle, 
         categoryAxis.gridAlpha = 0.1;
         categoryAxis.axisAlpha = 0;
         categoryAxis.title = mainTitle;
-        categoryAxis.ignoreAxisWidth = true;
-        categoryAxis.autoWrap = true;
-        //categoryAxis.labelFunction = addLineBreaks;
-        //categoryAxis.maxLabelWidth = 20;
-        chart.marginLeft = 120;
+        //categoryAxis.ignoreAxisWidth = true;
+        //categoryAxis.autoWrap = true;
+        categoryAxis.labelFunction = addLineBreaks;
+        chart.fontSize = 13;
 
         if(tooltips != null) {
             chart.categoryAxis.addListener("rollOverItem", function (event) {
@@ -130,27 +129,26 @@ function addLineBreaks(label, item, axis) {
     if(breaksNeeded == 0)
         return label;
 
-    var divisionPoints = [];
-    for(var i=0; i<breaksNeeded; i++) {
-        divisionPoints.push(Math.floor(label.length * (i + 1) / (breaksNeeded+1)));
-    }
-
+    var lengthPerLine = Math.floor(label.length / (breaksNeeded+1));
     var words = label.split(' ');
     var insertPoints = [];
+    var startWord = 0;
 
-    for(var i=0; i<divisionPoints.length; i++) {
-        var position = 0;
-        for(var j=0; j<words.length; j++) {
-            position += words[j].length;
-            if(position > divisionPoints[i]) {
+    for(var i=0; i<breaksNeeded; i++) {
+        var lineLength = 0;
+        //starting at the beginning of the line, add words until the length exceeds the line length
+        for(var j=startWord; j<words.length; j++) {
+            lineLength += words[j].length;
+            if(lineLength > lengthPerLine) {
                 //check if more than half the word would fit on this line
-                if(position - divisionPoints[i] < words[j].length/2)
-                    insertPoints.push(j+1);
+                if(lineLength - lengthPerLine < words[j].length/2)
+                    startWord = j+1;
                 else
-                    insertPoints.push(j);
+                    startWord = j;
+                insertPoints.push(startWord);
                 break;
             }
-            position++;//for space
+            lineLength++;//for space
         }
     }
 
