@@ -79,6 +79,7 @@ function createPercentChart(counts, percents, mLabels, gLabels, mTitle, gTitle, 
         };
         chart.write("chartdiv");
     });
+    return chart;
 }
 
 function createSubGraph(title,field,num,isCategory) {
@@ -153,9 +154,15 @@ function makeFilterString(grade, gender, race) {
         return null;
 }
 
+function isIE() {
+    if (window.navigator.userAgent.indexOf("MSIE ") > 0 || !!window.navigator.userAgent.match(/Trident.*rv\:11\./))
+        return true;
+    else
+        return false;
+}
+
 function writeCSV() {
-    var csv = "data:text/csv;charset=utf-8,";
-    csv += "Fairfax County Youth Survey Data Explorer\r\n";
+    var csv = "Fairfax County Youth Survey Data Explorer\r\n";
     var descriptor = isCategory ? "Category: " : "Question: ";
     csv += '"' + descriptor + mainQuestion + '"\r\n';
     if(groupQuestion != null)
@@ -214,16 +221,28 @@ function writeCSV() {
             csv += "Total," + Math.round(sumTotal) + ",100%";
         }
     }
+
     return csv;
 }
 
 function tableToExcel() {
-    var encodedUri = encodeURI(writeCSV());
-    var link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "fairfaxdata.csv");
-    document.body.appendChild(link); // Required for FF
-    link.click();
+    var csv = writeCSV();
+    if(!isIE()) {
+        csv = "data:text/csv;charset=utf-8," + csv;
+        var encodedUri = encodeURI(csv);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "fairfaxdata.csv");
+        document.body.appendChild(link); // Required for FF
+        link.click();
+    }
+    else {
+        var IEwindow = window.open();
+        IEwindow.document.write('sep=,\r\n' + csv);
+        IEwindow.document.close();
+        IEwindow.document.execCommand('SaveAs', true, "fairfaxdata.csv");
+        IEwindow.close();
+    }
 }
 
 function createSimpleTable(tableElem) {

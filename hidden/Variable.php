@@ -17,7 +17,7 @@ class Variable
 
 	//after Answers have been constructed, set up each Answer's count array with a 0 value for each group
 	public function initAnswers($groupVar){
-        $numGroups = $groupVar == null ? 0 : count($groupVar->answers);
+        $numGroups = $groupVar == null ? 1 : count($groupVar->answers);
         foreach ($this->answers as $answer) {
             for ($i = 1; $i <= $numGroups; $i++) {
                 $answer->addCount($i, 0);

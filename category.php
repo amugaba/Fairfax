@@ -71,6 +71,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+    <script src="js/exportgraph.js"></script>
 </head>
 <body>
 <?php include_header(); ?>
@@ -107,6 +108,9 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
                 <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
+            </div>
+            <div style="overflow: visible; height: 1px; width: 100%; text-align: right">
+                <input type="button" onclick="exportGraph()" value="Export" class="btn btn-blue" style="position: relative; z-index: 100">
             </div>
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 

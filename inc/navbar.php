@@ -1,3 +1,5 @@
+<div class="wrapper">
+
 <nav class="navbar navbar-default" id="topbar">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -19,7 +21,7 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Contact</a></li>
+                <li><a href="contact.php">Contact</a></li>
                 <li><a href="http://www.fairfaxcounty.gov/" target="_blank">Fairfax County</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->

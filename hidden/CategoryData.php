@@ -27,7 +27,7 @@ function getCategoryVariable($cat)
         $lowCutoffs = [1, 1];
         $highCutoffs = [1, 1];
         $totalCutoffs = [null, null];
-        $explanation = "<p>The Youth survey asks about students' sexual behavior, including preventive behaviors (condom use).
+        $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use).
         Related questions addressing aggression in relationships are reported in the <a href='category.php?cat=5'>Dating Aggression</a> category.</p>
         <p>To learn about other sexual behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
     } else if ($cat == 3) {
@@ -38,9 +38,9 @@ function getCategoryVariable($cat)
             'The % of students who reported at least 1 occasion of texting or e-mailing while driving a car or other vehicle in the past 30 days.'];
         $lowCutoffs = [3, 3];
         $highCutoffs = [null, null];
-        $totalCutoffs = [1, 1];
+        $totalCutoffs = [null, null];
         $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
-        after drinking and texting while driving..</p>
+        after drinking and texting while driving. Data are for 12th grade students only.</p>
         <p>To learn more about vehicle safety, <a href='graphs.php'>Explore All Questions</a>.</p>";
     } else if ($cat == 4) {
         $title = "Bullying and Cyberbullying";
@@ -68,7 +68,7 @@ function getCategoryVariable($cat)
         These range from a partner physically forcing someone to have sexual intercourse to someone always wanting to know his or her partner’s whereabouts.</p>
         <p>To learn more about behaviors related to dating aggression, <a href='graphs.php'>Explore All Questions</a>.</p>";
     } else if ($cat == 6) {
-        $title = "Other Aggression";
+        $title = "Other Aggressive Behaviors";
         $qCodes = ['B2A', 'B10A', 'W5'];
         $labels = ["Insulted Someone's<br>Race or Culture", 'Had Race or<br>Culture Insulted', 'Carried a Weapon'];
         $tooltips = ['The % of students who reported that they had said something bad about someone’s race or culture in the past year.',
@@ -97,7 +97,7 @@ function getCategoryVariable($cat)
         Highlights include both frequency of physical activity across selected timeframes as well as indicators of inactivity and information about adequate sleep.</p>
         <p>Additional data are available in this category by choosing to <a href='graphs.php'>Explore All Questions</a>.</p>";
     } else if ($cat == 8) {
-        $title = "Nutrition";
+        $title = "Nutrition and Weight Loss Behaviors";
         $qCodes = ['fruitveg', 'H7', 'RF31'];
         $labels = ['Ate Fruits and Vegetables<br>at least 5 Times per Day', 'Drank No Soda<br>during Past Week', 'Went Hungry at least Once<br>during Past Month'];
         $tooltips = ['The % of students who ate fruits (excluding juice) and vegetables an average of 5 times per day over the past week.',
@@ -124,7 +124,7 @@ function getCategoryVariable($cat)
     } else if ($cat == 10) {
         $title = "Extracurricular Activities and Civic Behaviors";
         $qCodes = ['C13', 'C11', 'C12', 'C2'];
-        $labels = ['Did Extra Curriculars<br>for 1+ Hour per Day', 'Did Homework<br>for 1+ Hour per Day', 'Went to Work<br>for 1+ hour per Day', 'Volunteered for<br>Community Service'];
+        $labels = ['Did Extracurriculars<br>for 1+ Hour per Day', 'Did Homework<br>for 1+ Hour per Day', 'Went to Work<br>for 1+ hour per Day', 'Volunteered for<br>Community Service'];
         $tooltips = ['The % of students who reported staying after school to participate in a team, club, or program for at least 1 hour on an average school day.',
             'The % of students who reported doing at least 1 hour of homework outside of school on an average school day.',
             'The % of students who reported going to work (e.g., a job) for at least 1 hour on an average school day.',

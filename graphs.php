@@ -15,6 +15,7 @@ $race = isset($_GET['race']) ? $ds->connection->real_escape_string($_GET['race']
 //Get Variables
 $mainVar = $ds->getVariableByCode($q1);
 $groupVar = $ds->getVariableByCode($grp);
+
 if ($mainVar == null)
     die("User input was invalid.");
 $mainVar->initAnswers($groupVar);
@@ -71,7 +72,7 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
             groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
             sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
 
-            createPercentChart(<?php echo json_encode($mainVar->getCountArray()); ?>, <?php echo json_encode($mainVar->getPercentArray()); ?>,
+            chart = createPercentChart(<?php echo json_encode($mainVar->getCountArray()); ?>, <?php echo json_encode($mainVar->getPercentArray()); ?>,
                 <?php echo json_encode($mainVar->getLabels()); ?>, <?php echo json_encode($groupLabels); ?>,
                 <?php echo json_encode($mainVar->summary); ?>,  <?php echo json_encode($groupSummary); ?>,
                 false, null);
@@ -82,7 +83,7 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
                 createCrosstabTable($('#datatable'));
 
             filterString = makeFilterString(<?php echo json_encode($grade); ?>,<?php echo json_encode($gender); ?>,<?php echo json_encode($race); ?>);
-            var titleString = "<h4>"+mainQuestion+"</h4>";
+            titleString = "<h4>"+mainQuestion+"</h4>";
             if(groupQuestion != null)
                 titleString += "<i>compared to</i><h4>" + groupQuestion + "</h4>";
             if(filterString != null)
@@ -97,6 +98,7 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
             createVariablesByCategory("School",4);
             createVariablesByCategory("Bullying",2);
             createVariablesByCategory("Sex and Relationships",3);
+            createVariablesByCategory("Sexual Misconduct",14);
             createVariablesByCategory("Family",11);
             createVariablesByCategory("Community Support",10);
             createVariablesByCategory("Safety and Violence",13);
@@ -117,6 +119,7 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
+    <script src="js/exportgraph.js"></script>
 </head>
 <body>
 <?php include_header(); ?>
@@ -169,8 +172,12 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
         </div>
 
         <div class="col-md-9">
+
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
+            </div>
+            <div style="overflow: visible; height: 1px; width: 100%; text-align: right">
+                <input type="button" onclick="exportGraph()" value="Export" class="btn btn-blue" style="position: relative; z-index: 100">
             </div>
 
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
