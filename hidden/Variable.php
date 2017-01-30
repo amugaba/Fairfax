@@ -8,6 +8,7 @@ class Variable
 	public $category;
     public $answers;
     public $totals;
+    public $connector;//word used in tooltip, "X% of students reported [connector] [question]"
 	
 	public function __construct()
 	{

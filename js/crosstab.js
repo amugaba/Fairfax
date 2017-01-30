@@ -3,7 +3,7 @@
  */
 "use strict";
 var questions = [], countData = [], percentData = [], mainLabels = [], groupLabels = [], mainTotals = [], groupTotals = [], categoryDivisors = [];
-var mainTitle, groupTitle, sumTotal, mainQuestion, groupQuestion, filterString, isCategory;
+var mainTitle, groupTitle, sumTotal, mainQuestion, groupQuestion, filterString, isCategory, connector;
 var chart, mainCode = null, groupCode = null;
 
 var fillColors = ["#70a1c2","#7cc27c","#d4d257","#ddaf45","#c26751","#c273bf","#c29e88","#567ac2"];
@@ -38,6 +38,11 @@ function createPercentChart(counts, percents, mLabels, gLabels, mTitle, gTitle, 
         categoryAxis.gridAlpha = 0.1;
         categoryAxis.axisAlpha = 0;
         categoryAxis.title = mainTitle;
+        categoryAxis.ignoreAxisWidth = true;
+        categoryAxis.autoWrap = true;
+        //categoryAxis.labelFunction = addLineBreaks;
+        //categoryAxis.maxLabelWidth = 20;
+        chart.marginLeft = 120;
 
         if(tooltips != null) {
             chart.categoryAxis.addListener("rollOverItem", function (event) {
@@ -89,7 +94,7 @@ function createSubGraph(title,field,num,isCategory) {
     graph1.valueField = field;
     if(isCategory) {
         if(title == "Total")
-            graph1.balloonText = "[[value]]% of students were positive for [[category]]";
+            graph1.balloonText = "[[value]]% of students reported " + connector + "[[category]]";
         else
             graph1.balloonText = "[[value]]% of "+title+" students were positive for [[category]]";
     }
@@ -118,6 +123,49 @@ function createVariablesByCategory(title,category) {
             $("<li></li>").appendTo(list2).append("<a href='graphs.php?q1="+mainCode+"&grp="+questions[i].code+"'>"+questions[i].summary+"</a>");
         }
     }
+}
+
+function addLineBreaks(label, item, axis) {
+    var breaksNeeded = Math.floor(label.length / 20);
+    if(breaksNeeded == 0)
+        return label;
+
+    var divisionPoints = [];
+    for(var i=0; i<breaksNeeded; i++) {
+        divisionPoints.push(Math.floor(label.length * (i + 1) / (breaksNeeded+1)));
+    }
+
+    var words = label.split(' ');
+    var insertPoints = [];
+
+    for(var i=0; i<divisionPoints.length; i++) {
+        var position = 0;
+        for(var j=0; j<words.length; j++) {
+            position += words[j].length;
+            if(position > divisionPoints[i]) {
+                //check if more than half the word would fit on this line
+                if(position - divisionPoints[i] < words[j].length/2)
+                    insertPoints.push(j+1);
+                else
+                    insertPoints.push(j);
+                break;
+            }
+            position++;//for space
+        }
+    }
+
+    //reconstruct string with <br> at insertion points
+    var newstring = "";
+    for(var i=0; i<words.length; i++) {
+        if(i != 0) {
+            if(insertPoints.indexOf(i) >= 0)
+                newstring += "<br>";
+            else
+                newstring += " ";
+        }
+        newstring += words[i];
+    }
+    return newstring;
 }
 
 function filter() {
@@ -163,7 +211,7 @@ function isIE() {
 
 function writeCSV() {
     var csv = "Fairfax County Youth Survey Data Explorer\r\n";
-    var descriptor = isCategory ? "Category: " : "Question: ";
+    var descriptor = isCategory ? "" : "Question: ";
     csv += '"' + descriptor + mainQuestion + '"\r\n';
     if(groupQuestion != null)
         csv += '"Compared to Question: ' + groupQuestion + '"\r\n';

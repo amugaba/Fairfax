@@ -45,12 +45,13 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
     <script src="js/crosstab.js" type="application/javascript"></script>
     <script>
         $(function() {
-            mainQuestion = <?php echo json_encode($mainVar->question); ?>;
+            mainQuestion = "Highlights: " + <?php echo json_encode($mainVar->question); ?>;
             groupQuestion = <?php echo json_encode($groupQuestion); ?>;
             mainTotals = <?php echo json_encode($mainVar->getMainTotals()); ?>;
             categoryDivisors = <?php echo json_encode($mainVar->getCategoryDivisors()); ?>;
             groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
             sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
+            connector = <?php echo json_encode($mainVar->connector); ?>;
 
             createPercentChart(<?php echo json_encode($mainVar->getCountArray()); ?>, <?php echo json_encode($mainVar->getPercentArray()); ?>,
                 <?php echo json_encode($mainVar->getLabels()); ?>, <?php echo json_encode($groupLabels); ?>,

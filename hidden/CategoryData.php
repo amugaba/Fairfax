@@ -4,6 +4,7 @@
  */
 function getCategoryVariable($cat)
 {
+    $connector = "";
     if ($cat == 1) {
         $title = "Substance Use";
         $qCodes = ['A2A', 'A3A', 'A4', 'D2A'];
@@ -45,7 +46,7 @@ function getCategoryVariable($cat)
     } else if ($cat == 4) {
         $title = "Bullying and Cyberbullying";
         $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
-        $labels = ['Bullied Someone<br>at School', 'Been Bullied at School', 'Cyberbullied<br>Someone at School', 'Been Cyberbullied<br>at School'];
+        $labels = ['Bullied Someone at School', 'Had Been Bullied at School', 'Cyberbullied Someone at School', 'Had Been Cyberbullied at School'];
         $tooltips = ['The % of students who reported having bullied someone on school property within the past 12 months.',
             'The % of students who reported having been bullied on school property within the past 12 months.',
             'The % of students who reported having cyberbullied someone in the past year.',
@@ -55,6 +56,7 @@ function getCategoryVariable($cat)
         $totalCutoffs = [null, null, null, null];
         $explanation = "<p>The Youth Survey asks questions about both bullying in-person and bullying online (called cyberbullying).</p>
         <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore All Questions</a>.</p>";
+        $connector = "they ";
     } else if ($cat == 5) {
         $title = "Dating Aggression";
         $qCodes = ['B15', 'B25'];
@@ -144,6 +146,7 @@ function getCategoryVariable($cat)
     $var->question = $title;
     $var->explanation = $explanation;
     $var->tooltips = $tooltips;
+    $var->connector = $connector;
 
     for($i=0; $i<count($qCodes); $i++){
         $ans = new Answer();
