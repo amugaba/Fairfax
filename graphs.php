@@ -110,18 +110,8 @@ if(!$showIntro) {
                 dropdownCssClass: "searchbox"
             });
 
-            $("#question1").select2({
-                containerCssClass: "searchbox",
-                dropdownCssClass: "searchbox"
-            });
-
             $("#category2").select2({
                 data: categories,
-                containerCssClass: "searchbox",
-                dropdownCssClass: "searchbox"
-            });
-
-            $("#question2").select2({
                 containerCssClass: "searchbox",
                 dropdownCssClass: "searchbox"
             });
@@ -131,16 +121,6 @@ if(!$showIntro) {
                 dropdownCssClass: "searchbox"
             });
 
-            $( "#accordion1" ).accordion({
-                collapsible: true,
-                active: false,
-                heightStyle: "content"
-            });
-            $( "#accordion2" ).accordion({
-                collapsible: true,
-                active: false,
-                heightStyle: "content"
-            });
             $('[data-toggle="tooltip"]').tooltip();
         });
 
@@ -148,11 +128,6 @@ if(!$showIntro) {
             $(target).val('');
             $(target).trigger('change')
             $(target).find("option:gt(0)").remove();//remove all but first option
-
-            /*for(var i=0; i<questions.length; i++) {
-                if(questions[i].category != null && (category == "" || category == questions[i].category))
-                    $(target).append('<option val="' + questions[i].code + '">' + questions[i].summary + '</option>').val = 17;
-            }*/
 
             //construct array of questions in this category
             var data = [];
@@ -204,7 +179,7 @@ if(!$showIntro) {
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
-            <select id="category2" style="width:160px" onchange="refreshQuestions(this.value, '#question1')">
+            <select id="category2" style="width:160px" onchange="refreshQuestions(this.value, '#question2')">
                 <option value="" selected="selected">All categories</option>
             </select>
             <select id="question2" style="width:300px" class="searchbox">
@@ -237,7 +212,7 @@ if(!$showIntro) {
             <input type="button" value="Generate Graph" class="btn" style="display: block; margin: 0 auto" onclick="searchData()">
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
             include "instructions.php";
         else: ?>
