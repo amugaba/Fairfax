@@ -5,48 +5,50 @@ require_once 'hidden/DataService.php';
 $ds = new DataService();
 $variables = $ds->getVariables();
 
-//Process user input
-$q1 = isset($_GET['q1'])? $_GET['q1'] : 'A4';
-$grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
-$grade = isset($_GET['grade']) ? $ds->connection->real_escape_string($_GET['grade']) : null;
-$gender = isset($_GET['gender']) ? $ds->connection->real_escape_string($_GET['gender']) : null;
-$race = isset($_GET['race']) ? $ds->connection->real_escape_string($_GET['race']) : null;
+$showIntro = !isset($_GET['q1']);
+if(!$showIntro) {
+    //Process user input
+    $q1 = $_GET['q1'];
+    $grp = isset($_GET['grp']) ? $_GET['grp'] : 'none';
+    $grade = isset($_GET['grade']) ? $ds->connection->real_escape_string($_GET['grade']) : null;
+    $gender = isset($_GET['gender']) ? $ds->connection->real_escape_string($_GET['gender']) : null;
+    $race = isset($_GET['race']) ? $ds->connection->real_escape_string($_GET['race']) : null;
 
-//Get Variables
-$mainVar = $ds->getVariableByCode($q1);
-$groupVar = $ds->getVariableByCode($grp);
+    //Get Variables
+    $mainVar = $ds->getVariableByCode($q1);
+    $groupVar = $ds->getVariableByCode($grp);
 
-if ($mainVar == null)
-    die("User input was invalid.");
-$mainVar->initAnswers($groupVar);
+    if ($mainVar == null)
+        die("User input was invalid.");
+    $mainVar->initAnswers($groupVar);
 
-//Construct filter
-$filter = " 1 ";
-if ($grade != null)
-    $filter .= " AND I2 = $grade";
-if ($gender != null)
-    $filter .= " AND I3 = $gender";
-if ($race != null)
-    $filter .= " AND race_eth = $race";
+    //Construct filter
+    $filter = " 1 ";
+    if ($grade != null)
+        $filter .= " AND I2 = $grade";
+    if ($gender != null)
+        $filter .= " AND I3 = $gender";
+    if ($race != null)
+        $filter .= " AND race_eth = $race";
 
-//Load data into main Variable
-$ds->getData($mainVar, $groupVar, $filter);
-$ds->getGroupTotals($mainVar, $groupVar, $filter);
-$mainVar->calculatePercents();
+    //Load data into main Variable
+    $ds->getData($mainVar, $groupVar, $filter);
+    $ds->getGroupTotals($mainVar, $groupVar, $filter);
+    $mainVar->calculatePercents();
 
-//Group variables
-if($groupVar != null){
-    $groupLabels = $groupVar->getLabels();
-    $groupSummary = $groupVar->summary;
-    $groupQuestion = $groupVar->question;
+    //Group variables
+    if ($groupVar != null) {
+        $groupLabels = $groupVar->getLabels();
+        $groupSummary = $groupVar->summary;
+        $groupQuestion = $groupVar->question;
+    } else {
+        $groupLabels = ['Total'];
+        $groupSummary = null;
+        $groupQuestion = null;
+    }
+    $graphHeight = min(1200, max(600, (count($groupLabels) + 1) * count($mainVar->getLabels()) * 30 + 100));//height is (labels*(labels+spacing)*bar height + header height
+    $noresponse = $ds->getNoResponseCount($q1, $grp);
 }
-else {
-    $groupLabels = ['Total'];
-    $groupSummary = null;
-    $groupQuestion = null;
-}
-$graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabels())*30+100));//height is (labels*(labels+spacing)*bar height + header height
-$noresponse = $ds->getNoResponseCount($q1, $grp);
 ?>
 
 <!DOCTYPE html>
@@ -60,12 +62,15 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
     <script src="js/amcharts/plugins/export/export.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
     <script src="js/crosstab.js" type="application/javascript"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.full.js"></script>
     <script>
         $(function() {
-            mainCode = <?php echo json_encode($q1); ?>;
-            groupCode = <?php echo json_encode($grp); ?>;
             questions = <?php echo json_encode($variables); ?>;
 
+            <?php if(!$showIntro): ?>
+            mainCode = <?php echo json_encode($q1); ?>;
+            groupCode = <?php echo json_encode($grp); ?>;
             mainQuestion = <?php echo json_encode($mainVar->question); ?>;
             groupQuestion = <?php echo json_encode($groupQuestion); ?>;
             mainTotals = <?php echo json_encode($mainVar->getMainTotals()); ?>;
@@ -89,22 +94,42 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
             if(filterString != null)
                 titleString += "<i>" + filterString + "</i>";
             $("#graphTitle").html(titleString);
+            <?php endif; ?>
 
-            createVariablesByCategory("Demographics",99);
-            createVariablesByCategory("Alcohol",1);
-            createVariablesByCategory("Tobacco",12);
-            createVariablesByCategory("Drugs",5);
-            createVariablesByCategory("Mental Health",9);
-            createVariablesByCategory("School",4);
-            createVariablesByCategory("Bullying",2);
-            createVariablesByCategory("Sex and Relationships",3);
-            createVariablesByCategory("Sexual Misconduct",14);
-            createVariablesByCategory("Family",11);
-            createVariablesByCategory("Community Support",10);
-            createVariablesByCategory("Safety and Violence",13);
-            createVariablesByCategory("Physical Activity",6);
-            createVariablesByCategory("Nutrition",7);
-            createVariablesByCategory("Self/Peer Perception",8);
+            refreshQuestions('','#question1');
+            refreshQuestions('','#question2');
+
+            var categories = [{id:'', text: 'All categories'}, {id:99, text: 'Demographics'}, {id:1, text: 'Alcohol'}, {id:12, text: 'Tobacco'},
+                {id:5, text: 'Drugs'}, {id:9, text: 'Mental Health'}, {id:4, text: 'School'}, {id:2, text: 'Bullying'}, {id:3, text: 'Sex and Relationships'},
+                {id:14, text: 'Sexual Misconduct'}, {id:11, text: 'Family'}, {id:10, text: 'Community Support'}, {id:13, text: 'Safety and Violence'},
+                {id:6, text: 'Physical Activity'}, {id:7, text: 'Nutrition'}, {id:8, text: 'Self/Peer Perception'}];
+
+            $("#category1").select2({
+                data: categories,
+                containerCssClass: "searchbox",
+                dropdownCssClass: "searchbox"
+            });
+
+            $("#question1").select2({
+                containerCssClass: "searchbox",
+                dropdownCssClass: "searchbox"
+            });
+
+            $("#category2").select2({
+                data: categories,
+                containerCssClass: "searchbox",
+                dropdownCssClass: "searchbox"
+            });
+
+            $("#question2").select2({
+                containerCssClass: "searchbox",
+                dropdownCssClass: "searchbox"
+            });
+
+            $(".filter").select2({
+                containerCssClass: "searchbox",
+                dropdownCssClass: "searchbox"
+            });
 
             $( "#accordion1" ).accordion({
                 collapsible: true,
@@ -118,66 +143,109 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
             });
             $('[data-toggle="tooltip"]').tooltip();
         });
+
+        function refreshQuestions(category, target) {
+            $(target).val('');
+            $(target).trigger('change')
+            $(target).find("option:gt(0)").remove();//remove all but first option
+
+            /*for(var i=0; i<questions.length; i++) {
+                if(questions[i].category != null && (category == "" || category == questions[i].category))
+                    $(target).append('<option val="' + questions[i].code + '">' + questions[i].summary + '</option>').val = 17;
+            }*/
+
+            //construct array of questions in this category
+            var data = [];
+            for(var i=0; i<questions.length; i++) {
+                if(questions[i].category != null && (category == "" || category == questions[i].category))
+                    data.push({id:questions[i].code, text:questions[i].summary});
+            }
+            //add questions to dropdown
+            $(target).select2({data:data,
+                containerCssClass: "searchbox",
+                dropdownCssClass: "searchbox"});
+        }
+
+        function searchData() {
+            var q1 = $('#question1').val();
+            var q2 = $('#question2').val();
+            var grade = $("#filtergrade option:selected").val();
+            var gender = $("#filtergender option:selected").val();
+            var race = $("#filterrace option:selected").val();
+
+            if(q1 != '') {
+                var url = 'graphs.php?q1='+q1;
+
+                if(q2 != '')
+                    url += '&grp='+q2;
+                if(grade != '')
+                    url += "&grade="+grade;
+                if(gender != '')
+                    url += "&gender="+gender;
+                if(race != '')
+                    url += "&race="+race;
+
+                window.location.href = url;
+            }
+        }
     </script>
     <script src="js/exportgraph.js"></script>
 </head>
 <body>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row">
-        <div class="col-md-3 sidebar">
-            <div class="h3 shadowdeep">1. Select a Question
-                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Click a category below to expand the box and display all questions in that category. Select a question to display its graph."></div>
-            </div>
-            <div id="accordion1" class="accordion"></div>
-
-            <div class="h3 shadowdeep">2. (Optional) Compare to Another Question
-                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="After selecting the primary question above, you may select a second question to look at subgroups. For example, select 'Alcohol>Binge Drinking' above, then select 'Demographics>Age' here to see how binge drinking varies with age."></div>
-            </div>
-            <div id="accordion2" class="accordion"></div>
-
-            <div class="h3 shadowdeep">3. (Optional) Filter Results
-                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="You can focus your query on specific populations. After selecting question(s) above, choose which groups you want to include here. For example, choosing 'Mental Health>Considered suicide' and then filtering for 'Male' will show suicide data only for male students."></div>
-            </div>
-            <div class="bordergrey filterbox" style="margin-bottom: 20px;">
-                <label for="filteryear">Year: </label>
-                <select id="filteryear">
-                    <option value="0">All</option>
-                    <option value="2015">2015</option>
-                </select><br>
-                <label for="filtergrade">Grade: </label>
-                <select id="filtergrade">
-                    <option value="0">All</option>
-                    <option value="1">8th</option>
-                    <option value="2">10th</option>
-                    <option value="3">12th</option>
-                </select><br>
-                <label for="filtergrade">Gender: </label>
-                <select id="filtergender">
-                    <option value="0">All</option>
-                    <option value="1">Female</option>
-                    <option value="2">Male</option>
-                </select><br>
-                <label for="filterrace">Race: </label>
-                <select id="filterrace">
-                    <option value="0">All</option>
-                    <option value="1">White</option>
-                    <option value="2">Black</option>
-                    <option value="3">Hispanic</option>
-                    <option value="4">Asian/Pacific Islander</option>
-                    <option value="5">Other/Multiple</option>
-                </select><br>
-                <input type="button" onclick="filter()" value="Filter" style="margin: 0px 0px 0px 103px; width: 100px;">
-            </div>
+    <div class="row" style="background-color: #2e6da4;">
+        <div class="searchbar">
+            <label class="shadow">1. Select primary question:</label>
+            <select id="category1" style="width:160px" onchange="refreshQuestions(this.value, '#question1')">
+                <option value="" selected="selected">All categories</option>
+            </select>
+            <select id="question1" style="width:300px" class="searchbox">
+                <option value="" selected="selected">Select a question</option>
+            </select><br>
+            <label class="shadow">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
+            <select id="category2" style="width:160px" onchange="refreshQuestions(this.value, '#question1')">
+                <option value="" selected="selected">All categories</option>
+            </select>
+            <select id="question2" style="width:300px" class="searchbox">
+                <option value="" selected="selected">Select a question</option>
+            </select><br>
+            <label class="shadow" style="margin: 10px 0 20px">3. (Optional) Filter data by:</label>
+            <select id="filteryear" class="filter">
+                <option value="">Year</option>
+                <option value="2015">2015</option>
+            </select>
+            <select id="filtergrade" class="filter">
+                <option value="">Grade</option>
+                <option value="1">8th</option>
+                <option value="2">10th</option>
+                <option value="3">12th</option>
+            </select>
+            <select id="filtergender" class="filter">
+                <option value="">Gender</option>
+                <option value="1">Female</option>
+                <option value="2">Male</option>
+            </select>
+            <select id="filterrace" class="filter">
+                <option value="">Race</option>
+                <option value="1">White</option>
+                <option value="2">Black</option>
+                <option value="3">Hispanic</option>
+                <option value="4">Asian/Pacific Islander</option>
+                <option value="5">Other/Multiple</option>
+            </select><br>
+            <input type="button" value="Generate Graph" class="btn" style="display: block; margin: 0 auto" onclick="searchData()">
         </div>
-
-        <div class="col-md-9">
-
+    </div>
+    <div class="row">
+        <?php if($showIntro):
+            include "instructions.php";
+        else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right">
-                <input type="button" onclick="exportGraph()" value="Export" class="btn btn-blue" style="position: relative; z-index: 100">
+                <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">
             </div>
 
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
@@ -187,9 +255,9 @@ $noresponse = $ds->getNoResponseCount($q1, $grp);
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <div>No Reponse: <?php echo number_format($noresponse,0);?></div>
-                <input type="button" onclick="tableToExcel()" value="Export to CSV">
+                <input type="button" onclick="tableToExcel()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>
-        </div>
+        <?php endif; ?>
     </div>
 </div>
 <?php include_footer(); ?>

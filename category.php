@@ -111,7 +111,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
                 <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right">
-                <input type="button" onclick="exportGraph()" value="Export" class="btn btn-blue" style="position: relative; z-index: 100">
+                <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">
             </div>
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
@@ -119,7 +119,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
-                <input type="button" onclick="tableToExcel()" value="Export to CSV">
+                <input type="button" onclick="tableToExcel()" class="btn btn-blue" value="Export to CSV" style="margin-top: 10px">
             </div>
         </div>
     </div>

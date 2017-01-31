@@ -150,6 +150,22 @@ table.datatable {
     color: #ffffff;
 }
 
+.searchbar {
+    max-width: 710px;
+    border: thin white solid;
+    padding: 10px;
+    margin: 10px auto;
+}
+
+.searchbar label {
+    color: #ffffff;
+    width: 220px;
+    font-size: 12pt;
+}
+.searchbox {
+    font-size: 9pt;
+}
+
 .categories a {
     font-size: 13pt;
     color: #ffffff;
