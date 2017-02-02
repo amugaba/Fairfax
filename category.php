@@ -38,11 +38,11 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
     <meta charset="UTF-8">
     <title><?php echo PAGE_TITLE ?></title>
     <?php include_styles() ?>
-    <script src="js/amcharts/amcharts.js" type="text/javascript"></script>
-    <script src="js/amcharts/serial.js" type="text/javascript"></script>
-    <script src="js/amcharts/plugins/export/export.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="js/amcharts/plugins/export/export.css" type="text/css">
-    <script src="js/crosstab.js" type="application/javascript"></script>
+    <script src="js/amcharts/amcharts.js"></script>
+    <script src="js/amcharts/serial.js"></script>
+    <script src="js/amcharts/plugins/export/export.min.js"></script>
+    <script src="js/crosstab.js"></script>
+
     <script>
         $(function() {
             mainQuestion = "Highlights: " + <?php echo json_encode($mainVar->question); ?>;
