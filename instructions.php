@@ -12,8 +12,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <ul><li>You can also filter the questions list by selecting a category in the 'All Categories' drop-down.
-                    Select 'Bullying', for example, to reduce the questions list to only bullying-related items.</li></ul>
+            <ul><li>You can also filter the questions list by selecting a category in the 'All categories' drop-down.</li></ul>
         </div>
         <div class="col-md-6">
             <img src="img/help-category-sm.PNG" style="display: block; margin: 0 0 10px;">
@@ -36,8 +35,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <ul><li>You can filter the data by selecting a year, grade, gender, or race in the last row. This will show only data for the selected group.
-                    You could view stress level for only 12th graders.</li></ul>
+            <ul><li>You can filter the data by selecting a year, grade, gender, or race in the last row. This will show only data for the selected group.</li></ul>
         </div>
         <div class="col-md-6">
             <img src="img/help-filter-sm.PNG" style="display: block; margin: 0 0 10px;">

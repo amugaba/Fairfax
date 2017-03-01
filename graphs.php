@@ -13,6 +13,9 @@ if(!$showIntro) {
     $grade = isset($_GET['grade']) ? $ds->connection->real_escape_string($_GET['grade']) : null;
     $gender = isset($_GET['gender']) ? $ds->connection->real_escape_string($_GET['gender']) : null;
     $race = isset($_GET['race']) ? $ds->connection->real_escape_string($_GET['race']) : null;
+    $year = isset($_GET['year']) ? $ds->connection->real_escape_string($_GET['year']) : null;
+    $cat1 = isset($_GET['cat1']) ? $ds->connection->real_escape_string($_GET['cat1']) : null;
+    $cat2 = isset($_GET['cat2']) ? $ds->connection->real_escape_string($_GET['cat2']) : null;
 
     //Get Variables
     $mainVar = $ds->getVariableByCode($q1);
@@ -86,46 +89,65 @@ if(!$showIntro) {
             else
                 createCrosstabTable($('#datatable'));
 
-            filterString = makeFilterString(<?php echo json_encode($grade); ?>,<?php echo json_encode($gender); ?>,<?php echo json_encode($race); ?>);
+            var grade = <?php echo json_encode($grade); ?>;
+            var gender = <?php echo json_encode($gender); ?>;
+            var race = <?php echo json_encode($race); ?>;
+            var year = <?php echo json_encode($year); ?>;
+            var cat1 = <?php echo json_encode($cat1); ?>;
+            var cat2 = <?php echo json_encode($cat2); ?>;
+
+            filterString = makeFilterString(grade, gender, race);
             titleString = "<h4>"+mainQuestion+"</h4>";
             if(groupQuestion != null)
                 titleString += "<i>compared to</i><h4>" + groupQuestion + "</h4>";
             if(filterString != null)
                 titleString += "<i>" + filterString + "</i>";
             $("#graphTitle").html(titleString);
-            <?php endif; ?>
 
+            if(cat1 != null) {
+                $('#category1').val(cat1);
+                refreshQuestions(cat1,'#question1');
+            }
+            else
+                refreshQuestions('','#question1');
+            if(cat2 != null) {
+                $('#category2').val(cat2);
+                refreshQuestions(cat2,'#question2');
+            }
+            else
+                refreshQuestions('','#question2');
+
+            if(mainCode != null) {
+                $('#question1').val(mainCode);
+                $("#question1").trigger('change');
+            }
+            if(groupCode != null && groupCode != 'none') {
+                $('#question2').val(groupCode);
+                $("#question2").trigger('change');
+            }
+            if(year != null) {
+                $('#filteryear').val(year);
+            }
+            if(grade != null) {
+                $('#filtergrade').val(grade);
+            }
+            if(gender != null) {
+                $('#filtergender').val(gender);
+            }
+            if(race != null) {
+                $('#filterrace').val(race);
+            }
+            <?php else: ?>
             refreshQuestions('','#question1');
             refreshQuestions('','#question2');
-
-            var categories = [{id:'', text: 'All categories'}, {id:99, text: 'Demographics'}, {id:1, text: 'Alcohol'}, {id:12, text: 'Tobacco'},
-                {id:5, text: 'Drugs'}, {id:9, text: 'Mental Health'}, {id:4, text: 'School'}, {id:2, text: 'Bullying'}, {id:3, text: 'Sex and Relationships'},
-                {id:14, text: 'Sexual Misconduct'}, {id:11, text: 'Family'}, {id:10, text: 'Community Support'}, {id:13, text: 'Safety and Violence'},
-                {id:6, text: 'Physical Activity'}, {id:7, text: 'Nutrition'}, {id:8, text: 'Self/Peer Perception'}];
-
-            $("#category1").select2({
-                data: categories,
-                containerCssClass: "searchbox",
-                dropdownCssClass: "searchbox"
-            });
-
-            $("#category2").select2({
-                data: categories,
-                containerCssClass: "searchbox",
-                dropdownCssClass: "searchbox"
-            });
-
-            $(".filter").select2({
-                containerCssClass: "searchbox",
-                dropdownCssClass: "searchbox"
-            });
+            <?php endif; ?>
 
             $('[data-toggle="tooltip"]').tooltip();
         });
 
         function refreshQuestions(category, target) {
             $(target).val('');
-            $(target).trigger('change')
+            $(target).trigger('change');
             $(target).find("option:gt(0)").remove();//remove all but first option
 
             //construct array of questions in this category
@@ -143,15 +165,24 @@ if(!$showIntro) {
         function searchData() {
             var q1 = $('#question1').val();
             var q2 = $('#question2').val();
-            var grade = $("#filtergrade option:selected").val();
-            var gender = $("#filtergender option:selected").val();
-            var race = $("#filterrace option:selected").val();
+            var cat1 = $('#category1').val();
+            var cat2 = $('#category2').val();
+            var year = $("#filteryear").val();
+            var grade = $("#filtergrade").val();
+            var gender = $("#filtergender").val();
+            var race = $("#filterrace").val();
 
             if(q1 != '') {
                 var url = 'graphs.php?q1='+q1;
 
                 if(q2 != '')
                     url += '&grp='+q2;
+                if(cat1 != '')
+                    url += '&cat1='+cat1;
+                if(cat2 != '')
+                    url += '&cat2='+cat2;
+                if(year != '')
+                    url += "&year="+year;
                 if(grade != '')
                     url += "&grade="+grade;
                 if(gender != '')
@@ -171,36 +202,66 @@ if(!$showIntro) {
     <div class="row" style="background-color: #2e6da4;">
         <div class="searchbar">
             <label class="shadow">1. Select primary question:</label>
-            <select id="category1" style="width:160px" onchange="refreshQuestions(this.value, '#question1')">
+            <select id="category1" style="width:160px" class="selector" onchange="refreshQuestions(this.value, '#question1')">
                 <option value="" selected="selected">All categories</option>
+                <option value="99">Demographics</option>
+                <option value="1">Alcohol</option>
+                <option value="12">Tobacco</option>
+                <option value="5">Drugs</option>
+                <option value="9">Mental Health</option>
+                <option value="4">School</option>
+                <option value="2">Bullying</option>
+                <option value="3">Sex and Relationships</option>
+                <option value="14">Sexual Misconduct</option>
+                <option value="11">Family</option>
+                <option value="10">Community Suppor</option>
+                <option value="13">Safety and Violence</option>
+                <option value="6">Physical Activity</option>
+                <option value="7">Nutrition</option>
+                <option value="8">Self/Peer Perception</option>
             </select>
             <select id="question1" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
-            <select id="category2" style="width:160px" onchange="refreshQuestions(this.value, '#question2')">
+            <select id="category2" style="width:160px" class="selector" onchange="refreshQuestions(this.value, '#question2')">
                 <option value="" selected="selected">All categories</option>
+                <option value="99">Demographics</option>
+                <option value="1">Alcohol</option>
+                <option value="12">Tobacco</option>
+                <option value="5">Drugs</option>
+                <option value="9">Mental Health</option>
+                <option value="4">School</option>
+                <option value="2">Bullying</option>
+                <option value="3">Sex and Relationships</option>
+                <option value="14">Sexual Misconduct</option>
+                <option value="11">Family</option>
+                <option value="10">Community Suppor</option>
+                <option value="13">Safety and Violence</option>
+                <option value="6">Physical Activity</option>
+                <option value="7">Nutrition</option>
+                <option value="8">Self/Peer Perception</option>
             </select>
             <select id="question2" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 20px">3. (Optional) Filter data by:</label>
-            <select id="filteryear" class="filter">
+            <select id="filteryear" class="filter selector">
                 <option value="">Year</option>
                 <option value="2015">2015</option>
             </select>
-            <select id="filtergrade" class="filter">
+            <select id="filtergrade" class="filter selector">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
                 <option value="2">10th</option>
                 <option value="3">12th</option>
             </select>
-            <select id="filtergender" class="filter">
+            <select id="filtergender" class="filter selector">
                 <option value="">Gender</option>
                 <option value="1">Female</option>
                 <option value="2">Male</option>
             </select>
-            <select id="filterrace" class="filter">
+            <select id="filterrace" class="filter selector">
                 <option value="">Race</option>
                 <option value="1">White</option>
                 <option value="2">Black</option>
@@ -208,7 +269,10 @@ if(!$showIntro) {
                 <option value="4">Asian/Pacific Islander</option>
                 <option value="5">Other/Multiple</option>
             </select><br>
-            <input type="button" value="Generate Graph" class="btn" style="display: block; margin: 0 auto" onclick="searchData()">
+            <div style="text-align: center;">
+                <input type="button" value="Generate Graph" class="btn" onclick="searchData()">
+                <input type="button" value="Reset" class="btn" onclick="location.href = 'graphs.php'">
+            </div>
         </div>
     </div>
     <div class="row" style="margin: 10px auto; max-width: 1400px">
