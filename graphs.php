@@ -214,7 +214,7 @@ if(!$showIntro) {
                 <option value="3">Sex and Relationships</option>
                 <option value="14">Sexual Misconduct</option>
                 <option value="11">Family</option>
-                <option value="10">Community Suppor</option>
+                <option value="10">Community Support</option>
                 <option value="13">Safety and Violence</option>
                 <option value="6">Physical Activity</option>
                 <option value="7">Nutrition</option>
@@ -236,7 +236,7 @@ if(!$showIntro) {
                 <option value="3">Sex and Relationships</option>
                 <option value="14">Sexual Misconduct</option>
                 <option value="11">Family</option>
-                <option value="10">Community Suppor</option>
+                <option value="10">Community Support</option>
                 <option value="13">Safety and Violence</option>
                 <option value="6">Physical Activity</option>
                 <option value="7">Nutrition</option>

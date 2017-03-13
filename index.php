@@ -64,13 +64,13 @@ include_once "config/config.php";
     <div style="max-width: 1000px; margin: 20px auto;">
         <div class="row">
             <div class="col-md-5">
-                <div class="h2 " style="color:#767676">Fairfax Youth Survey Interactive Data Explorer</div>
+                <div class="h2 " style="color:#767676">Fairfax County Youth Survey Interactive Data Explorer</div>
             </div>
             <div class="col-md-7">
                 <p>The <b>interactive data explorer</b> allows you to generate custom graphs and data tables on the questions and demographics that you find most interesting.</p>
                 <ul>
-                    <li>Head to <b><a href="category.php">Survey Highlights</a></b> to see a hand-picked selection of the most important findings.</li>
-                    <li>Or <b><a href="graphs.php">Explore All Questions</a></b> to create and export your own graphs from any questions in the survey.</li>
+                    <li>Head to <b><a href="category.php">Survey Highlights</a></b> to see selected results from various topics.</li>
+                    <li>Or <b><a href="graphs.php">Explore All Questions</a></b> to create and export your own graphs from any question in the survey.</li>
                 </ul>
             </div>
         </div>
@@ -84,10 +84,10 @@ include_once "config/config.php";
                 <div class="h2 " style="color:#767676">Learn More About the Survey</div>
             </div>
             <div class="col-md-7">
-                <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in grades six through twelve.
+                <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in grades sixth, eighth, tenth, and twelfth.
                     It examines behaviors, experiences, and other factors that influence the health and well-being of the county's youth.
-                    The survey is co-sponsored by the Fairfax County Board of Supervisors and the Fairfax County School Board, and has been administered for the past ten (10) years.</p>
-                <p>For more information, please see the <a href="http://www.fairfaxcounty.gov/demogrph/youth_survey_results.htm" target="_blank">Youth Survey homepage</a>.</p>
+                    The survey is co-sponsored by the Fairfax County Board of Supervisors and the Fairfax County School Board, and has been administered since 2001.</p>
+                <p>For more information, please see the <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Youth Survey homepage</a>.</p>
             </div>
         </div>
     </div>

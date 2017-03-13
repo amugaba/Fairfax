@@ -83,16 +83,18 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
             </div>
                 <ul class="categories shadow">
-                    <li><a href='?cat=1'>Substance Use</a></li>
-                    <li><a href='?cat=2'>Sexual Activity</a></li>
-                    <li><a href='?cat=3'>Vehicle Safety</a></li>
-                    <li><a href='?cat=4'>Bullying and Cyberbullying</a></li>
-                    <li><a href='?cat=5'>Dating Aggression</a></li>
-                    <li><a href='?cat=6'>Other Aggressive Behaviors</a></li>
-                    <li><a href='?cat=7'>Physical Activity and Rest</a></li>
-                    <li><a href='?cat=8'>Nutrition and Weight Loss Behaviors</a></li>
-                    <li><a href='?cat=9'>Mental Health</a></li>
-                    <li><a href='?cat=10'>Extracurricular Activities and Civic Behaviors</a></li>
+                    <li><a href='?cat=1'>Alcohol</a></li>
+                    <li><a href='?cat=2'>Tobacco</a></li>
+                    <li><a href='?cat=3'>Drugs</a></li>
+                    <li><a href='?cat=4'>Sexual Health</a></li>
+                    <li><a href='?cat=5'>Vehicle Safety</a></li>
+                    <li><a href='?cat=6'>Bullying and Cyberbullying</a></li>
+                    <li><a href='?cat=7'>Dating Aggression</a></li>
+                    <li><a href='?cat=8'>Other Aggressive Behaviors and Victimization</a></li>
+                    <li><a href='?cat=10'>Nutrition and Physical Activity</a></li>
+                    <li><a href='?cat=11'>Mental Health</a></li>
+                    <li><a href='?cat=12'>Extracurricular Activities and Civic Behaviors</a></li>
+                    <li><a href='?cat=13'>Assets that Build Resiliency</a></li>
                 </ul>
         </div>
         <div class="col-md-9 mainbar">
