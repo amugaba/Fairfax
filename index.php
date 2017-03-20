@@ -70,7 +70,7 @@ include_once "config/config.php";
                 <p>The <b>interactive data explorer</b> allows you to generate custom graphs and data tables on the questions and demographics that you find most interesting.</p>
                 <ul>
                     <li>Head to <b><a href="category.php">Survey Highlights</a></b> to see selected results from various topics.</li>
-                    <li>Or <b><a href="graphs.php">Explore All Questions</a></b> to create and export your own graphs from any question in the survey.</li>
+                    <li>Or <b><a href="graphs.php">Explore the Data</a></b> to create and export your own graphs from any question in the survey.</li>
                 </ul>
             </div>
         </div>

@@ -5,7 +5,7 @@
     }
 </style>
 <div style="max-width:1000px; margin: 0 auto">
-    <h3 style="text-align: center">How to Use the Explorer:</h3>
+    <h3 style="text-align: center">How to Use the Data Explorer:</h3>
     <h4>1. Select the question you want to examine</h4>
     <div class="row">
         <ul><li>In the first row, click the <span class="bluetext">Select a question</span> drop-down to view all questions. You can type in this box to search through the list.</li>

@@ -16,7 +16,7 @@ function getCategoryVariable($cat)
         $highCutoffs = [null, null, null];
         $totalCutoffs = [null, null, null];
         $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on alcohol, the most commonly used substance by Fairfax County youth.</p>
-        <p>To learn about other substances or to compare alcohol use with other behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn about other substances or to compare alcohol use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     }
     else if ($cat == 2) {
         $title = "Tobacco";
@@ -30,7 +30,7 @@ function getCategoryVariable($cat)
         $highCutoffs = [null, null, null, null];
         $totalCutoffs = [null, null, null, null];
         $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco, including e-cigarettes.</p>
-        <p>To learn about other substances or to compare tobacco use with other behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn about other substances or to compare tobacco use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     }
     else if ($cat == 3) {
         $title = "Drugs";
@@ -44,7 +44,7 @@ function getCategoryVariable($cat)
         $highCutoffs = [null, null, null, null];
         $totalCutoffs = [null, null, null, null];
         $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on selected substances of interest to the Fairfax County community.</p>
-        <p>To learn about other substances or to compare substance use with other behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn about other substances or to compare substance use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 4) {
         $title = "Sexual Health";
         $qCodes = ['X1', 'X8'];
@@ -56,7 +56,7 @@ function getCategoryVariable($cat)
         $totalCutoffs = [null, null];
         $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use).
         Related questions addressing aggression in relationships are reported in the <a href='category.php?cat=7'>Dating Aggression</a> category.</p>
-        <p>To learn more about behaviors related to sexual health, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn more about behaviors related to sexual health, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 5) {
         $title = "Vehicle Safety";
         $qCodes = ['A5', 'S3'];
@@ -68,7 +68,7 @@ function getCategoryVariable($cat)
         $totalCutoffs = [null, null];
         $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
         after drinking and texting while driving.</p><p style='font-style: italic; text-decoration: underline'>Data are for 12th grade students only.</p>
-        <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 6) {
         $title = "Bullying and Cyberbullying";
         $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
@@ -81,7 +81,7 @@ function getCategoryVariable($cat)
         $highCutoffs = [1, 1, null, null];
         $totalCutoffs = [null, null, null, null];
         $explanation = "<p>The Youth Survey asks questions about both bullying in-person and bullying online (called cyberbullying).</p>
-        <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 7) {
         $title = "Dating Aggression";
@@ -94,7 +94,7 @@ function getCategoryVariable($cat)
         $totalCutoffs = [null, null];
         $explanation = "<p>There are a variety of behaviors that might be classified as dating aggression, or that might signify 
             a risk of dating aggression. These range from a partner always wanting to know his or her partner's whereabouts to pressuring a partner to have sex.</p>
-        <p>To learn more about behaviors related to dating aggression, including physical abuse, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn more about behaviors related to dating aggression, including physical abuse, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 8) {
         $title = "Other Aggressive Behaviors and Victimization";
@@ -109,7 +109,7 @@ function getCategoryVariable($cat)
         $totalCutoffs = [null, null, null, null];
         $explanation = "<p>The Youth Survey asks about aggression and victimization in a variety of forms, both verbal and physical. The highlights page 
             provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who carried a weapon.</p>
-        <p>To learn more about other behaviors and experiences related to aggression and victimization, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn more about other behaviors and experiences related to aggression and victimization, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 10) {
         $title = "Nutrition and Physical Activity";
@@ -125,7 +125,7 @@ function getCategoryVariable($cat)
         $highCutoffs = [null, 1, null, null, null];
         $totalCutoffs = [null, null, null, null, null];
         $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sweetened beverages, level of physical activity, and other questions related to physical health.</p>
-        <p>To learn more about behaviors related to nutrition and physical health, including unhealthy weight loss and food insecurity (hunger), <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn more about behaviors related to nutrition and physical health, including unhealthy weight loss and food insecurity (hunger), <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 11) {
         $title = "Mental Health";
@@ -140,7 +140,7 @@ function getCategoryVariable($cat)
         $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
             highlights students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row 
             (which may indicate risk for depression), and those who attempted suicide.</p>
-        <p>To learn more about these topics, as well as suicidal ideation and unhealthy weight loss behaviors, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To learn more about these topics, as well as suicidal ideation and unhealthy weight loss behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 12) {
         $title = "Extracurricular Activities and Civic Behaviors";
@@ -156,7 +156,7 @@ function getCategoryVariable($cat)
         $explanation = "<p>The Youth Survey asks about a variety of behaviors that indicate civic engagement or diligence, including
         completion of homework, working at a job, volunteering in the community, and participating in extracurricular activities.
         This page shows the percentage of students with a moderate level of engagement (1+ hour of work or at least one time volunteering).</p>
-        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 13) {
         $title = "Assets that Build Resiliency";
@@ -174,7 +174,7 @@ function getCategoryVariable($cat)
         $explanation = "<p>The Youth Survey asks about a variety of behaviors that indicate civic engagement or diligence, including
         completion of homework, working at a job, volunteering in the community, and participating in extracurricular activities.
         This page shows the percentage of students with a moderate level of engagement (1+ hour of work or at least one time volunteering).</p>
-        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore All Questions</a>.</p>";
+        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else {
         die("Category chosen is invalid.");
     }
