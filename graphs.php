@@ -159,7 +159,8 @@ if(!$showIntro) {
             //add questions to dropdown
             $(target).select2({data:data,
                 containerCssClass: "searchbox",
-                dropdownCssClass: "searchbox"});
+                dropdownCssClass: "searchbox",
+            placeholder: "Select an option"});
         }
 
         function searchData() {
@@ -208,16 +209,21 @@ if(!$showIntro) {
                 <option value="1">Alcohol</option>
                 <option value="12">Tobacco</option>
                 <option value="5">Drugs</option>
-                <option value="9">Mental Health</option>
-                <option value="4">School</option>
-                <option value="2">Bullying</option>
-                <option value="3">Sex and Relationships</option>
-                <option value="14">Sexual Misconduct</option>
-                <option value="11">Family</option>
-                <option value="10">Community Support</option>
-                <option value="13">Safety and Violence</option>
+                <option value="2">Bullying & Cyberbullying</option>
+                <option value="14">Harassment</option>
+                <option value="3">Dating Aggression</option>
+                <option value="13">Other Aggressive Behaviors</option>
+                <option value="17">Vehicle Safety</option>
                 <option value="6">Physical Activity</option>
                 <option value="7">Nutrition</option>
+                <option value="19">Unhealthy Weight Loss Behaviors</option>
+                <option value="9">Mental Health</option>
+                <option value="18">Sexual Health</option>
+                <option value="4">School</option>
+                <option value="11">Family</option>
+                <option value="10">Community Support</option>
+                <option value="16">Civic Engagement</option>
+                <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
             </select>
             <select id="question1" style="width:300px" class="searchbox">
@@ -230,16 +236,21 @@ if(!$showIntro) {
                 <option value="1">Alcohol</option>
                 <option value="12">Tobacco</option>
                 <option value="5">Drugs</option>
-                <option value="9">Mental Health</option>
-                <option value="4">School</option>
-                <option value="2">Bullying</option>
-                <option value="3">Sex and Relationships</option>
-                <option value="14">Sexual Misconduct</option>
-                <option value="11">Family</option>
-                <option value="10">Community Support</option>
-                <option value="13">Safety and Violence</option>
+                <option value="2">Bullying & Cyberbullying</option>
+                <option value="14">Harassment</option>
+                <option value="3">Dating Aggression</option>
+                <option value="13">Other Aggressive Behaviors</option>
+                <option value="17">Vehicle Safety</option>
                 <option value="6">Physical Activity</option>
                 <option value="7">Nutrition</option>
+                <option value="19">Unhealthy Weight Loss Behaviors</option>
+                <option value="9">Mental Health</option>
+                <option value="18">Sexual Health</option>
+                <option value="4">School</option>
+                <option value="11">Family</option>
+                <option value="10">Community Support</option>
+                <option value="16">Civic Engagement</option>
+                <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
             </select>
             <select id="question2" style="width:300px" class="searchbox">

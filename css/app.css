@@ -295,3 +295,7 @@ th.clearcell {
             5px 5px;
     background-repeat: no-repeat;
 }
+
+.select2-results__options {
+    max-height: 300px !important;
+}
