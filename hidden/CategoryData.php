@@ -97,7 +97,7 @@ function getCategoryVariable($cat)
         <p>To learn more about behaviors related to dating aggression, including physical abuse, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 8) {
-        $title = "Other Aggressive Behaviors and Victimization";
+        $title = "Harassment and Aggressive Behaviors";
         $qCodes = ['B2A', 'B10A', 'B11', 'W5'];
         $labels = ["Insulted Someone's Race or Culture", 'Had Race or Culture Insulted', 'Had Been Sexually Harassed', 'Carried a Weapon'];
         $tooltips = ['The % of students who reported that they said something bad about someone’s race or culture in the past year.',
@@ -107,9 +107,9 @@ function getCategoryVariable($cat)
         $lowCutoffs = [2, 2, 2, 2];
         $highCutoffs = [null, null, null, null];
         $totalCutoffs = [null, null, null, null];
-        $explanation = "<p>The Youth Survey asks about aggression and victimization in a variety of forms, both verbal and physical. The highlights page 
-            provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who carried a weapon.</p>
-        <p>To learn more about other behaviors and experiences related to aggression and victimization, <a href='graphs.php'>Explore the Data</a>.</p>";
+        $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
+            provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who reported carrying a weapon.</p>
+        <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 10) {
         $title = "Nutrition and Physical Activity";
@@ -171,10 +171,11 @@ function getCategoryVariable($cat)
         $lowCutoffs = [3, 3, 3, 3, null];
         $highCutoffs = [null, null, null, null, 2];
         $totalCutoffs = [null, null, null, null, null];
-        $explanation = "<p>The Youth Survey asks about a variety of behaviors that indicate civic engagement or diligence, including
-        completion of homework, working at a job, volunteering in the community, and participating in extracurricular activities.
-        This page shows the percentage of students with a moderate level of engagement (1+ hour of work or at least one time volunteering).</p>
-        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
+        $explanation = "<p>The Youth Survey asks about assets that are strengths in young people, their families, schools, and 
+            communities that help them thrive in health, in school, and daily life, and in a safe environment.  The more assets an individual 
+            has in his or her life, the fewer risk behaviors are reported.  This highlights page focuses on selected assets that build resiliency in youth.</p>
+        <p>To learn about other assets or to compare prevalence of risk behaviors with assets, <a href='graphs.php'>Explore the Data</a> 
+        under the following categories:  School, Family, Community Support, Civic Engagement, and Self/Peer Perception.</p>";
     } else {
         die("Category chosen is invalid.");
     }
