@@ -41,15 +41,15 @@ include_once "config/config.php";
             </ol>
             <div class="carousel-inner">
                 <div class="item active">
-                    <a href="category.php"><img src="img/youngkids.jpg"></a>
+                    <a href="category.php"><img src="img/kidslocker.jpg"></a>
                     <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the 2015 survey!</div>
                 </div>
                 <div class="item">
-                    <a href="graphs.php"><img src="img/olderkids.jpg"></a>
+                    <a href="graphs.php"><img src="img/kidscircle.jpg"></a>
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/demogrph/youth_survey/pdfs/sy2014_15_youth_survey_report.pdf" target="_blank"><img src="img/survey2014.jpg"></a>
+                    <a href="http://www.fairfaxcounty.gov/demogrph/youth_survey/pdfs/sy2015_16_youth_survey_report.pdf" target="_blank"><img src="img/report2015.jpg"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>

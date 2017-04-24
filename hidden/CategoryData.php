@@ -143,20 +143,20 @@ function getCategoryVariable($cat)
         <p>To learn more about these topics, as well as suicidal ideation and unhealthy weight loss behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 12) {
-        $title = "Extracurricular Activities and Civic Behaviors";
-        $qCodes = ['C13', 'C11', 'C12', 'C2'];
-        $labels = ['Did Extracurriculars for 1+ Hour per Day', 'Did Homework for 1+ Hour per Day', 'Went to Work for 1+ hour per Day', 'Volunteered for Community Service'];
-        $tooltips = ['The % of students who reported staying after school to participate in a team, club, or program for at least 1 hour on an average school day.',
-            'The % of students who reported doing at least 1 hour of homework outside of school on an average school day.',
-            'The % of students who reported going to work (e.g., a job) for at least 1 hour on an average school day.',
-            'The % of students who reported volunteering to do community service about once a month or more during the past year.'];
-        $lowCutoffs = [4, 4, 4, 3];
+        $title = "Civic Engagement and Time Use";
+        $qCodes = ['C2', 'C11', 'C12', 'extracurric'];
+        $labels = ['Volunteered to do Community Service Regularly', 'Did Homework for 3+ Hours per Day', 'Went to Work for 3+ Hours per Day', 'Did Extracurriculars for 3+ Hours per Day'];
+        $tooltips = ['The % of students who reported volunteering regularly (did community service once a month or more during the past year).',
+            'The % of students who reported doing 3+ hours of homework outside of school on an average school day.',
+            'The % of students who reported doing 3+ hours of work (e.g., a job) on an average school day.',
+            'The % of students who reported spending 3+ hours on extracurricular activities (both at school and away from school) on an average school day.'];
+        $lowCutoffs = [4, 6, 6, 2.95];
         $highCutoffs = [null, null, null, null];
         $totalCutoffs = [null, null, null, null];
-        $explanation = "<p>The Youth Survey asks about a variety of behaviors that indicate civic engagement or diligence, including
-        completion of homework, working at a job, volunteering in the community, and participating in extracurricular activities.
-        This page shows the percentage of students with a moderate level of engagement (1+ hour of work or at least one time volunteering).</p>
-        <p>To see the exact levels of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
+        $explanation = "<p>The Youth Survey asks questions related to civic engagement and use of time outside of school hours, 
+            including volunteering for community service and time spent on homework, working at a job, and participating in extracurricular 
+            activities. This page shows the percentage of students who volunteer regularly and spend 3 or more hours on selected activities outside of school hours.</p>
+        <p>To see more specific level of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
         $connector = "they ";
     } else if ($cat == 13) {
         $title = "Assets that Build Resiliency";

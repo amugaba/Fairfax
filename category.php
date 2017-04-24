@@ -93,7 +93,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
                     <li><a href='?cat=8'>Harassment and Aggressive Behaviors</a></li>
                     <li><a href='?cat=10'>Nutrition and Physical Activity</a></li>
                     <li><a href='?cat=11'>Mental Health</a></li>
-                    <li><a href='?cat=12'>Extracurricular Activities and Civic Behaviors</a></li>
+                    <li><a href='?cat=12'>Civic Engagement and Time Use</a></li>
                     <li><a href='?cat=13'>Assets that Build Resiliency</a></li>
                 </ul>
         </div>
