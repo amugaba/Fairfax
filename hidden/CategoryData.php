@@ -150,7 +150,7 @@ function getCategoryVariable($cat)
             'The % of students who reported doing 3+ hours of homework outside of school on an average school day.',
             'The % of students who reported doing 3+ hours of work (e.g., a job) on an average school day.',
             'The % of students who reported spending 3+ hours on extracurricular activities (both at school and away from school) on an average school day.'];
-        $lowCutoffs = [4, 6, 6, 2.95];
+        $lowCutoffs = [4, 6, 6, 3];
         $highCutoffs = [null, null, null, null];
         $totalCutoffs = [null, null, null, null];
         $explanation = "<p>The Youth Survey asks questions related to civic engagement and use of time outside of school hours, 

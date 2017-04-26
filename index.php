@@ -49,7 +49,7 @@ include_once "config/config.php";
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/demogrph/youth_survey/pdfs/sy2015_16_youth_survey_report.pdf" target="_blank"><img src="img/report2015.jpg"></a>
+                    <a href="http://www.fairfaxcounty.gov/demogrph/youthpdf.htm" target="_blank"><img src="img/report2015.jpg"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>
