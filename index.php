@@ -49,7 +49,7 @@ include_once "config/config.php";
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/demogrph/youthpdf.htm" target="_blank"><img src="img/report2015.jpg"></a>
+                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2015.jpg"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>
@@ -84,7 +84,7 @@ include_once "config/config.php";
                 <div class="h2 " style="color:#767676">Learn More About the Survey</div>
             </div>
             <div class="col-md-7">
-                <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in grades sixth, eighth, tenth, and twelfth.
+                <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in sixth, eighth, tenth, and twelfth grades.
                     It examines behaviors, experiences, and other factors that influence the health and well-being of the county's youth.
                     The survey is co-sponsored by the Fairfax County Board of Supervisors and the Fairfax County School Board, and has been administered since 2001.</p>
                 <p>For more information, please see the <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Youth Survey homepage</a>.</p>
