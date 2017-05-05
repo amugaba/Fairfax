@@ -210,6 +210,7 @@ function isIE() {
 function writeCSV() {
     var csv = "Fairfax County Youth Survey Data Explorer\r\n";
     var descriptor = isCategory ? "" : "Question: ";
+    csv += "Year: 2015\r\n";
     csv += '"' + descriptor + mainQuestion + '"\r\n';
     if(groupQuestion != null)
         csv += '"Compared to Question: ' + groupQuestion + '"\r\n';
