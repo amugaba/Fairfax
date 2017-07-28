@@ -2,7 +2,12 @@
 require_once "config/config.php";
 require_once 'hidden/DataService.php';
 
-$ds = new DataService();
+if(isset($_GET['year']))
+    $year = intval($_GET['year']);
+else
+    $year = getCurrentYear();
+
+$ds = DataService::getInstance($year, DataService::EIGHT_TO_TWELVE);
 $variables = $ds->getVariables();
 
 $showIntro = !isset($_GET['q1']);
@@ -13,7 +18,7 @@ if(!$showIntro) {
     $grade = isset($_GET['grade']) ? $ds->connection->real_escape_string($_GET['grade']) : null;
     $gender = isset($_GET['gender']) ? $ds->connection->real_escape_string($_GET['gender']) : null;
     $race = isset($_GET['race']) ? $ds->connection->real_escape_string($_GET['race']) : null;
-    $year = isset($_GET['year']) ? $ds->connection->real_escape_string($_GET['year']) : null;
+    //$year = isset($_GET['year']) ? $ds->connection->real_escape_string($_GET['year']) : null;
     $cat1 = isset($_GET['cat1']) ? $ds->connection->real_escape_string($_GET['cat1']) : null;
     $cat2 = isset($_GET['cat2']) ? $ds->connection->real_escape_string($_GET['cat2']) : null;
 
@@ -69,6 +74,7 @@ if(!$showIntro) {
     <script>
         $(function() {
             questions = <?php echo json_encode($variables); ?>;
+            year = <?php echo json_encode($year); ?>;
 
             <?php if(!$showIntro): ?>
             mainCode = <?php echo json_encode($q1); ?>;
@@ -92,12 +98,11 @@ if(!$showIntro) {
             var grade = <?php echo json_encode($grade); ?>;
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
-            var year = <?php echo json_encode($year); ?>;
             var cat1 = <?php echo json_encode($cat1); ?>;
             var cat2 = <?php echo json_encode($cat2); ?>;
 
             filterString = makeFilterString(grade, gender, race);
-            titleString = "<h4>"+mainQuestion+"</h4>";
+            titleString = "<h4>"+mainQuestion + " - " + year + "</h4>";
             if(groupQuestion != null)
                 titleString += "<i>compared to</i><h4>" + groupQuestion + "</h4>";
             if(filterString != null)
@@ -256,11 +261,12 @@ if(!$showIntro) {
             <select id="question2" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
-            <label class="shadow" style="margin: 10px 0 20px">3. (Optional) Filter data by:</label>
+            <label class="shadow" style="margin: 10px 0 10px">3. Select which year to view:</label>
             <select id="filteryear" class="filter selector">
-                <option value="">Year</option>
+                <option value="2016">2016</option>
                 <option value="2015">2015</option>
-            </select>
+            </select><br>
+            <label class="shadow" style="margin: 10px 0 20px">4. (Optional) Filter data by:</label>
             <select id="filtergrade" class="filter selector">
                 <option value="">Grade</option>
                 <option value="1">8th</option>

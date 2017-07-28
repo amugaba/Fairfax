@@ -55,7 +55,7 @@ function getCategoryVariable($cat)
         $highCutoffs = [1, 1];
         $totalCutoffs = [null, null];
         $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use).
-        Related questions addressing aggression in relationships are reported in the <a href='category.php?cat=7'>Dating Aggression</a> category.</p>
+        Related questions addressing aggression in relationships are reported in the <a href='highlights.php?cat=7'>Dating Aggression</a> category.</p>
         <p>To learn more about behaviors related to sexual health, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 5) {
         $title = "Vehicle Safety";

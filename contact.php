@@ -13,8 +13,8 @@ include_once "config/config.php";
 <div class="container" id="main">
     <div class="row" style="background-color: #2e6da4">
         <div style="width:570px; margin: -10px auto 10px;">
-            <img src="img/fairfax-logo3.png" height="100px" style="float: left; padding-right:20px">
-            <div class="h1 shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2015 Survey Highlights and Data Explorer</span></div>
+            <img src="img/fairfax-logo.png" height="100px" style="float: left; padding-right:20px">
+            <div class="h1 shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2016 Survey Highlights and Data Explorer</span></div>
         </div>
 
     </div>

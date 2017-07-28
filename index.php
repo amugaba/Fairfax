@@ -1,5 +1,6 @@
 <?php
 include_once "config/config.php";
+$year = getCurrentYear();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,8 +29,8 @@ include_once "config/config.php";
 <div class="container" id="main">
     <div class="row" style="height:630px;background-color: #2e6da4">
         <div style="width:570px; margin: -10px auto 10px;">
-            <img src="img/fairfax-logo3.png" height="100px" style="float: left; padding-right:20px">
-            <div class="h1 shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2015 Survey Highlights and Data Explorer</span></div>
+            <img src="img/fairfax-logo.png" height="100px" style="float: left; padding-right:20px">
+            <div class="h1 shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;"><?php echo $year;?> Survey Highlights and Data Explorer</span></div>
         </div>
 
         <div id="carousel" class="carousel slide" data-ride="carousel" >
@@ -41,8 +42,8 @@ include_once "config/config.php";
             </ol>
             <div class="carousel-inner">
                 <div class="item active">
-                    <a href="category.php"><img src="img/kidslocker.jpg"></a>
-                    <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the 2015 survey!</div>
+                    <a href="highlights.php"><img src="img/kidslocker.jpg"></a>
+                    <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the <?php echo $year;?> survey!</div>
                 </div>
                 <div class="item">
                     <a href="graphs.php"><img src="img/kidscircle.jpg"></a>
@@ -69,7 +70,7 @@ include_once "config/config.php";
             <div class="col-md-7">
                 <p>The <b>interactive data explorer</b> allows you to generate custom graphs and data tables on the questions and demographics that you find most interesting.</p>
                 <ul>
-                    <li>Head to <b><a href="category.php">Survey Highlights</a></b> to see selected results from various topics.</li>
+                    <li>Head to <b><a href="highlights.php">Survey Highlights</a></b> to see selected results from various topics.</li>
                     <li>Or <b><a href="graphs.php">Explore the Data</a></b> to create and export your own graphs from any question in the survey.</li>
                 </ul>
             </div>

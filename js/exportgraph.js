@@ -4,7 +4,7 @@
 function exportGraph() {
     var exportContent = [
         {
-            text: "Fairfax County Youth Survey 2015",
+            text: "Fairfax County Youth Survey "+year,
             style: ["header"]
         },
         {

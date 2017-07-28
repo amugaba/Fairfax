@@ -34,3 +34,6 @@ function include_footer() {
 function echo_self() {
     echo htmlspecialchars($_SERVER["PHP_SELF"]);
 }
+function getCurrentYear() {
+    return 2016;
+}

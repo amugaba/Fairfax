@@ -95,7 +95,7 @@ function createSubGraph(title,field,num,isCategory) {
         if(title == "Total")
             graph1.balloonText = "[[value]]% of students reported " + connector + "[[category]]";
         else
-            graph1.balloonText = "[[value]]% of "+title+" students were positive for [[category]]";
+            graph1.balloonText = "[[value]]% of "+title+" students reported " + connector + "[[category]]";
     }
     else if(groupTitle == null)
         graph1.balloonText = "[[value]]% of students answered '[[category]]' to '"+mainTitle+"'";
@@ -210,7 +210,7 @@ function isIE() {
 function writeCSV() {
     var csv = "Fairfax County Youth Survey Data Explorer\r\n";
     var descriptor = isCategory ? "" : "Question: ";
-    csv += "Year: 2015\r\n";
+    csv += "Year: "+year+"\r\n";
     csv += '"' + descriptor + mainQuestion + '"\r\n';
     if(groupQuestion != null)
         csv += '"Compared to Question: ' + groupQuestion + '"\r\n';

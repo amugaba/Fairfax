@@ -9,14 +9,27 @@ require_once 'Answer.php';
 class DataService {
 
     public $connection;
-    public $vartable = "variables_2015";
-    public $datatable = "data_2015_8to12";
+    private $vartable = "variables_2015";
+    private $datatable = "data_2015_8to12";
+    protected static $instance = null;
+    const EIGHT_TO_TWELVE = '8to12';
+    const SIXTH = '6th';
 
-    public function __construct ()
+    protected function __construct ()
     {
         $cm = new ConnectionManager();
         $this->connection = mysqli_connect($cm->server, $cm->username, $cm->password, $cm->databasename, $cm->port);
         $this->throwExceptionOnError($this->connection);
+    }
+
+    /** @param $year int
+     *  @param $grade string
+     *  @return DataService */
+    public static function getInstance($year, $grade) {
+        if(DataService::$instance === null)
+            DataService::$instance = new DataService();
+        DataService::$instance->datatable = 'data_'.$year.'_'.$grade;
+        return DataService::$instance;
     }
 
     /**
