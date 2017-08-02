@@ -24,6 +24,9 @@ function include_styles() {
     <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
     <script src='//code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
     ";
+
+    //Enable for live only
+    //echo "<script src='$root/js/analytics.js'>";
 }
 function include_header() {
     include ROOT_PATH."inc/navbar.php";

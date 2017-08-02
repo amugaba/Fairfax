@@ -34,7 +34,7 @@ function getCategoryVariable($cat)
     }
     else if ($cat == 3) {
         $title = "Drugs";
-        $qCodes = ['A2A', 'A3A', 'A4', 'D2A'];
+        $qCodes = ['D3A', 'D9A', 'D17', 'D15'];
         $labels = ['Past Month Marijuana Use', 'Past Month Inhalant Use', 'Past Month Painkiller Use (without doctor\'s order)', 'Past Month Heroin Use'];
         $tooltips = ['The % of students who reported at least 1 occasion of marijuana use in the past 30 days.',
             'The % of students who reported at least 1 occasion of inhalant use in the past 30 days.',
@@ -71,14 +71,14 @@ function getCategoryVariable($cat)
         <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 6) {
         $title = "Bullying and Cyberbullying";
-        $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
+        $qCodes = ['B20', 'B22', 'CB3', 'CB1'];
         $labels = ['Bullied Someone at School', 'Had Been Bullied at School', 'Cyberbullied Someone at School', 'Had Been Cyberbullied at School'];
         $tooltips = ['The % of students who reported having bullied someone on school property within the past 12 months.',
             'The % of students who reported having been bullied on school property within the past 12 months.',
             'The % of students who reported having cyberbullied someone in the past year.',
             'The % of students who reported having been cyberbullied in the past year.'];
-        $lowCutoffs = [1, 1, 2, 2];
-        $highCutoffs = [1, 1, null, null];
+        $lowCutoffs = [1, 1, 2, 1];
+        $highCutoffs = [1, 1, null, 1];
         $totalCutoffs = [null, null, null, null];
         $explanation = "<p>The Youth Survey asks questions about both bullying in-person and bullying online (called cyberbullying).</p>
         <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore the Data</a>.</p>";

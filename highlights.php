@@ -79,6 +79,11 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
                 window.location = "highlights.php?year="+year+"&cat="+category+"&grp="+this.value;
             });
             $('[data-toggle="tooltip"]').tooltip();
+
+            //add year to each category link
+            $('.categories li a').each(function(){
+                $(this).attr('href',$(this).attr('href')+'&year='+year);
+            });
         });
         function changeYear(year) {
             if(group != null)
