@@ -65,9 +65,9 @@ if(!$showIntro) {
     <meta charset="UTF-8">
     <title><?php echo PAGE_TITLE ?></title>
     <?php include_styles() ?>
-    <script src="js/amcharts/amcharts.js"></script>
-    <script src="js/amcharts/serial.js"></script>
-    <script src="js/amcharts/plugins/export/export.min.js"></script>
+    <script src="js/amcharts3/amcharts.js"></script>
+    <script src="js/amcharts3/serial.js"></script>
+    <script src="js/amcharts3/plugins/export/export.min.js"></script>
     <script src="js/crosstab.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.full.js"></script>

@@ -43,9 +43,9 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
     <meta charset="UTF-8">
     <title><?php echo PAGE_TITLE ?></title>
     <?php include_styles() ?>
-    <script src="js/amcharts/amcharts.js"></script>
-    <script src="js/amcharts/serial.js"></script>
-    <script src="js/amcharts/plugins/export/export.min.js"></script>
+    <script src="js/amcharts3/amcharts.js"></script>
+    <script src="js/amcharts3/serial.js"></script>
+    <script src="js/amcharts3/plugins/export/export.min.js"></script>
     <script src="js/crosstab.js"></script>
 
     <script>

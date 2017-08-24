@@ -1,4 +1,22 @@
 <?php
+/**
+ * Class Answer
+ *
+ * Each Variable has multiple Answers. An answer is a single response option to a question.
+ * For example: "8th grade" is an answer to "What grade are you in?"
+ *
+ * In that case, the object will be structured like:
+ * label = "8th grade"
+ * code = 1 (b/c it is the first answer)
+ * lowCutoff = null (the cutoffs for the Question are stored here for some reason)
+ * counts = [~13000]
+ * percents = [33.3]
+ * totals = (is this even used?)
+ *
+ * If the Variable was separated by a grouping question, like "What grade are you in?" by "Gender", the data would be:
+ * counts = [6500, 6500]
+ * percents = [16.7, 16.7] (since there is a value for each group)
+ */
 class Answer
 {
     public $label;

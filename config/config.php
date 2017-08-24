@@ -40,3 +40,6 @@ function echo_self() {
 function getCurrentYear() {
     return 2016;
 }
+function getAllYears() {
+    return [2015,2016];
+}

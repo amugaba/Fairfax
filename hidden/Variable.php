@@ -1,12 +1,24 @@
 <?php
+/**
+ * Class Variable
+ *
+ * A Variable is a single question like "How old are you?"
+ * The data for that variable would look like:
+ * code = "I1"
+ * question = "How old are you?"
+ * summary = "Age"
+ * category = 99 (Demographics)
+ * answers = array of Answer objects, [Answer for age 10, Answer for age 11, etc.]
+ * totals ???
+ */
 class Variable
 {
 	public $autoid;
-	public $code;
-	public $question;
-	public $summary;
-	public $category;
-    public $answers;
+	public $code; //identifier like I2 or A5
+	public $question; //full text of the question
+	public $summary; //short text
+	public $category; //integer category i.e. Alcohol=1, Bullying=2
+    public $answers; //array of Answer objects
     public $totals;
     public $connector;//word used in tooltip, "X% of students reported [connector] [question]"
 	
