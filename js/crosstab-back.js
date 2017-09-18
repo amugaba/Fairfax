@@ -23,9 +23,8 @@ function createPercentChart(counts, percents, mLabels, gLabels, mTitle, gTitle, 
         chart.dataProvider = percentData;
 
         chart.categoryField = "answer";
-        chart.startDuration = 1;
-        chart.plotAreaBorderColor = "#DADADA";
-        chart.plotAreaBorderAlpha = 1;
+        //chart.startDuration = 1; //bounce
+        chart.plotAreaBorderAlpha = 0.2;
         // this single line makes the chart a bar chart
         chart.rotate = true;
         chart.columnSpacing = 0;
@@ -38,8 +37,6 @@ function createPercentChart(counts, percents, mLabels, gLabels, mTitle, gTitle, 
         categoryAxis.gridAlpha = 0.1;
         categoryAxis.axisAlpha = 0;
         categoryAxis.title = mainTitle;
-        //categoryAxis.ignoreAxisWidth = true;
-        //categoryAxis.autoWrap = true;
         categoryAxis.labelFunction = addLineBreaks;
         chart.fontSize = 13;
 
@@ -77,7 +74,6 @@ function createPercentChart(counts, percents, mLabels, gLabels, mTitle, gTitle, 
         legend.title = groupTitle;
         chart.addLegend(legend);
 
-        chart.creditsPosition = "top-right";
         chart.export = {
             enabled: true
         };

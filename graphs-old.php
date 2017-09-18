@@ -10,27 +10,25 @@ else
 $ds = DataService::getInstance($year, DataService::EIGHT_TO_TWELVE);
 $variables = $ds->getVariables();
 
-//Process user input
-$q1 = isset($_GET['q1']) ? $_GET['q1'] : null;
-$grp = isset($_GET['grp']) ? $_GET['grp'] : 'none';
-$cat1 = isset($_GET['cat1']) ? $_GET['cat1'] : null;
-$cat2 = isset($_GET['cat2']) ? $_GET['cat2'] : null;
-$grade = isset($_GET['grade']) ? $_GET['grade'] : null;
-$gender = isset($_GET['gender']) ? $_GET['gender'] : null;
-$race = isset($_GET['race']) ? $_GET['race'] : null;
-
-$showIntro = $q1 == null;
+$showIntro = !isset($_GET['q1']);
 if(!$showIntro) {
+    //Process user input
+    $q1 = $_GET['q1'];
+    $grp = isset($_GET['grp']) ? $_GET['grp'] : 'none';
+    $cat1 = isset($_GET['cat1']) ? $ds->connection->real_escape_string($_GET['cat1']) : null;
+    $cat2 = isset($_GET['cat2']) ? $ds->connection->real_escape_string($_GET['cat2']) : null;
+
     //Get Variables
     $mainVar = $ds->getMultiVariable($q1);
     $groupVar = $ds->getMultiVariable($grp);
 
     if ($mainVar == null)
         die("User input was invalid.");
-    $mainVar->initializeCounts($groupVar);
 
     //Construct filter
-    $filter = $ds->createFilterString($grade, $gender, $race);
+    $filter = $ds->createFilterString(isset($_GET['grade']) ? $_GET['grade'] : null,
+        isset($_GET['gender']) ? $_GET['gender'] : null,
+        isset($_GET['race']) ? $_GET['race'] : null);
 
     //Load data into main Variable
     $ds->getMultiPositives($mainVar, $groupVar, $filter);
@@ -60,7 +58,7 @@ if(!$showIntro) {
     }
 
     $graphHeight = min(1200, max(600, (count($groupLabels) + 1) * count($mainVar->getLabels()) * 30 + 100));//height is (labels*(labels+spacing)*bar height + header height
-    $noresponse = $ds->getNoResponseCount($mainVar, $groupVar, $filter);
+    $noresponse = $ds->getNoResponseCount($q1, $grp);
 }
 ?>
 
@@ -73,25 +71,61 @@ if(!$showIntro) {
     <script src="js/amcharts3/amcharts.js"></script>
     <script src="js/amcharts3/serial.js"></script>
     <script src="js/amcharts3/plugins/export/export.min.js"></script>
+    <script src="js/crosstab.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.full.js"></script>
     <script src="js/variableSelector.js"></script>
-    <script src="js/graph.js"></script>
     <script src="js/datatable.js"></script>
+    <script src="js/exportgraph.js"></script>
     <script>
         $(function() {
             questions = <?php echo json_encode($variables); ?>;
-            //get user inputs
+            year = <?php echo json_encode($year); ?>;
+
+            <?php if(!$showIntro): ?>
+            mainTitle = <?php echo json_encode($mainVar->question); ?>;
+            groupTitle = <?php echo json_encode($groupQuestion); ?>;
+            groupSummary = <?php echo json_encode($groupSummary); ?>;
+            mainLabels = <?php echo json_encode($mainVar->labels); ?>;
+            groupLabels = <?php echo json_encode($groupLabels); ?>;
+            counts = <?php echo json_encode($mainVar->counts); ?>;
+            percentData = <?php echo json_encode($percentData); ?>;
+            totals = <?php echo json_encode($mainVar->totals); ?>;
+            isGrouped = groupLabels.length > 1;
+
             mainCode = <?php echo json_encode($q1); ?>;
             groupCode = <?php echo json_encode($grp); ?>;
+
+            //mainTotals = <?php echo json_encode($mainVar->getMainTotals()); ?>;
+            //groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
+            //sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
+
+            createBarGraph(percentData, mainTitle, groupTitle, groupLabels, null);
+
+            chart = createPercentChart(<?php echo json_encode($mainVar->getCountArray()); ?>, <?php echo json_encode($mainVar->getPercentArray()); ?>,
+                <?php echo json_encode($mainVar->getLabels()); ?>, <?php echo json_encode($groupLabels); ?>,
+                <?php echo json_encode($mainVar->summary); ?>,  <?php echo json_encode($groupSummary); ?>,
+                false, null);
+
+            if(groupLabels.length == 1)
+                createSimpleTable($('#datatable'));
+            else
+                createCrosstabTable($('#datatable'));
+
             var grade = <?php echo json_encode($grade); ?>;
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
             var cat1 = <?php echo json_encode($cat1); ?>;
             var cat2 = <?php echo json_encode($cat2); ?>;
-            year = <?php echo json_encode($year); ?>;
 
-            //persist user inputs in search form
+            filterString = makeFilterString(grade, gender, race);
+            titleString = "<h4>"+mainQuestion + " - " + year + "</h4>";
+            if(groupQuestion != null)
+                titleString += "<i>compared to</i><h4>" + groupQuestion + "</h4>";
+            if(filterString != null)
+                titleString += "<i>" + filterString + "</i>";
+            $("#graphTitle").html(titleString);
+
             if(cat1 != null)
                 $('#category1').val(cat1);
             if(cat2 != null)
@@ -108,7 +142,6 @@ if(!$showIntro) {
                 $('#question2').val(groupCode);
                 $("#question2").trigger('change');
             }
-
             if(year != null) {
                 $('#filteryear').val(year);
             }
@@ -121,49 +154,13 @@ if(!$showIntro) {
             if(race != null) {
                 $('#filterrace').val(race);
             }
-
-            <?php if(!$showIntro): ?>
-            mainTitle = <?php echo json_encode($mainVar->question); ?>;
-            mainSummary = <?php echo json_encode($mainVar->summary); ?>;
-            groupTitle = <?php echo json_encode($groupQuestion); ?>;
-            groupSummary = <?php echo json_encode($groupSummary); ?>;
-            mainLabels = <?php echo json_encode($mainVar->labels); ?>;
-            groupLabels = <?php echo json_encode($groupLabels); ?>;
-            counts = <?php echo json_encode($mainVar->counts); ?>;
-            percentData = <?php echo json_encode($percentData); ?>;
-            sumPositives = <?php echo json_encode($mainVar->getSumPositives()); ?>;
-            totals = <?php echo json_encode($mainVar->totals); ?>;
-            groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
-            sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
-            isGrouped = groupLabels.length > 1;
-
-            createBarGraph(percentData, mainTitle, groupTitle, groupLabels, null);
-
-            if(!isGrouped)
-                createSimpleExplorerTable($('#datatable'), mainLabels, counts, sumTotal);
-            else
-                createCrosstabExplorerTable($('#datatable'), mainSummary, groupSummary, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal);
-
-            filterString = makeFilterString(grade, gender, race);
-            titleString = "<h4>"+mainTitle + " - " + year + "</h4>";
-            if(isGrouped)
-                titleString += "<i>compared to</i><h4>" + groupTitle + "</h4>";
-            if(filterString != null)
-                titleString += "<i>" + filterString + "</i>";
-            $("#graphTitle").html(titleString);
+            <?php else: ?>
+            enableSelect2(questions, "#category1", "#question1");
+            enableSelect2(questions, "#category2", "#question2");
             <?php endif; ?>
 
             $('[data-toggle="tooltip"]').tooltip();
         });
-        function exportCSV() {
-            if(!isGrouped)
-                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year);
-            else
-                crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year);
-        }
-        function exportGraph() {
-            exportToPDF(chart, mainTitle, groupTitle, year, filterString);
-        }
 
         function searchData() {
             var q1 = $('#question1').val();
@@ -197,6 +194,7 @@ if(!$showIntro) {
             }
         }
     </script>
+    <script src="js/exportgraph.js"></script>
 </head>
 <body>
 <?php include_header(); ?>
@@ -306,7 +304,7 @@ if(!$showIntro) {
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <div>No Reponse: <?php echo number_format($noresponse,0);?></div>
-                <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
+                <input type="button" onclick="tableToExcel()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>
         <?php endif; ?>
     </div>

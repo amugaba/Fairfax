@@ -10,32 +10,64 @@ else
 
 $ds = DataService::getInstance($year, DataService::EIGHT_TO_TWELVE);
 $cat = isset($_GET['cat'])? $_GET['cat'] : 1;
-$grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
+$grp = isset($_GET['grp'])? $_GET['grp'] : null;
 
-$mainVar = getCategoryVariable($cat);
-$groupVar = $ds->getVariableByCode($grp);
+$highlightGroup = getHighlightGroup($cat);
+$groupVar = $ds->getMultiVariable($grp);
+$variablesInGraph = [];
+$filter = "1";
 
 //get data for each question
-foreach($mainVar->answers as $answer)
+for($i = 0; $i < count($highlightGroup->codes); $i++)
 {
-    $ds->getDataCutoff($answer, $groupVar);
-    $ds->getGroupTotalsCutoff($answer, $groupVar);
+    $variable = $ds->getCutoffVariable($highlightGroup->codes[$i]);
+    $variable->summary = $highlightGroup->labels[$i];
+    $ds->getCutoffPositives($variable, $groupVar, $filter);
+    $ds->getCutoffTotal($variable, $groupVar, $filter);
+    $variable->calculatePercents();
+    $variablesInGraph[] = $variable;
 }
-$mainVar->calculatePercents();
 
-//Group variables
+//Create the data structure used by AmCharts for bar graphs
+//[['answer' => Var1 label, 'v0' => Group0 percent, 'v1' => Group1 percent, ...], ['answer' => Var 2 label, ...]]
+$percentData = [];
+foreach ($variablesInGraph as $variable) {
+    $percentArray['answer'] = $variable->summary;
+    for($i=0; $i<count($variable->counts); $i++) {
+        $percentArray['v'.$i] = $variable->percents[$i];
+    }
+    $percentData[] = $percentArray;
+}
+
+//Also create data for display in graph and table
+$mainLabels = []; //labels for main variable
+$counts = []; //[[var1 counts], [var2 counts], ...] where [var1 counts] = [group1, group2, ...]
+$sumPositives = []; //sum positives/counts for a variable
+$variableTotals = []; //sum valid cases for a variable
+$tooltips = []; //mouse-over pop-ups to explain graph labels and bars
+
+foreach ($variablesInGraph as $variable) {
+    $mainLabels[] = $variable->summary;
+    $counts[] = $variable->counts;
+    $sumPositives[] = array_sum($variable->counts);
+    $variableTotals[] = array_sum($variable->totals);
+    $tooltips[] = $variable->tooltip;
+}
+
+//Group variable data in case it's null
 if($groupVar != null){
     $groupLabels = $groupVar->getLabels();
     $groupSummary = $groupVar->summary;
-    $groupQuestion = $groupVar->question;
+    $groupTitle = $groupVar->question;
 }
 else {
     $groupLabels = ['Total'];
     $groupSummary = null;
-    $groupQuestion = null;
+    $groupTitle = null;
 }
-$sumTotal = $mainVar->getSumTotal();
-$graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabels())*30+100));//height is (labels*(labels+spacing)*bar height + header height
+
+//height is (labels*(labels+spacing)*bar height + header height
+$graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->codes)*30+100));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,32 +78,35 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
     <script src="js/amcharts3/amcharts.js"></script>
     <script src="js/amcharts3/serial.js"></script>
     <script src="js/amcharts3/plugins/export/export.min.js"></script>
-    <script src="js/crosstab.js"></script>
-
+    <script src="js/graph.js"></script>
+    <script src="js/datatable.js"></script>
     <script>
         $(function() {
-            mainQuestion = "Highlights: " + <?php echo json_encode($mainVar->question); ?>;
-            groupQuestion = <?php echo json_encode($groupQuestion); ?>;
-            mainTotals = <?php echo json_encode($mainVar->getMainTotals()); ?>;
-            categoryDivisors = <?php echo json_encode($mainVar->getCategoryDivisors()); ?>;
-            groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
-            sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
-            connector = <?php echo json_encode($mainVar->connector); ?>;
+            mainTitle = <?php echo json_encode($highlightGroup->title); ?>;
+            groupTitle = <?php echo json_encode($groupTitle); ?>;
+            groupSummary = <?php echo json_encode($groupSummary); ?>;
+            mainLabels = <?php echo json_encode($mainLabels); ?>;
+            groupLabels = <?php echo json_encode($groupLabels); ?>;
+            counts = <?php echo json_encode($counts); ?>;
+            percentData = <?php echo json_encode($percentData); ?>;
+            sumPositives = <?php echo json_encode($sumPositives); ?>;
+            totals = <?php echo json_encode($variableTotals); ?>;
+            tooltips = <?php echo json_encode($tooltips); ?>;
+            isGrouped = groupLabels.length > 1;
+
+            //Inputs, used to set links
             year = <?php echo json_encode($year); ?>;
             category = <?php echo json_encode($cat); ?>;
             group = <?php echo json_encode($grp); ?>;
 
-            createPercentChart(<?php echo json_encode($mainVar->getCountArray()); ?>, <?php echo json_encode($mainVar->getPercentArray()); ?>,
-                <?php echo json_encode($mainVar->getLabels()); ?>, <?php echo json_encode($groupLabels); ?>,
-                <?php echo json_encode($mainVar->question); ?>,  <?php echo json_encode($groupSummary); ?>,
-                true, <?php echo json_encode($mainVar->tooltips); ?>);
+            createBarGraph(percentData, mainTitle, groupSummary, groupLabels, tooltips);
 
-            if(groupLabels.length == 1)
-                createSimpleTable($('#datatable'));
+            if(!isGrouped)
+                createSimpleHighlightTable($('#datatable'), mainLabels, counts, totals);
             else
-                createCrosstabTable($('#datatable'));
+                createCrosstabHighlightTable($('#datatable'), mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals);
 
-            $("#graphTitle").html(mainQuestion);
+            $("#graphTitle").html("Highlights: " + mainTitle);
             $('#grouping :input[value='+group+']').prop("checked",true);
             $('#yearSelect').val(year);
             $('#grouping').buttonset();
@@ -89,8 +124,16 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
             if(group != null)
                 window.location = "highlights.php?year="+year+"&cat="+category+"&grp="+group;
         }
+        function exportCSV() {
+            if(!isGrouped)
+                simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year);
+            else
+                crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year);
+        }
+        function exportGraph() {
+            exportToPDF(chart, mainTitle, groupTitle, year, null);
+        }
     </script>
-    <script src="js/exportgraph.js"></script>
 </head>
 <body>
 <?php include_header(); ?>
@@ -124,7 +167,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
         <div class="col-md-9 mainbar">
             <div style="text-align: center;">
                 <h2 id="graphTitle"></h2>
-                <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $mainVar->explanation;?></div>
+                <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $highlightGroup->explanation;?></div>
                 <p><b>Mouse over</b> the graph's labels and bars to see in more detail what each element represents.</p>
             </div>
 
@@ -145,7 +188,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($mainVar->getLabel
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
-                <input type="button" onclick="tableToExcel()" class="btn btn-blue" value="Export to CSV" style="margin-top: 10px">
+                <input type="button" onclick="exportCSV()" class="btn btn-blue" value="Export to CSV" style="margin-top: 10px">
             </div>
         </div>
     </div>

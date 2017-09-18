@@ -180,7 +180,7 @@ function getTrendVariable($cat)
         die("Category chosen is invalid.");
     }
 
-    $var = new Variable();
+    $var = new CutoffVariable();
     $var->question = $title;
     $var->explanation = $explanation;
     $var->tooltips = $tooltips;

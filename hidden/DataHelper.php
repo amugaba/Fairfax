@@ -81,5 +81,5 @@ function getSumTotal($totals)
 
 
 //height is (labels*(labels+spacing)*bar height + header height
-$graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($labels)*30+100));
+$graphHeight = min(1200,max(600,(count($grouplabels)+1)*count($mainLabels)*30+100));
 $noresponse = $ds->getNoResponseCount($q1, $grp);

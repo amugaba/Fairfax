@@ -8,9 +8,7 @@ var chart, mainCode = null, groupCode = null;
 
 var fillColors = ["#70a1c2","#7cc27c","#d4d257","#ddaf45","#c26751","#c273bf","#c29e88","#567ac2"];
 
-function testLineChart() {
-    var chartData = generateChartData();
-
+function createLineChart() {
     var graphs = [];
     for(var i = 0; i < questions.length; i++) {
         graphs.push({
@@ -19,7 +17,7 @@ function testLineChart() {
             "bullet": "round",
             "bulletBorderAlpha": 1,
             "hideBulletsCount": 50,
-            "title": questions[i].label,
+            "title": questions[i].summary,
             "valueField": questions[i].code,
             "useLineColorForBulletBorder": true,
             "balloon":{
@@ -60,124 +58,9 @@ function testLineChart() {
         },
         "legend": {
             "useGraphSettings": true,
-            "position":"right"
+            "position":"bottom"
         }
     });
-}
-
-function generateChartData() {
-    var chartData = [];
-    chartData.push({
-        year: 2015,
-        alcohol: 33,
-        marijuana: 16
-    });
-    chartData.push({
-        year: 2016,
-        alcohol: 30,
-        marijuana: 14
-    });
-
-    return chartData;
-}
-
-function createLineChart(counts, percents, mLabels, gLabels, mTitle, gTitle, category, tooltips) {
-    //save global variables
-    countData = counts;
-    percentData = percents;
-    mainLabels = mLabels;
-    groupLabels = gLabels;
-    mainTitle = mTitle;
-    groupTitle = gTitle;
-    isCategory = category;
-
-    AmCharts.ready(function () {
-        chart = new AmCharts.AmSerialChart();
-        chart.dataProvider = percentData;
-
-        chart.categoryField = "answer";
-        chart.startDuration = 1;
-        chart.plotAreaBorderColor = "#DADADA";
-        chart.plotAreaBorderAlpha = 1;
-        // this single line makes the chart a bar chart
-        chart.rotate = true;
-        chart.columnSpacing = 0;
-        chart.precision = 1;
-
-        // AXES
-        // Category
-        var categoryAxis = chart.categoryAxis;
-        categoryAxis.gridPosition = "start";
-        categoryAxis.gridAlpha = 0.1;
-        categoryAxis.axisAlpha = 0;
-        categoryAxis.title = mainTitle;
-        //categoryAxis.ignoreAxisWidth = true;
-        //categoryAxis.autoWrap = true;
-        categoryAxis.labelFunction = addLineBreaks;
-        chart.fontSize = 13;
-
-        if(tooltips != null) {
-            chart.categoryAxis.addListener("rollOverItem", function (event) {
-                event.target.setAttr("cursor", "default");
-                event.chart.balloon.borderColor = "#70a1c2";
-                event.chart.balloon.followCursor(true);
-                event.chart.balloon.changeColor(event.serialDataItem.dataContext.color);
-                event.chart.balloon.showBalloon(tooltips[percentData.indexOf(event.serialDataItem.dataContext)]);
-            });
-            chart.categoryAxis.addListener("rollOutItem", function (event) {
-                event.chart.balloon.hide();
-            });
-        }
-
-        // Value
-        var valueAxis = new AmCharts.ValueAxis();
-        valueAxis.axisAlpha = 0;
-        valueAxis.gridAlpha = 0.1;
-        valueAxis.position = "top";
-        valueAxis.title = "Percent %";
-        valueAxis.minimum = 0;
-        valueAxis.maximum = 100;
-        chart.addValueAxis(valueAxis);
-
-        // GRAPHS
-        for(var i = 0; i < groupLabels.length; i++) {
-            chart.addGraph(createSubGraph(groupLabels[i], 'v'+i, i, isCategory));
-        }
-
-        // LEGEND
-        var legend = new AmCharts.AmLegend();
-        legend.position = "top";
-        legend.title = groupTitle;
-        chart.addLegend(legend);
-
-        chart.creditsPosition = "top-right";
-        chart.export = {
-            enabled: true
-        };
-        chart.write("chartdiv");
-    });
-    return chart;
-}
-
-function createSubGraph(title,field,num,isCategory) {
-    var graph1 = new AmCharts.AmGraph();
-    graph1.type = "column";
-    graph1.title = title;
-    graph1.valueField = field;
-    if(isCategory) {
-        if(title == "Total")
-            graph1.balloonText = "[[value]]% of students reported " + connector + "[[category]]";
-        else
-            graph1.balloonText = "[[value]]% of "+title+" students reported " + connector + "[[category]]";
-    }
-    else if(groupTitle == null)
-        graph1.balloonText = "[[value]]% of students answered '[[category]]' to '"+mainTitle+"'";
-    else
-        graph1.balloonText = "[[value]]% of students who answered <i>'"+title+"'</i> to '"+groupTitle+"' also answered <i>'[[category]]'</i> to '"+mainTitle+"'";
-    graph1.lineAlpha = 0;
-        graph1.fillColors = fillColors[num];
-    graph1.fillAlphas = 1;
-    return graph1;
 }
 
 function createVariablesByCategory(title,category) {
@@ -195,48 +78,6 @@ function createVariablesByCategory(title,category) {
             $("<li></li>").appendTo(list2).append("<a href='graphs.php?q1="+mainCode+"&grp="+questions[i].code+"'>"+questions[i].summary+"</a>");
         }
     }
-}
-
-function addLineBreaks(label, item, axis) {
-    var breaksNeeded = Math.floor(label.length / 20);
-    if(breaksNeeded == 0)
-        return label;
-
-    var lengthPerLine = Math.floor(label.length / (breaksNeeded+1));
-    var words = label.split(' ');
-    var insertPoints = [];
-    var startWord = 0;
-
-    for(var i=0; i<breaksNeeded; i++) {
-        var lineLength = 0;
-        //starting at the beginning of the line, add words until the length exceeds the line length
-        for(var j=startWord; j<words.length; j++) {
-            lineLength += words[j].length;
-            if(lineLength > lengthPerLine) {
-                //check if more than half the word would fit on this line
-                if(lineLength - lengthPerLine < words[j].length/2)
-                    startWord = j+1;
-                else
-                    startWord = j;
-                insertPoints.push(startWord);
-                break;
-            }
-            lineLength++;//for space
-        }
-    }
-
-    //reconstruct string with <br> at insertion points
-    var newstring = "";
-    for(var i=0; i<words.length; i++) {
-        if(i != 0) {
-            if(insertPoints.indexOf(i) >= 0)
-                newstring += "<br>";
-            else
-                newstring += " ";
-        }
-        newstring += words[i];
-    }
-    return newstring;
 }
 
 function filter() {
