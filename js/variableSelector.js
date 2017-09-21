@@ -18,7 +18,7 @@ function refreshVariables(category, target) {
     $(target).trigger('change');
     $(target).find("option:gt(0)").remove();//remove all but first option
 
-    var categoryCode = $(category).val();
+    var categoryCode = category==null ? "" : $(category).val();
 
     //construct array of variables in this category
     var data = [];

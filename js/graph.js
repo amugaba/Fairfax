@@ -156,7 +156,6 @@ function createLineChart(percentData, labels) {
             "dashLength": 1,
             "position": "left",
             "minimum": 0,
-            "maximum": 100,
             "title": "Percent %"
         }],
         "graphs": graphs,

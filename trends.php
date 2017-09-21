@@ -6,7 +6,6 @@ require_once 'hidden/TrendGroups.php';
 //Process user input
 $trendGroup = isset($_GET['group'])? $_GET['group'] : null;
 $questionCode = isset($_GET['question'])? $_GET['question'] : null;
-$category = isset($_GET['cat'])? $_GET['cat'] : null;
 $grade = isset($_GET['grade']) ? $_GET['grade'] : null;
 $gender = isset($_GET['gender']) ? $_GET['gender'] : null;
 $race = isset($_GET['race']) ? $_GET['race'] : null;
@@ -80,13 +79,11 @@ if(!$showIntro)
             var grade = <?php echo json_encode($grade); ?>;
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
-            var category = <?php echo json_encode($category); ?>;
 
             //persist user inputs in search form
             var groupSelect = $("#group");
             var questionSelect = $("#question");
-            $('#category').val(category);
-            enableSelect2(variables, "#category", "#question"); //must come before setting question value
+            enableSelect2(variables, null, "#question"); //must come before setting question value
             questionSelect.val(questionCode);
             questionSelect.trigger('change');
             groupSelect.val(trendGroup);
@@ -131,7 +128,7 @@ if(!$showIntro)
             simpleTrendCSV(title, labels, years, percentData, filterString);
         }
         function exportGraph() {
-            exportToPDF(chart, mainTitle, null, null, filterString);
+            exportToPDF(chart, mainTitle, null, years[0]+' to '+years[years.length-1], filterString);
         }
         function searchData() {
             var group = $("#group").val();
@@ -168,7 +165,7 @@ if(!$showIntro)
 <div class="container" id="main">
     <div class="row" style="background-color: #2e6da4;">
         <div class="searchbar">
-            <label class="shadow">1. Select a trend group:</label>
+            <label class="shadow" style="width: 250px">1. Select a group of questions:</label>
             <select id="group" style="width:260px; margin-bottom: 0px" class="selector">
                 <option value="">Select an option</option>
                 <option value="1">Alcohol</option>
@@ -184,34 +181,11 @@ if(!$showIntro)
                 <option value="12">Civic Engagement and Time Use</option>
                 <option value="13">Assets that Build Resiliency</option>
             </select><br>
-            <label class="shadow">OR Select an individual question:</label>
-            <select id="category" style="width:160px" class="selector">
-                <option value="" selected="selected">All categories</option>
-                <option value="99">Demographics</option>
-                <option value="1">Alcohol</option>
-                <option value="12">Tobacco</option>
-                <option value="5">Drugs</option>
-                <option value="2">Bullying & Cyberbullying</option>
-                <option value="14">Harassment</option>
-                <option value="3">Dating Aggression</option>
-                <option value="13">Other Aggressive Behaviors</option>
-                <option value="17">Vehicle Safety</option>
-                <option value="6">Physical Activity</option>
-                <option value="7">Nutrition</option>
-                <option value="19">Unhealthy Weight Loss Behaviors</option>
-                <option value="9">Mental Health</option>
-                <option value="18">Sexual Health</option>
-                <option value="4">School</option>
-                <option value="11">Family</option>
-                <option value="10">Community Support</option>
-                <option value="16">Civic Engagement</option>
-                <option value="15">Time Use</option>
-                <option value="8">Self/Peer Perception</option>
-            </select>
+            <label class="shadow" style="width: 250px">OR Select an individual question:</label>
             <select id="question" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
-            <label class="shadow" style="margin: 10px 0 20px">2. (Optional) Filter data by:</label>
+            <label class="shadow" style="margin: 10px 0 20px; width: 250px">2. (Optional) Filter data by:</label>
             <select id="filtergrade" class="filter selector">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
@@ -233,13 +207,13 @@ if(!$showIntro)
             </select><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">
-                <input type="button" value="Reset" class="btn" onclick="location.href = 'graphs.php'">
+                <input type="button" value="Reset" class="btn" onclick="location.href = 'trends.php'">
             </div>
         </div>
     </div>
     <div class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
-            include "instructions.php";
+            include "trends-instructions.php";
         else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
@@ -251,7 +225,7 @@ if(!$showIntro)
             <div id="chartdiv" style="width100%; height:700px;"></div>
 
             <div style="text-align: center; margin-bottom: 20px;">
-                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
+                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the percentage of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
