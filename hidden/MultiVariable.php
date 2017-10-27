@@ -32,7 +32,7 @@ class MultiVariable extends Variable
         }
     }
     public function initializeCounts($groupVar){
-        $groupLength = $groupVar == null ? 0 : count($groupVar->labels);
+        $groupLength = $groupVar == null ? 1 : count($groupVar->labels);
         for($i=0; $i < count($this->labels); $i++) {
             for($j=0; $j < $groupLength; $j++) {
                 $this->counts[$i][$j] = 0;

@@ -28,7 +28,6 @@ if(!$showIntro) {
     if ($mainVar == null)
         die("User input was invalid.");
     $mainVar->initializeCounts($groupVar);
-
     //Construct filter
     $filter = $ds->createFilterString($grade, $gender, $race);
 
@@ -59,7 +58,7 @@ if(!$showIntro) {
         $percentData[] = $percentArray;
     }
 
-    $graphHeight = min(1200, max(600, (count($groupLabels) + 1) * count($mainVar->getLabels()) * 30 + 100));//height is (labels*(labels+spacing)*bar height + header height
+    $graphHeight = min(1200, max(700, (count($groupLabels) + 1) * count($mainVar->getLabels()) * 30 + 100));//height is (labels*(labels+spacing)*bar height + header height
     $noresponse = $ds->getNoResponseCount($mainVar, $groupVar, $filter);
 }
 ?>
@@ -137,7 +136,7 @@ if(!$showIntro) {
             sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
             isGrouped = groupLabels.length > 1;
 
-            createBarGraph(percentData, mainTitle, groupTitle, groupLabels, null);
+            createBarGraph(percentData, mainTitle, groupTitle, groupLabels, null, mainSummary);
 
             if(!isGrouped)
                 createSimpleExplorerTable($('#datatable'), mainLabels, counts, sumTotal);

@@ -5,7 +5,7 @@
 var chart;
 var fillColors = ["#70a1c2","#7cc27c","#d4d257","#ddaf45","#c26751","#c273bf","#c29e88","#567ac2"];
 
-function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltips) {
+function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltips, summary) {
     AmCharts.ready(function () {
         chart = new AmCharts.AmSerialChart();
         chart.dataProvider = percentData;
@@ -24,7 +24,7 @@ function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltip
         categoryAxis.gridPosition = "start";
         categoryAxis.gridAlpha = 0.1;
         categoryAxis.axisAlpha = 0;
-        categoryAxis.title = mainTitle;
+        categoryAxis.title = summary != null ? summary : mainTitle;
         categoryAxis.labelFunction = addLineBreaks;
         chart.fontSize = 13;
 
@@ -84,6 +84,48 @@ function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltip
         };
         chart.write("chartdiv");
     });
+}
+
+function addBreakToTitle(label) {
+    var breaksNeeded = Math.floor(label.length / 20);
+    if(breaksNeeded == 0)
+        return label;
+
+    var lengthPerLine = Math.floor(label.length / (breaksNeeded+1));
+    var words = label.split(' ');
+    var insertPoints = [];
+    var startWord = 0;
+
+    for(var i=0; i<breaksNeeded; i++) {
+        var lineLength = 0;
+        //starting at the beginning of the line, add words until the length exceeds the line length
+        for(var j=startWord; j<words.length; j++) {
+            lineLength += words[j].length;
+            if(lineLength > lengthPerLine) {
+                //check if more than half the word would fit on this line
+                if(lineLength - lengthPerLine < words[j].length/2)
+                    startWord = j+1;
+                else
+                    startWord = j;
+                insertPoints.push(startWord);
+                break;
+            }
+            lineLength++;//for space
+        }
+    }
+
+    //reconstruct string with <br> at insertion points
+    var newstring = "";
+    for(var i=0; i<words.length; i++) {
+        if(i != 0) {
+            if(insertPoints.indexOf(i) >= 0)
+                newstring += "<br>";
+            else
+                newstring += " ";
+        }
+        newstring += words[i];
+    }
+    return newstring;
 }
 
 function addLineBreaks(label, item, axis) {

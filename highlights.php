@@ -21,6 +21,7 @@ $filter = "1";
 for($i = 0; $i < count($highlightGroup->codes); $i++)
 {
     $variable = $ds->getCutoffVariable($highlightGroup->codes[$i]);
+    $variable->initializeCounts($groupVar);
     $variable->summary = $highlightGroup->labels[$i];
     $ds->getCutoffPositives($variable, $groupVar, $filter);
     $ds->getCutoffTotal($variable, $groupVar, $filter);
@@ -123,6 +124,8 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->c
         function changeYear(year) {
             if(group != null)
                 window.location = "highlights.php?year="+year+"&cat="+category+"&grp="+group;
+            else
+                window.location = "highlights.php?year="+year+"&cat="+category;
         }
         function exportCSV() {
             if(!isGrouped)

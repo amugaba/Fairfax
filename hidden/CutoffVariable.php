@@ -19,16 +19,13 @@ class CutoffVariable extends Variable
     public $highCutoff;
     public $totalCutoff;
     public $tooltip;
-	
-	public function __construct()
-	{
-        $this->totals = array();
-	}
 
     public function getCount($groupCode){
         return $this->counts[intval($groupCode)-1];
     }
     public function getPercent($groupCode){
+        if($this->getTotal($groupCode) == 0)
+            return 0;
         return $this->getCount($groupCode) / $this->getTotal($groupCode);
     }
     public function getTotal($groupCode){
@@ -48,9 +45,21 @@ class CutoffVariable extends Variable
         $this->totals[intval($groupCode)-1] = floatval($num);
     }
 
+    public function initializeCounts($groupVar){
+        $groupLength = $groupVar == null ? 1 : count($groupVar->labels);
+        for($j=0; $j < $groupLength; $j++) {
+            $this->counts[$j] = 0;
+            $this->totals[$j] = 0;
+        }
+    }
+
     public function calculatePercents(){
-        for($i=0; $i < count($this->counts); $i++)
-            $this->percents[] = round($this->counts[$i] / $this->totals[$i] * 100, 1);
+        for($i=0; $i < count($this->counts); $i++) {
+            if($this->totals[$i] == 0)
+                $this->percents[] = 0;
+            else
+                $this->percents[] = round($this->counts[$i] / $this->totals[$i] * 100, 1);
+        }
     }
 
     public function fill($dbobj)

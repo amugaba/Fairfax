@@ -50,7 +50,7 @@ $year = getCurrentYear();
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2015.jpg"></a>
+                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2016.jpg"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>
@@ -74,6 +74,7 @@ $year = getCurrentYear();
                     <li><b><a href="graphs.php">Explore the Data</a></b> to create and export your own graphs from any question in the survey.</li>
                     <li>View <b><a href="trends.php">Trends over Time</a></b> to see how survey responses vary by year.</li>
                 </ul>
+                <b>6th Grade Data Coming Winter 2018.</b>
             </div>
         </div>
         <div class="row">
