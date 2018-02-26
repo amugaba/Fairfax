@@ -60,7 +60,7 @@ if(!$showIntro)
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo PAGE_TITLE ?></title>
+    <title>Trends - Fairfax County Youth Survey</title>
     <?php include_styles() ?>
     <script src="js/amcharts3/amcharts.js"></script>
     <script src="js/amcharts3/serial.js"></script>
@@ -165,7 +165,7 @@ if(!$showIntro)
 <div class="container" id="main">
     <div class="row" style="background-color: #2e6da4;">
         <div class="searchbar">
-            <label class="shadow" style="width: 250px">1. Select a group of questions:</label>
+            <label class="shadow" style="width: 250px" for="group">1. Select a group of questions:</label>
             <select id="group" style="width:260px; margin-bottom: 0px" class="selector">
                 <option value="">Select an option</option>
                 <option value="1">Alcohol</option>
@@ -181,23 +181,23 @@ if(!$showIntro)
                 <option value="12">Civic Engagement and Time Use</option>
                 <option value="13">Assets that Build Resiliency</option>
             </select><br>
-            <label class="shadow" style="width: 250px">OR Select an individual question:</label>
+            <label class="shadow" style="width: 250px" for="question">OR Select an individual question:</label>
             <select id="question" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 20px; width: 250px">2. (Optional) Filter data by:</label>
-            <select id="filtergrade" class="filter selector">
+            <select id="filtergrade" class="filter selector" title="Grade">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
                 <option value="2">10th</option>
                 <option value="3">12th</option>
             </select>
-            <select id="filtergender" class="filter selector">
+            <select id="filtergender" class="filter selector" title="Gender">
                 <option value="">Gender</option>
                 <option value="1">Female</option>
                 <option value="2">Male</option>
             </select>
-            <select id="filterrace" class="filter selector">
+            <select id="filterrace" class="filter selector" title="Race">
                 <option value="">Race</option>
                 <option value="1">White</option>
                 <option value="2">Black</option>

@@ -147,20 +147,30 @@ function crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, cou
 
 function tableToExcel(csv) {
     if(!isIE()) {
-        csv = "data:text/csv;charset=utf-8," + csv;
-        var encodedUri = encodeURI(csv);
-        var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "fairfaxdata.csv");
-        document.body.appendChild(link); // Required for FF
-        link.click();
+        var blob = new Blob([csv],{type: "text/csv;charset=utf-8;"});
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, "fairfaxdata.csv")
+        } else {
+            csv = "data:text/csv;charset=utf-8," + csv;
+            var encodedUri = encodeURI(csv);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "fairfaxdata.csv");
+            document.body.appendChild(link); // Required for FF
+            link.click();
+        }
     }
     else {
-        var IEwindow = window.open();
-        IEwindow.document.write('sep=,\r\n' + csv);
-        IEwindow.document.close();
-        IEwindow.document.execCommand('SaveAs', true, "fairfaxdata.csv");
-        IEwindow.close();
+        var blob = new Blob([csv],{type: "text/csv;charset=utf-8;"});
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, "fairfaxdata.csv")
+        } else {
+            var IEwindow = window.open();
+            IEwindow.document.write('sep=,\r\n' + csv);
+            IEwindow.document.close();
+            IEwindow.document.execCommand('SaveAs', true, "fairfaxdata.csv");
+            IEwindow.close();
+        }
     }
 }
 
@@ -168,7 +178,7 @@ function createSimpleHighlightTable(tableElem, labels, counts, totals) {
     var table = $(tableElem);
 
     //add header in first row
-    table.append('<tr><th class="clearcell"></th>' +
+    table.append('<tr><th class="clearcell">Category</th>' +
         '<th style="text-align: center">Total<br>Positive</th>' +
         '<th style="text-align: center">Total<br>Possible</th>' +
         '<th style="text-align: center">% Positive</th></tr>');
@@ -187,7 +197,7 @@ function createSimpleExplorerTable(tableElem, labels, counts, sumTotal) {
     var table = $(tableElem);
 
     //add header in first row
-    table.append('<tr><th class="clearcell"></th>' +
+    table.append('<tr><th class="clearcell">Answer</th>' +
         '<th style="text-align: center">Total</th>' +
         '<th style="text-align: center">% Total</th></tr>');
 
@@ -209,11 +219,11 @@ function simpleTrendTable(tableElem, labels, years, percents) {
     var table = $(tableElem);
 
     //add "Year" in first row
-    table.append('<tr><th class="clearcell"></th>' +
+    table.append('<tr><th class="clearcell" rowspan="2">Answer</th>' +
         '<th colspan="'+years.length+'" style="text-align: center">Year</th></tr>');
 
     //add individual years as headers in second row
-    var row = $('<tr><th class="clearcell"></tr>').appendTo(table);
+    var row = $('<tr></tr>').appendTo(table);
     for(var i=0; i<years.length; i++){
         row.append('<th>'+years[i]+'</th>');
     }
@@ -233,7 +243,7 @@ function createCrosstabHighlightTable(tableElem, mainTitle, groupTitle, mainLabe
 
     //add group title in first row
     var row = $('<tr></tr>').appendTo(table);
-    row.append('<th colspan="2" class="clearcell"></th>' +
+    row.append('<th colspan="2" rowspan="2" class="clearcell">Category</th>' +
         '<th colspan="'+groupLabels.length+'" style="text-align: center">'+groupTitle+'</th>');
 
     row.append('<th rowspan="2" style="text-align: center">Total<br>Positive</th>' +
@@ -241,7 +251,7 @@ function createCrosstabHighlightTable(tableElem, mainTitle, groupTitle, mainLabe
         '<th rowspan="2" style="text-align: center">% Positive</th>');
 
     //add group answers in second row
-    var groupHeader = $('<tr><th colspan="2" class="clearcell"></th></tr>').appendTo(table);
+    var groupHeader = $('<tr></tr>').appendTo(table);
     for(var i=0; i<groupLabels.length; i++) {
         groupHeader.append('<th>'+groupLabels[i]+'</th>');
     }
@@ -272,14 +282,14 @@ function createCrosstabExplorerTable(tableElem, mainTitle, groupTitle, mainLabel
 
     //add group title in first row
     var row = $('<tr></tr>').appendTo(table);
-    row.append('<th colspan="2" class="clearcell"></th>' +
+    row.append('<th colspan="2" rowspan="2" class="clearcell">Answer</th>' +
         '<th colspan="'+groupLabels.length+'" style="text-align: center">'+groupTitle+'</th>');
 
     row.append('<th rowspan="2" style="text-align: center">Total</th>' +
         '<th rowspan="2" style="text-align: center">% Total</th>');
 
     //add group answers in second row
-    var groupHeader = $('<tr><th colspan="2" class="clearcell"></th></tr>').appendTo(table);
+    var groupHeader = $('<tr></tr>').appendTo(table);
     for(var i=0; i<groupLabels.length; i++) {
         groupHeader.append('<th>'+groupLabels[i]+'</th>');
     }

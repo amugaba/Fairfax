@@ -74,7 +74,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->c
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo PAGE_TITLE ?></title>
+    <title>Highlights - Fairfax County Youth Survey</title>
     <?php include_styles() ?>
     <script src="js/amcharts3/amcharts.js"></script>
     <script src="js/amcharts3/serial.js"></script>
@@ -144,14 +144,14 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->c
     <div class="row">
         <div class="col-md-3 sidebar">
             <div class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for
-                <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)">
+                <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)" title="Change Year drop down">
                     <option value="2016">2016</option>
                     <option value="2015">2015</option>
                 </select>
             </div>
-            <div class="h2 shadowdeep">Select a Category
+            <h1 class="shadowdeep">Select a Category
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
-            </div>
+            </h1>
                 <ul class="categories shadow">
                     <li><a href='?cat=1'>Alcohol</a></li>
                     <li><a href='?cat=2'>Tobacco</a></li>
@@ -175,7 +175,7 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->c
             </div>
 
             <div id="grouping" class="groupbox" style="width:500px; margin: 20px auto 0">
-                <label class="searchLabel">Group data by:</label>
+                <span style="font-weight: bold">Group data by:</span>
                 <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
                 <input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>

@@ -5,7 +5,7 @@
       <webServer id="4168503b-b570-4a35-aaf7-98dcad502420" name="Angstrom-Test" url="http://angstrom-software.com/fairfax">
         <fileTransfer host="angstrom-software.com" port="21" rootFolder="/angstrom-software.com" username="davtid4" password="dfcbdf8adfdcdfcfdfd8dfd3df8adfd9dfc7dfcbdfc6dfc6df8adfc4dfdfdfc7dfc8dfcfdfd8">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
           </advancedOptions>
           <option name="port" value="21" />
         </fileTransfer>

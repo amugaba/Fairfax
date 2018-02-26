@@ -69,7 +69,7 @@ function getHighlightGroup($cat)
         <p>To learn more about behaviors related to nutrition and physical health, including unhealthy weight loss and food insecurity (hunger), <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 11) {
         $title = "Mental Health";
-        $qCodes = ['M5', 'M1', 'M2'];
+        $qCodes = ['M5', 'M1', 'M4'];
         $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
         $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
             highlights students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row 

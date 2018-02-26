@@ -67,7 +67,7 @@ if(!$showIntro) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo PAGE_TITLE ?></title>
+    <title>Explore the Data - Fairfax County Youth Survey</title>
     <?php include_styles() ?>
     <script src="js/amcharts3/amcharts.js"></script>
     <script src="js/amcharts3/serial.js"></script>
@@ -202,8 +202,8 @@ if(!$showIntro) {
 <div class="container" id="main">
     <div class="row" style="background-color: #2e6da4;">
         <div class="searchbar">
-            <label class="shadow">1. Select primary question:</label>
-            <select id="category1" style="width:160px" class="selector">
+            <label class="shadow" for="question1">1. Select primary question:</label>
+            <select id="category1" style="width:160px" class="selector" title="Select category to filter primary question">
                 <option value="" selected="selected">All categories</option>
                 <option value="99">Demographics</option>
                 <option value="1">Alcohol</option>
@@ -229,8 +229,8 @@ if(!$showIntro) {
             <select id="question1" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
-            <label class="shadow">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
-            <select id="category2" style="width:160px" class="selector">
+            <label class="shadow" for="question2">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
+            <select id="category2" style="width:160px" class="selector" title="Select category to filter secondary question>
                 <option value="" selected="selected">All categories</option>
                 <option value="99">Demographics</option>
                 <option value="1">Alcohol</option>
@@ -256,24 +256,24 @@ if(!$showIntro) {
             <select id="question2" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
-            <label class="shadow" style="margin: 10px 0 10px">3. Select which year to view:</label>
+            <label class="shadow" style="margin: 10px 0 10px" for="filteryear">3. Select which year to view:</label>
             <select id="filteryear" class="filter selector">
                 <option value="2016">2016</option>
                 <option value="2015">2015</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 20px">4. (Optional) Filter data by:</label>
-            <select id="filtergrade" class="filter selector">
+            <select id="filtergrade" class="filter selector" title="Grade">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
                 <option value="2">10th</option>
                 <option value="3">12th</option>
             </select>
-            <select id="filtergender" class="filter selector">
+            <select id="filtergender" class="filter selector" title="Gender">
                 <option value="">Gender</option>
                 <option value="1">Female</option>
                 <option value="2">Male</option>
             </select>
-            <select id="filterrace" class="filter selector">
+            <select id="filterrace" class="filter selector" title="Race">
                 <option value="">Race</option>
                 <option value="1">White</option>
                 <option value="2">Black</option>

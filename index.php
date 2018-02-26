@@ -6,7 +6,7 @@ $year = getCurrentYear();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo PAGE_TITLE ?></title>
+    <title>Home - Fairfax County Youth Survey</title>
     <?php include_styles() ?>
     <link rel="stylesheet" type="text/css" href="js/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="js/slick/slick-theme.css"/>
@@ -29,8 +29,8 @@ $year = getCurrentYear();
 <div class="container" id="main">
     <div class="row" style="height:630px;background-color: #2e6da4">
         <div style="width:570px; margin: -10px auto 10px;">
-            <img src="img/fairfax-logo.png" height="100px" style="float: left; padding-right:20px">
-            <div class="h1 shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;"><?php echo $year;?> Survey Highlights and Data Explorer</span></div>
+            <img src="img/fairfax-logo.png" height="100px" style="float: left; padding-right:20px" alt="Fairfax County Youth Survey Logo">
+            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;"><?php echo $year;?> Survey Highlights and Data Explorer</span></h1>
         </div>
 
         <div id="carousel" class="carousel slide" data-ride="carousel" >
@@ -42,30 +42,30 @@ $year = getCurrentYear();
             </ol>
             <div class="carousel-inner">
                 <div class="item active">
-                    <a href="highlights.php"><img src="img/kidslocker.jpg"></a>
+                    <a href="highlights.php"><img src="img/kidslocker.jpg" alt="Highschool kids in front of lockers"></a>
                     <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the <?php echo $year;?> survey!</div>
                 </div>
                 <div class="item">
-                    <a href="graphs.php"><img src="img/kidscircle.jpg"></a>
+                    <a href="graphs.php"><img src="img/kidscircle.jpg" alt="Children laughing in a circle"></a>
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2016.jpg"></a>
+                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2016.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>
-            <a class="left carousel-control" href="#carousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
+            <a class="left carousel-control" href="#carousel" data-slide="prev" >
+                <span class="glyphicon glyphicon-chevron-left"></span><span style="display:none">Previous Image</span>
             </a>
             <a class="right carousel-control" href="#carousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="glyphicon glyphicon-chevron-right"></span><span style="display:none">Next Image</span>
             </a>
         </div>
     </div>
     <div style="max-width: 1000px; margin: 20px auto;">
         <div class="row">
             <div class="col-md-5">
-                <div class="h2 " style="color:#767676">Fairfax County Youth Survey Interactive Data Explorer</div>
+                <h2 style="color:#767676">Fairfax County Youth Survey Interactive Data Explorer</h2>
             </div>
             <div class="col-md-7">
                 <p>The <b>interactive data explorer</b> allows you to generate custom graphs and data tables on the questions and demographics that you find most interesting.</p>
@@ -84,7 +84,7 @@ $year = getCurrentYear();
         </div>
         <div class="row">
             <div class="col-md-5">
-                <div class="h2 " style="color:#767676">Learn More About the Survey</div>
+                <h2 style="color:#767676">Learn More About the Survey</h2>
             </div>
             <div class="col-md-7">
                 <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in sixth, eighth, tenth, and twelfth grades.
