@@ -5,14 +5,23 @@
  * It sets environment variables, starts session, and contains utility functions such as
  * importing header and footer.
  */
-//include "conn/UserVO.php";//to store the User object properly
-define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] ."/fairfax/");
-define("HTTP_ROOT", "http://".$_SERVER['HTTP_HOST'] ."/fairfax/");
-define("PAGE_TITLE", "Fairfax Survey");
+if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false || strpos($_SERVER['HTTP_HOST'], "angstrom") !== false) {
+    define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] . "/fairfax/");
+    define("HTTP_ROOT", "http://" . $_SERVER['HTTP_HOST'] . "/fairfax/");
+    define("DEBUG", true);
+}
+else {
+    define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] . "/");
+    define("HTTP_ROOT", "http://" . $_SERVER['HTTP_HOST'] . "/");
+    define("DEBUG", false);
+}
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+define("PAGE_TITLE", "Fairfax Survey");
+if(DEBUG) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ERROR);
+}
 
 function include_styles() {
     $root = HTTP_ROOT;
@@ -41,5 +50,5 @@ function getCurrentYear() {
     return 2016;
 }
 function getAllYears() {
-    return [2015,2016];
+    return [2015,2016,2017];
 }

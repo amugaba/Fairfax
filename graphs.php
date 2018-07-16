@@ -230,7 +230,7 @@ if(!$showIntro) {
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" for="question2">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
-            <select id="category2" style="width:160px" class="selector" title="Select category to filter secondary question>
+            <select id="category2" style="width:160px" class="selector" title="Select category to filter secondary question">
                 <option value="" selected="selected">All categories</option>
                 <option value="99">Demographics</option>
                 <option value="1">Alcohol</option>
@@ -258,6 +258,7 @@ if(!$showIntro) {
             </select><br>
             <label class="shadow" style="margin: 10px 0 10px" for="filteryear">3. Select which year to view:</label>
             <select id="filteryear" class="filter selector">
+                <option value="2017">2017</option>
                 <option value="2016">2016</option>
                 <option value="2015">2015</option>
             </select><br>
