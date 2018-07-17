@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: David
- * Date: 5/1/2016
- * Time: 10:54 PM
- */
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require_once 'DataService.php';
-$ds = new DataService();
+$ds = DataService::getInstance(2016, DataService::EIGHT_TO_TWELVE);
 
 $cat = 1;
 $grp = 'none';
@@ -18,7 +13,7 @@ $grp = 'none';
 require_once 'CategoryData.php';
 
 //set up variables
-$var = new Variable();
+$var = new CutoffVariable();
 $var->question = $title;
 $var->explanation = $explanation;
 
@@ -44,3 +39,4 @@ for($i=0; $i<count($mainVar->answers); $i++)
     $ds->getGroupTotalsCutoff($answer, $groupVar);
     var_dump($answer);
 }
+*/

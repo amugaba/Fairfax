@@ -8,11 +8,16 @@ if(isset($_GET['year']))
 else
     $year = getCurrentYear();
 
-$ds = DataService::getInstance($year, DataService::EIGHT_TO_TWELVE);
-$cat = isset($_GET['cat'])? $_GET['cat'] : 1;
-$grp = isset($_GET['grp'])? $_GET['grp'] : null;
+if(isset($_GET['ds']) && $_GET['ds'] == '6th')
+    $dataset = DataService::SIXTH;
+else
+    $dataset = DataService::EIGHT_TO_TWELVE;
 
-$highlightGroup = getHighlightGroup($cat);
+$ds = DataService::getInstance($year, $dataset);
+$cat = isset($_GET['cat'])? $_GET['cat'] : 1;
+$grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
+
+$highlightGroup = getHighlightGroup($cat, $dataset);
 $groupVar = $ds->getMultiVariable($grp);
 $variablesInGraph = [];
 $filter = "1";
@@ -97,44 +102,60 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->c
 
             //Inputs, used to set links
             year = <?php echo json_encode($year); ?>;
+            dataset = <?php echo json_encode($dataset); ?>;
             category = <?php echo json_encode($cat); ?>;
             group = <?php echo json_encode($grp); ?>;
 
-            createBarGraph(percentData, mainTitle, groupSummary, groupLabels, tooltips);
+            if(percentData.length > 0) {
+                createBarGraph(percentData, mainTitle, groupSummary, groupLabels, tooltips);
 
-            if(!isGrouped)
-                createSimpleHighlightTable($('#datatable'), mainLabels, counts, totals);
-            else
-                createCrosstabHighlightTable($('#datatable'), mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals);
+                if (!isGrouped)
+                    createSimpleHighlightTable($('#datatable'), mainLabels, counts, totals);
+                else
+                    createCrosstabHighlightTable($('#datatable'), mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals);
+            }
+            else {
+                $(".hideIfNoGraph").hide();
+                $(".showIfNoGraph").show();
+            }
+            if(dataset === '6th') {
+                $(".groupbox").width(400);
+                $("#gradeButton").hide();
+            }
 
             $("#graphTitle").html("Highlights: " + mainTitle);
             $('#grouping :input[value='+group+']').prop("checked",true);
             $('#yearSelect').val(year);
+            $('#datasetSelect').val(dataset);
             $('#grouping').buttonset();
             $('#grouping :input').click(function() {
-                window.location = "highlights.php?year="+year+"&cat="+category+"&grp="+this.value;
+                window.location = generateHighlightLink(year, dataset, category, this.value);
             });
             $('[data-toggle="tooltip"]').tooltip();
 
-            //add year to each category link
+            //set category links, preserve year and dataset, reset grouping
             $('.categories li a').each(function(){
-                $(this).attr('href',$(this).attr('href')+'&year='+year);
+                $(this).attr('href', generateHighlightLink(year, dataset, $(this).data('category'), 'none'));
             });
         });
-        function changeYear(year) {
-            if(group != null)
-                window.location = "highlights.php?year="+year+"&cat="+category+"&grp="+group;
-            else
-                window.location = "highlights.php?year="+year+"&cat="+category;
+        function changeYear(yr) {
+            window.location = generateHighlightLink(yr, dataset, category, group);
+        }
+        function changeDataset(ds) {
+            window.location = generateHighlightLink(year, ds, category, group);
         }
         function exportCSV() {
             if(!isGrouped)
-                simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year);
+                simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year, dataset);
             else
-                crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year);
+                crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year, dataset);
         }
         function exportGraph() {
             exportToPDF(chart, mainTitle, groupTitle, year, null);
+        }
+        //create a link to highlights page based on current year, dataset, category, and group variables
+        function generateHighlightLink(yr, ds, cat, grp){
+            return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat+"&grp="+grp;
         }
     </script>
 </head>
@@ -143,51 +164,59 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->c
 <div class="container" id="main">
     <div class="row">
         <div class="col-md-3 sidebar">
-            <div class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for
-                <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)" title="Change Year drop down">
+            <div class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for<br>
+                <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)" title="Change year drop down">
+                    <option value="2017">2017</option>
                     <option value="2016">2016</option>
                     <option value="2015">2015</option>
+                </select>
+                <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
+                    <option value="8to12">8th-12th grade</option>
+                    <option value="6th">6th grade</option>
                 </select>
             </div>
             <h1 class="shadowdeep">Select a Category
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
             </h1>
                 <ul class="categories shadow">
-                    <li><a href='?cat=1'>Alcohol</a></li>
-                    <li><a href='?cat=2'>Tobacco</a></li>
-                    <li><a href='?cat=3'>Drugs</a></li>
-                    <li><a href='?cat=4'>Sexual Health</a></li>
-                    <li><a href='?cat=5'>Vehicle Safety</a></li>
-                    <li><a href='?cat=6'>Bullying and Cyberbullying</a></li>
-                    <li><a href='?cat=7'>Dating Aggression</a></li>
-                    <li><a href='?cat=8'>Harassment and Aggressive Behaviors</a></li>
-                    <li><a href='?cat=10'>Nutrition and Physical Activity</a></li>
-                    <li><a href='?cat=11'>Mental Health</a></li>
-                    <li><a href='?cat=12'>Civic Engagement and Time Use</a></li>
-                    <li><a href='?cat=13'>Assets that Build Resiliency</a></li>
+                    <li><a data-category="1">Alcohol</a></li>
+                    <li><a data-category="2">Tobacco</a></li>
+                    <li><a data-category="3">Drugs</a></li>
+                    <li><a data-category="4">Sexual Health</a></li>
+                    <li><a data-category="5">Vehicle Safety</a></li>
+                    <li><a data-category="6">Bullying and Cyberbullying</a></li>
+                    <li><a data-category="7">Dating Aggression</a></li>
+                    <li><a data-category="8">Harassment and Aggressive Behaviors</a></li>
+                    <li><a data-category="10">Nutrition and Physical Activity</a></li>
+                    <li><a data-category="11">Mental Health</a></li>
+                    <li><a data-category="12">Civic Engagement and Time Use</a></li>
+                    <li><a data-category="13">Assets that Build Resiliency</a></li>
                 </ul>
         </div>
         <div class="col-md-9 mainbar">
             <div style="text-align: center;">
                 <h2 id="graphTitle"></h2>
                 <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $highlightGroup->explanation;?></div>
-                <p><b>Mouse over</b> the graph's labels and bars to see in more detail what each element represents.</p>
+                <p class="hideIfNoGraph"><b>Mouse over</b> the graph's labels and bars to see in more detail what each element represents.</p>
+                <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">
+                    The 6th grade survey does not ask questions about this topic. You can access the 8th to 12th grade survey or select a different category.
+                </div>
             </div>
 
-            <div id="grouping" class="groupbox" style="width:500px; margin: 20px auto 0">
+            <div id="grouping" class="groupbox hideIfNoGraph" style="width:500px; margin: 20px auto 0">
                 <span style="font-weight: bold">Group data by:</span>
                 <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
-                <input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label>
+                <span id="gradeButton"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
                 <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
             </div>
-            <div style="overflow: visible; height: 1px; width: 100%; text-align: right">
+            <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">
             </div>
             <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
 
-            <div style="text-align: center; margin-bottom: 20px;">
+            <div style="text-align: center; margin-bottom: 20px;" class="hideIfNoGraph">
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>

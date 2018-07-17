@@ -7,7 +7,12 @@ if(isset($_GET['year']))
 else
     $year = getCurrentYear();
 
-$ds = DataService::getInstance($year, DataService::EIGHT_TO_TWELVE);
+if(isset($_GET['ds']) && $_GET['ds'] == '6th')
+    $dataset = DataService::SIXTH;
+else
+    $dataset = DataService::EIGHT_TO_TWELVE;
+
+$ds = DataService::getInstance($year, $dataset);
 $variables = $ds->getVariables();
 
 //Process user input
@@ -89,6 +94,7 @@ if(!$showIntro) {
             var cat1 = <?php echo json_encode($cat1); ?>;
             var cat2 = <?php echo json_encode($cat2); ?>;
             year = <?php echo json_encode($year); ?>;
+            dataset = <?php echo json_encode($dataset); ?>;
 
             //persist user inputs in search form
             if(cat1 != null)
@@ -120,6 +126,7 @@ if(!$showIntro) {
             if(race != null) {
                 $('#filterrace').val(race);
             }
+            $('#datasetSelect').val(dataset);
 
             <?php if(!$showIntro): ?>
             mainTitle = <?php echo json_encode($mainVar->question); ?>;
@@ -156,9 +163,9 @@ if(!$showIntro) {
         });
         function exportCSV() {
             if(!isGrouped)
-                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year);
+                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset);
             else
-                crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year);
+                crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year, dataset);
         }
         function exportGraph() {
             exportToPDF(chart, mainTitle, groupTitle, year, filterString);
@@ -175,7 +182,7 @@ if(!$showIntro) {
             var race = $("#filterrace").val();
 
             if(q1 != '') {
-                var url = 'graphs.php?q1='+q1;
+                var url = 'graphs.php?ds='+dataset+'&q1='+q1;
 
                 if(q2 != '')
                     url += '&grp='+q2;
@@ -195,12 +202,21 @@ if(!$showIntro) {
                 window.location.href = url;
             }
         }
+        function changeDataset(ds) {
+            window.location.href = "graphs.php?ds="+ds;
+        }
     </script>
 </head>
 <body>
 <?php include_header(); ?>
 <div class="container" id="main">
     <div class="row" style="background-color: #2e6da4;">
+        <div class="shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">Using dataset
+            <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
+                <option value="8to12">8th-12th grade</option>
+                <option value="6th">6th grade</option>
+            </select>
+        </div>
         <div class="searchbar">
             <label class="shadow" for="question1">1. Select primary question:</label>
             <select id="category1" style="width:160px" class="selector" title="Select category to filter primary question">

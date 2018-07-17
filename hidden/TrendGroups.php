@@ -1,32 +1,78 @@
 <?php
+require_once "DataService.php";
 /**
  * Provides variables for 2015 categories
  */
-function getGroupCodes($group) {
-    if($group == 1)
-        return ['A2A', 'A3A', 'A4'];
-    if($group == 2)
-        return ['T3', 'T4A', 'T5', 'T2'];
-    if($group == 3)
-        return ['D3A', 'D9A', 'D17', 'D15'];
-    if($group == 4)
-        return ['X1', 'X8'];
-    if($group == 5)
-        return ['A5', 'S3'];
-    if($group == 6)
-        return ['B20', 'B22', 'CB3', 'CB1'];
-    if($group == 7)
-        return ['B15', 'B16'];
-    if($group == 8)
-        return ['B2A', 'B10A', 'B11', 'W5'];
-    if($group == 10)
-        return ['fruitveg', 'H7', 'H3', 'H20', 'H2'];
-    if($group == 11)
-        return ['M5', 'M1', 'M2'];
-    if($group == 12)
+function getGroupCodes($group, $dataset) {
+    if($group == 1) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['A2A', 'A3A', 'A4'];
+        else
+            return ['A2B', 'A3B'];
+    }
+    if($group == 2) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['T3', 'T4A', 'T5', 'T2'];
+        else
+            return ['T3', 'T4B'];
+    }
+    if($group == 3) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['D3A', 'D9A', 'D17', 'D15'];
+        else
+            return ['D3B', 'D9B', 'D25'];
+    }
+    if($group == 4) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['X1', 'X8'];
+        else
+            return [];
+    }
+    if($group == 5) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['A5', 'S3'];
+        else
+            return [];
+    }
+    if($group == 6) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['B20', 'B22', 'CB3', 'CB1'];
+        else
+            return ['B20', 'B22', 'CB3', 'CB2'];
+    }
+    if($group == 7) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['B15', 'B16'];
+        else
+            return [];
+    }
+    if($group == 8) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['B2A', 'B10A', 'B11', 'W5'];
+        else
+            return ['B2A', 'B10A', 'W5'];
+    }
+    if($group == 10) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['fruitveg', 'H7', 'H3', 'H20', 'H2'];
+        else
+            return ['fruitveg', 'H7', 'H3', 'H2'];
+    }
+    if($group == 11) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['M5', 'M1', 'M2'];
+        else
+            return ['M5', 'M1'];
+    }
+    if($group == 12) {
         return ['C2', 'C11', 'C12', 'extracurric'];
-    if($group == 13)
-        return ['PF9', 'PS3', 'PC2', 'PC11','LS4'];
+    }
+    if($group == 13) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['PF9', 'PS3', 'PC2', 'PC11','LS4'];
+        else
+            return ['PF9', 'PS3', 'PC2', 'LS4'];
+    }
 }
 function getGroupName($group) {
     if($group == 1)

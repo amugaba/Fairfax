@@ -20,7 +20,12 @@ define("PAGE_TITLE", "Fairfax Survey");
 if(DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
-    error_reporting(E_ERROR);
+    error_reporting(E_ALL);
+}
+else {
+    //ini_set('display_errors', 1);
+    //ini_set('display_startup_errors', 1);
+    //error_reporting(E_ERROR);
 }
 
 function include_styles() {
@@ -34,8 +39,17 @@ function include_styles() {
     <script src='//code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
     ";
 
-    //Enable for live only
-    //echo "<script src='$root/js/analytics.js'>";
+    if(!DEBUG) {
+        echo "<!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-68365029-2\"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+        
+          gtag('config', 'UA-68365029-2');
+        </script>";
+    }
 }
 function include_header() {
     include ROOT_PATH."inc/navbar.php";

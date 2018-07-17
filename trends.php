@@ -10,7 +10,12 @@ $grade = isset($_GET['grade']) ? $_GET['grade'] : null;
 $gender = isset($_GET['gender']) ? $_GET['gender'] : null;
 $race = isset($_GET['race']) ? $_GET['race'] : null;
 
-$ds = DataService::getInstance(2015, DataService::EIGHT_TO_TWELVE);
+if(isset($_GET['ds']) && $_GET['ds'] == '6th')
+    $dataset = DataService::SIXTH;
+else
+    $dataset = DataService::EIGHT_TO_TWELVE;
+
+$ds = DataService::getInstance(getCurrentYear(), $dataset);
 $variables = $ds->getTrendVariables();
 
 $showIntro = $trendGroup == null && $questionCode == null;
@@ -24,7 +29,7 @@ if(!$showIntro)
         $variablesInGraph[] = $variable;
     }
     else {
-        $groupCodes = getGroupCodes($trendGroup);
+        $groupCodes = getGroupCodes($trendGroup, $dataset);
         $graphName = "Trend Group: " . getGroupName($trendGroup);
         foreach ($groupCodes as $code) {
             $variable = $ds->getCutoffVariable($code);
@@ -37,7 +42,7 @@ if(!$showIntro)
     $percentData = [];
     $filter = $ds->createFilterString($grade, $gender, $race);
     foreach ($years as $year) {
-        $ds = DataService::getInstance($year, DataService::EIGHT_TO_TWELVE);
+        $ds = DataService::getInstance($year, $dataset);
         $yearData = ["year" => $year];
         for($i=0; $i<count($variablesInGraph); $i++) {
             $ds->getCutoffPositives($variablesInGraph[$i], null, $filter);
@@ -79,6 +84,7 @@ if(!$showIntro)
             var grade = <?php echo json_encode($grade); ?>;
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
+            dataset = <?php echo json_encode($dataset); ?>;
 
             //persist user inputs in search form
             var groupSelect = $("#group");
@@ -90,6 +96,7 @@ if(!$showIntro)
             $('#filtergrade').val(grade);
             $('#filtergender').val(gender);
             $('#filterrace').val(race);
+            $('#datasetSelect').val(dataset);
 
             //If Group is selected, make Question blank and vice versa
             var blockEvent = false;
@@ -112,7 +119,13 @@ if(!$showIntro)
             years = <?php echo json_encode($years); ?>;
             isGrouped = <?php echo json_encode($trendGroup != null); ?>;
 
-            chart = createLineChart(percentData, labels);
+            if(labels.length > 0) {
+                chart = createLineChart(percentData, labels);
+            }
+            else {
+                $(".hideIfNoGraph").hide();
+                $(".showIfNoGraph").show();
+            }
 
             filterString = makeFilterString(grade, gender, race);
             var titleString = "<h4>"+mainTitle+"</h4>";
@@ -125,7 +138,7 @@ if(!$showIntro)
         });
         function exportCSV() {
             var title = isGrouped ? mainTitle : "Trends: "+mainTitle;
-            simpleTrendCSV(title, labels, years, percentData, filterString);
+            simpleTrendCSV(title, labels, years, percentData, dataset, filterString);
         }
         function exportGraph() {
             exportToPDF(chart, mainTitle, null, years[0]+' to '+years[years.length-1], filterString);
@@ -140,7 +153,7 @@ if(!$showIntro)
             var url = '';
 
             if(group != '')
-                url = 'trends.php?group='+group;
+                url = 'trends.php?ds='+dataset+'&group='+group;
             else if(question != '') {
                 url = 'trends.php?question=' + question;
                 if(category != '')
@@ -158,12 +171,21 @@ if(!$showIntro)
 
             window.location.href = url;
         }
+        function changeDataset(ds) {
+            window.location.href = "trends.php?ds="+ds;
+        }
     </script>
 </head>
 <body>
 <?php include_header(); ?>
 <div class="container" id="main">
     <div class="row" style="background-color: #2e6da4;">
+        <div class="shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">Using dataset
+            <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
+                <option value="8to12">8th-12th grade</option>
+                <option value="6th">6th grade</option>
+            </select>
+        </div>
         <div class="searchbar">
             <label class="shadow" style="width: 250px" for="group">1. Select a group of questions:</label>
             <select id="group" style="width:260px; margin-bottom: 0px" class="selector">
@@ -217,14 +239,17 @@ if(!$showIntro)
         else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
+                <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">
+                    The 6th grade survey does not ask questions about this topic. You can access the 8th to 12th grade survey or select a different category.
+                </div>
             </div>
-            <div style="overflow: visible; height: 1px; width: 100%; text-align: right">
+            <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100; margin-right: 80px">
             </div>
 
             <div id="chartdiv" style="width100%; height:700px;"></div>
 
-            <div style="text-align: center; margin-bottom: 20px;">
+            <div style="text-align: center; margin-bottom: 20px;" class="hideIfNoGraph">
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the percentage of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>

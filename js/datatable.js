@@ -31,9 +31,10 @@ function isIE() {
         return false;
 }
 
-function getCSVHeader(mainTitle, groupTitle, year, filterString) {
+function getCSVHeader(mainTitle, groupTitle, year, dataset, filterString) {
     var csv = "Fairfax County Youth Survey Data Explorer\r\n";
-    csv += "Year: "+year+"\r\n";
+    csv += "Year: " + year + "\r\n";
+    csv += "Dataset: " + (dataset==='6th' ? '6th grade' : '8th to 12th grade') + "\r\n";
     csv += '"' + mainTitle + '"\r\n';
     if(groupTitle != null)
         csv += '"Compared to Question: ' + groupTitle + '"\r\n';
@@ -44,8 +45,8 @@ function getCSVHeader(mainTitle, groupTitle, year, filterString) {
     return csv;
 }
 
-function simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year) {
-    var csv = getCSVHeader("Highlights: " + mainTitle, null, year, null);
+function simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year, dataset) {
+    var csv = getCSVHeader("Highlights: " + mainTitle, null, year, dataset, null);
 
     csv += ",Total Positive,Total Possible, % Positive\r\n";
 
@@ -59,8 +60,8 @@ function simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year) {
     tableToExcel(csv);
 }
 
-function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year) {
-    var csv = getCSVHeader("Question: " + mainTitle, null, year, null);
+function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset) {
+    var csv = getCSVHeader("Question: " + mainTitle, null, year, dataset, null);
 
     csv += ",Total,% Total\r\n";
 
@@ -74,8 +75,8 @@ function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year) {
     tableToExcel(csv);
 }
 
-function simpleTrendCSV(mainTitle, labels, years, percents, filterString) {
-    var csv = getCSVHeader(mainTitle, null, years[0]+' to '+years[years.length-1], filterString);
+function simpleTrendCSV(mainTitle, labels, years, percents, dataset, filterString) {
+    var csv = getCSVHeader(mainTitle, null, years[0]+' to '+years[years.length-1], dataset, filterString);
 
     csv += ",Year\r\n";
     for(var i=0; i<years.length; i++){
@@ -94,8 +95,8 @@ function simpleTrendCSV(mainTitle, labels, years, percents, filterString) {
     tableToExcel(csv);
 }
 
-function crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year) {
-    var csv = getCSVHeader("Highlights: " + mainTitle, groupTitle, year, null);
+function crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year, dataset) {
+    var csv = getCSVHeader("Highlights: " + mainTitle, groupTitle, year, dataset, null);
 
     csv += ',,"'+groupTitle+'"\r\n';
     csv += ",,"+groupLabels.join(",");
@@ -114,8 +115,8 @@ function crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, co
     tableToExcel(csv);
 }
 
-function crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, totals, groupTotals, sumTotal, filterString, year) {
-    var csv = getCSVHeader("Question: " + mainTitle, groupTitle, year, filterString);
+function crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, totals, groupTotals, sumTotal, filterString, year, dataset) {
+    var csv = getCSVHeader("Question: " + mainTitle, groupTitle, year, dataset, filterString);
 
     csv += ',,"'+groupTitle+'"\r\n';
     csv += ",,"+groupLabels.join(",");

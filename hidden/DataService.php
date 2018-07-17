@@ -12,6 +12,8 @@ class DataService {
     protected static $instance = null;
     const EIGHT_TO_TWELVE = '8to12';
     const SIXTH = '6th';
+    private $datatable;
+    private $variable_table;
 
     protected function __construct ()
     {
@@ -27,6 +29,7 @@ class DataService {
         if(DataService::$instance === null)
             DataService::$instance = new DataService();
         DataService::$instance->datatable = 'data_'.$year.'_'.$grade;
+        DataService::$instance->variable_table = 'variables_'.$grade;
         return DataService::$instance;
     }
 
@@ -38,7 +41,7 @@ class DataService {
             return null;
 
         $result = $this->query("SELECT autoid, code, question, cutoff_summary, cutoff_tooltip, category, low_cutoff, high_cutoff, total_cutoff 
-            FROM variables_2015 WHERE code='?'", [$code]);
+            FROM $this->variable_table WHERE code='?'", [$code]);
         return $this->fetchObject($result, CutoffVariable::class);
     }
 
@@ -49,13 +52,13 @@ class DataService {
         if($code == null)
             return null;
 
-        $result = $this->query("SELECT autoid, code, question, summary, category FROM variables_2015 WHERE code='?'", [$code]);
+        $result = $this->query("SELECT autoid, code, question, summary, category FROM $this->variable_table WHERE code='?'", [$code]);
         $variable = $this->fetchObject($result, MultiVariable::class);
 
         //Get Answers to the Question
         $result = $this->query("SELECT answer1,answer2,answer3,answer4,answer5,answer6,answer7,answer8,answer9,
         answer10,answer11,answer12,answer13,answer14,answer15,answer16,answer17,answer18,answer19,answer20,answer21,
-        answer22,answer23,answer24,answer25,answer26 FROM variables_2015 WHERE code='?'", [$code]);
+        answer22,answer23,answer24,answer25,answer26 FROM $this->variable_table WHERE code='?'", [$code]);
 
         $labels = $result->fetch_row();
 
@@ -73,7 +76,7 @@ class DataService {
      * @return MultiVariable[]     */
     public function getVariables()
     {
-        $result = $this->query("SELECT autoid, code, question, summary, category FROM variables_2015");
+        $result = $this->query("SELECT autoid, code, question, summary, category FROM $this->variable_table");
         return $this->fetchAllObjects($result, MultiVariable::class);
     }
 
@@ -81,7 +84,7 @@ class DataService {
     public function getTrendVariables()
     {
         $result = $this->query("SELECT autoid, code, question, cutoff_summary, category, low_cutoff, high_cutoff, total_cutoff 
-          FROM variables_2015 WHERE has_trends=1");
+          FROM $this->variable_table WHERE has_trends=1");
         return $this->fetchAllObjects($result, CutoffVariable::class);
     }
 

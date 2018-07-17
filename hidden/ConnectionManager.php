@@ -14,17 +14,15 @@
 
 class ConnectionManager
 {
-    private $production = false;
-
-    public $username = "root";
-    public $password = "asdf2423";
-    public $server = "127.0.0.1";
-    public $databasename = "fairfax";
+    public $username;
+    public $password;
+    public $server;
+    public $databasename;
     public $port = "3306";
 
     public function __construct ()
     {
-        if($this->production) {
+        if(strpos($_SERVER['HTTP_HOST'], "localhost") === false) {
             $this->username = "amugaba";
             $this->password = "overalls are in style";
             $this->server = "mysql.angstrom-software.com";
