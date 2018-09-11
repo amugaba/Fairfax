@@ -234,7 +234,7 @@ function simpleTrendTable(tableElem, labels, years, percents) {
         var row = $('<tr></tr>').appendTo(table);
         row.append('<th>'+labels[i]+'</th>');
         for(var j=0; j<years.length; j++) {
-            row.append('<td>'+percents[j]['v'+i]+'%</td>');
+            row.append('<td>'+percents[j]['v'+i].toFixed(1)+'%</td>');
         }
     }
 }

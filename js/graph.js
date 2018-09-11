@@ -60,7 +60,7 @@ function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltip
             if(tooltips != null) {
                 graph.balloonFunction = function (graphDataItem, graph) {
                     var title = graph.title == "Total" ? "" : graph.title;
-                    return graphDataItem.values.value +"% of "+title+" students reported " + tooltips[graphDataItem.index];
+                    return graphDataItem.values.value.toFixed(1) +"% of "+title+" students reported " + tooltips[graphDataItem.index];
                 };
             }
             else if(groupTitle == null)
@@ -75,9 +75,14 @@ function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltip
 
         // LEGEND
         var legend = new AmCharts.AmLegend();
-        legend.position = "top";
-        legend.title = groupTitle;
+        legend.position = "right";
+        legend.labelWidth = 160;
+        //legend.title = "";
+        //legend.marginTop = (Math.ceil(groupTitle.length/20))*20;
+        //legend.height = 300;
         chart.addLegend(legend);
+
+        //chart.addListener("drawn",addLegendLabel);
 
         chart.export = {
             enabled: true
@@ -85,6 +90,13 @@ function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltip
         chart.write("chartdiv");
     });
 }
+
+/*function addLegendLabel(e) {
+    var title = document.createElement("div");
+    title.innerHTML = "<b>"+groupTitle+"</b>";
+    title.className = "legend-title";
+    e.chart.legendDiv.append(title)
+}*/
 
 function addBreakToTitle(label) {
     var breaksNeeded = Math.floor(label.length / 20);
@@ -176,6 +188,9 @@ function createLineChart(percentData, labels) {
         graphs.push({
             "id": "g"+i,
             "balloonText": "[[value]]%",
+            "balloonFunction": function (graphDataItem, graph) {
+                return graphDataItem.values.value.toFixed(1) +"%";
+            },
             "bullet": "round",
             "bulletBorderAlpha": 1,
             "hideBulletsCount": 50,
@@ -188,7 +203,7 @@ function createLineChart(percentData, labels) {
     var chart = AmCharts.makeChart("chartdiv", {
         "type": "serial",
         "theme": "light",
-        "marginRight": 80,
+        "marginRight": 30,
         "autoMarginOffset": 20,
         "marginTop": 25,
         "fontSize": 13,
@@ -202,7 +217,7 @@ function createLineChart(percentData, labels) {
         }],
         "graphs": graphs,
         "chartCursor": {
-            "limitToGraph":"g1"
+
         },
         "categoryField": "year",
         "categoryAxis": {
@@ -217,7 +232,13 @@ function createLineChart(percentData, labels) {
         },
         "legend": {
             "useGraphSettings": true,
-            "position":"top"
+            "position":"right",
+            "labelWidth": 160,
+            "valueFunction": function (graphDataItem) {
+                if(graphDataItem.values == null)
+                    return "";
+                return graphDataItem.values.value.toFixed(1) +"%";
+            }
         }
     });
 
@@ -243,7 +264,7 @@ function makeFilterString(grade, gender, race) {
         return null;
 }
 
-function exportToPDF(chart, mainTitle, groupTitle, year, filterString) {
+function exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString) {
     var exportContent = [
         {
             text: "Fairfax County Youth Survey "+year,
@@ -263,6 +284,12 @@ function exportToPDF(chart, mainTitle, groupTitle, year, filterString) {
                 style: ["subheader"]
             });
     }
+    if(dataset != null) {
+        exportContent.push({
+            text: "Dataset: " + (dataset==='6th' ? '6th grade' : '8th to 12th grade'),
+            style: ["description"]
+        });
+    }
     if(filterString != null) {
         exportContent.push({
             text: filterString,
@@ -271,7 +298,7 @@ function exportToPDF(chart, mainTitle, groupTitle, year, filterString) {
     }
     exportContent.push({
         image: "image_1",
-        fit: [720,470],
+        fit: [720,450],
         style: ["description"]
     });
 

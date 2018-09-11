@@ -63,7 +63,7 @@ if(!$showIntro) {
         $percentData[] = $percentArray;
     }
 
-    $graphHeight = min(1200, max(700, (count($groupLabels) + 1) * count($mainVar->getLabels()) * 30 + 100));//height is (labels*(labels+spacing)*bar height + header height
+    $graphHeight = min(900, max(600, (count($groupLabels) + 1) * count($mainVar->getLabels()) * 30 + 100));//height is (labels*(labels+spacing)*bar height + header height
     $noresponse = $ds->getNoResponseCount($mainVar, $groupVar, $filter);
 }
 ?>
@@ -95,6 +95,10 @@ if(!$showIntro) {
             var cat2 = <?php echo json_encode($cat2); ?>;
             year = <?php echo json_encode($year); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
+            if(dataset === '6th') {
+                $("#filtergrade").hide();
+                $(".hide6").hide();
+            }
 
             //persist user inputs in search form
             if(cat1 != null)
@@ -168,7 +172,7 @@ if(!$showIntro) {
                 crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year, dataset);
         }
         function exportGraph() {
-            exportToPDF(chart, mainTitle, groupTitle, year, filterString);
+            exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString);
         }
 
         function searchData() {
@@ -227,14 +231,14 @@ if(!$showIntro) {
                 <option value="5">Drugs</option>
                 <option value="2">Bullying & Cyberbullying</option>
                 <option value="14">Harassment</option>
-                <option value="3">Dating Aggression</option>
+                <option value="3" class="hide6">Dating Aggression</option>
                 <option value="13">Other Aggressive Behaviors</option>
-                <option value="17">Vehicle Safety</option>
+                <option value="17" class="hide6">Vehicle Safety</option>
                 <option value="6">Physical Activity</option>
                 <option value="7">Nutrition</option>
-                <option value="19">Unhealthy Weight Loss Behaviors</option>
+                <option value="19" class="hide6">Unhealthy Weight Loss Behaviors</option>
                 <option value="9">Mental Health</option>
-                <option value="18">Sexual Health</option>
+                <option value="18" class="hide6">Sexual Health</option>
                 <option value="4">School</option>
                 <option value="11">Family</option>
                 <option value="10">Community Support</option>
@@ -254,14 +258,14 @@ if(!$showIntro) {
                 <option value="5">Drugs</option>
                 <option value="2">Bullying & Cyberbullying</option>
                 <option value="14">Harassment</option>
-                <option value="3">Dating Aggression</option>
+                <option value="3" class="hide6">Dating Aggression</option>
                 <option value="13">Other Aggressive Behaviors</option>
-                <option value="17">Vehicle Safety</option>
+                <option value="17" class="hide6">Vehicle Safety</option>
                 <option value="6">Physical Activity</option>
                 <option value="7">Nutrition</option>
-                <option value="19">Unhealthy Weight Loss Behaviors</option>
+                <option value="19" class="hide6">Unhealthy Weight Loss Behaviors</option>
                 <option value="9">Mental Health</option>
-                <option value="18">Sexual Health</option>
+                <option value="18" class="hide6">Sexual Health</option>
                 <option value="4">School</option>
                 <option value="11">Family</option>
                 <option value="10">Community Support</option>

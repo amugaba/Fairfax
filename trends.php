@@ -85,6 +85,10 @@ if(!$showIntro)
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
+            if(dataset === '6th') {
+                $("#filtergrade").hide();
+                $(".hide6").hide();
+            }
 
             //persist user inputs in search form
             var groupSelect = $("#group");
@@ -141,12 +145,11 @@ if(!$showIntro)
             simpleTrendCSV(title, labels, years, percentData, dataset, filterString);
         }
         function exportGraph() {
-            exportToPDF(chart, mainTitle, null, years[0]+' to '+years[years.length-1], filterString);
+            exportToPDF(chart, mainTitle, null, years[0]+' to '+years[years.length-1], dataset, filterString);
         }
         function searchData() {
             var group = $("#group").val();
             var question = $("#question").val();
-            var category = $('#category').val();
             var grade = $("#filtergrade").val();
             var gender = $("#filtergender").val();
             var race = $("#filterrace").val();
@@ -155,9 +158,7 @@ if(!$showIntro)
             if(group != '')
                 url = 'trends.php?ds='+dataset+'&group='+group;
             else if(question != '') {
-                url = 'trends.php?question=' + question;
-                if(category != '')
-                    url += '&cat='+category;
+                url = 'trends.php?ds='+dataset+'&question=' + question;
             }
             else
                 return;//if both are blank, do nothing
@@ -193,10 +194,10 @@ if(!$showIntro)
                 <option value="1">Alcohol</option>
                 <option value="2">Tobacco</option>
                 <option value="3">Drugs</option>
-                <option value="4">Sexual Health</option>
-                <option value="5">Vehicle Safety</option>
+                <option value="4" class="hide6">Sexual Health</option>
+                <option value="5" class="hide6">Vehicle Safety</option>
                 <option value="6">Bullying & Cyberbullying</option>
-                <option value="7">Dating Aggression</option>
+                <option value="7" class="hide6">Dating Aggression</option>
                 <option value="8">Harassment and Aggressive Behaviors</option>
                 <option value="10">Nutrition and Physical Activity</option>
                 <option value="11">Mental Health</option>

@@ -1,4 +1,4 @@
-<footer class="footer" style="z-index: 1000; position: absolute; bottom: 0; width:100%; background: #d6d6d6; padding: 10px">
+<footer class="footer" style="z-index: 1000; position: absolute; bottom: 0; width:100%; background: #d6d6d6; padding: 23px">
     <div style="margin: 0 auto; text-align: center; max-width: 500px;">
         <div style="float: left; margin-right: 50px">
             <img src="img/fcps_logo.png" alt="Fairfax County Public Schools logo">

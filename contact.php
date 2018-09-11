@@ -14,7 +14,7 @@ include_once "config/config.php";
     <div class="row" style="background-color: #2e6da4">
         <div style="width:570px; margin: -10px auto 10px;">
             <img src="img/fairfax-logo.png" height="100px" style="float: left; padding-right:20px" alt="Fairfax County Youth Survey logo">
-            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2016 Survey Highlights and Data Explorer</span></h1>
+            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;"><?php echo getCurrentYear();?> Survey Highlights and Data Explorer</span></h1>
         </div>
 
     </div>

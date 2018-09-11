@@ -73,7 +73,7 @@ else {
 }
 
 //height is (labels*(labels+spacing)*bar height + header height
-$graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->codes)*30+100));
+$graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->codes)*30+100));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -151,11 +151,14 @@ $graphHeight = min(1200,max(600,(count($groupLabels)+1)*count($highlightGroup->c
                 crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year, dataset);
         }
         function exportGraph() {
-            exportToPDF(chart, mainTitle, groupTitle, year, null);
+            exportToPDF(chart, mainTitle, groupTitle, year, dataset, null);
         }
         //create a link to highlights page based on current year, dataset, category, and group variables
         function generateHighlightLink(yr, ds, cat, grp){
-            return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat+"&grp="+grp;
+            if(ds === '6th' && grp === 'I2')
+                return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat;
+            else
+                return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat+"&grp="+grp;
         }
     </script>
 </head>

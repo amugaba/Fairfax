@@ -50,7 +50,7 @@ $year = getCurrentYear();
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2016.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
+                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2017.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>
@@ -74,7 +74,22 @@ $year = getCurrentYear();
                     <li><b><a href="graphs.php">Explore the Data</a></b> to create and export your own graphs from any question in the survey.</li>
                     <li>View <b><a href="trends.php">Trends over Time</a></b> to see how survey responses vary by year.</li>
                 </ul>
-                <b>6th Grade Data Coming Winter 2018.</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <h2 style="color:#767676">6th Grade Survey Data<br>Now Available</h2>
+            </div>
+            <div class="col-md-7">
+                <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.
+                    The <b>6th grade data set</b> is now available online. You can access it by selecting '6th grade' at the top of the
+                    <b><a href="highlights.php?ds=6th">Survey Highlights</a></b>, <b><a href="graphs.php?ds=6th">Explore the Data</a></b>, or
+                    <b><a href="trends.php?ds=6th">Trends over Time</a></b> pages.</p>
             </div>
         </div>
         <div class="row">

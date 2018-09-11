@@ -25,13 +25,15 @@ function getHighlightGroup($cat, $dataset)
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['T3', 'T4A', 'T5', 'T2'];
             $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month E-Cigarette Use', 'Past Month Smokeless Tobacco Use'];
+            $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco, including e-cigarettes.</p>
+            <p>To learn about other substances or to compare tobacco use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             $qCodes = ['T3', 'T4B'];
             $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use'];
+            $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco.</p>
+            <p>To learn about other substances or to compare tobacco use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
-        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco, including e-cigarettes.</p>
-        <p>To learn about other substances or to compare tobacco use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     }
     else if ($cat == 3) {
         $title = "Drugs";
@@ -41,7 +43,7 @@ function getHighlightGroup($cat, $dataset)
         }
         else {
             $qCodes = ['D3B', 'D9B', 'D25'];
-            $labels = ['Past Month Marijuana Use', 'Past Month Inhalant Use', 'Past Month Other Drug Use'];
+            $labels = ['Past Month Marijuana Use', 'Past Month Inhalant Use', 'Past Month Other Illegal Drug Use'];
         }
         $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on selected substances of interest to the Fairfax County community.</p>
         <p>To learn about other substances or to compare substance use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
@@ -50,29 +52,31 @@ function getHighlightGroup($cat, $dataset)
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['X1', 'X8'];
             $labels = ['Lifetime Sexual Intercourse', 'Lifetime Oral Sex'];
+            $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use).
+            Related questions addressing aggression in relationships are reported in the <a href='highlights.php?cat=7'>Dating Aggression</a> category.</p>
+            <p>To learn more about behaviors related to sexual health, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             //display message that the 6th grade survey doesn't ask about this
             $qCodes = [];
             $labels = [];
+            $explanation = "";
         }
-        $explanation = "<p>The Youth Survey asks about students' sexual behavior, including preventive behaviors (condom use).
-        Related questions addressing aggression in relationships are reported in the <a href='highlights.php?cat=7'>Dating Aggression</a> category.</p>
-        <p>To learn more about behaviors related to sexual health, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 5) {
         $title = "Vehicle Safety";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['A5', 'S3'];
             $labels = ['Driving after Drinking', 'Texting while Driving'];
+            $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
+            after drinking and texting while driving.</p><p style='font-style: italic; text-decoration: underline'>Data are for 12th grade students only.</p>
+            <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             //display message that the 6th grade survey doesn't ask about this
             $qCodes = [];
             $labels = [];
+            $explanation = "";
         }
-        $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
-        after drinking and texting while driving.</p><p style='font-style: italic; text-decoration: underline'>Data are for 12th grade students only.</p>
-        <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 6) {
         $title = "Bullying and Cyberbullying";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
@@ -90,28 +94,32 @@ function getHighlightGroup($cat, $dataset)
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['B15', 'B16'];
             $labels = ['Had a Partner that Always Wanted to Know Whereabouts', 'Had a Partner that Verbally Abused'];
+            $explanation = "<p>There are a variety of behaviors that might be classified as dating aggression, or that might signify 
+            a risk of dating aggression. These range from a partner always wanting to know his or her partner's whereabouts to pressuring a partner to have sex.</p>
+            <p>To learn more about behaviors related to dating aggression, including physical abuse, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             //display message that the 6th grade survey doesn't ask about this
             $qCodes = [];
             $labels = [];
+            $explanation = "";
         }
-        $explanation = "<p>There are a variety of behaviors that might be classified as dating aggression, or that might signify 
-            a risk of dating aggression. These range from a partner always wanting to know his or her partner's whereabouts to pressuring a partner to have sex.</p>
-        <p>To learn more about behaviors related to dating aggression, including physical abuse, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 8) {
         $title = "Harassment and Aggressive Behaviors";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['B2A', 'B10A', 'B11', 'W5'];
             $labels = ["Insulted Someone's Race or Culture", 'Had Race or Culture Insulted', 'Had Been Sexually Harassed', 'Carried a Weapon'];
+            $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
+            provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who reported carrying a weapon.</p>
+            <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             $qCodes = ['B2A', 'B10A', 'W5'];
             $labels = ["Insulted Someone's Race or Culture", 'Had Race or Culture Insulted', 'Carried a Weapon'];
+            $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
+            provides information on racial/cultural harassment and on youth who reported carrying a weapon.</p>
+            <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
-        $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
-            provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who reported carrying a weapon.</p>
-        <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 10) {
         $title = "Nutrition and Physical Activity";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
@@ -131,15 +139,19 @@ function getHighlightGroup($cat, $dataset)
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['M5', 'M1', 'M4'];
             $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
+            $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
+            highlights students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row 
+            (which may indicate risk for depression), and those who attempted suicide.</p>
+        <p>To learn more about these topics, as well as suicidal ideation and unhealthy weight loss behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             $qCodes = ['M5', 'M1'];
             $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
+            $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
+            highlights students who reported high levels of stress and those who felt sad or helpless two or more weeks in a row 
+            (which may indicate risk for depression).</p>
+        <p>To learn more about these topics, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
-        $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
-            highlights students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row 
-            (which may indicate risk for depression), and those who attempted suicide.</p>
-        <p>To learn more about these topics, as well as suicidal ideation and unhealthy weight loss behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 12) {
         $title = "Civic Engagement and Time Use";
         $qCodes = ['C2', 'C11', 'C12', 'extracurric'];

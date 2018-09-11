@@ -60,7 +60,7 @@ function getGroupCodes($group, $dataset) {
     }
     if($group == 11) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['M5', 'M1', 'M2'];
+            return ['M5', 'M1', 'M2', 'M4'];
         else
             return ['M5', 'M1'];
     }
