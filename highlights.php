@@ -123,7 +123,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 $("#gradeButton").hide();
             }
 
-            $("#graphTitle").html("Highlights: " + mainTitle);
+            $("#graphTitle").html(year + " Highlights: " + mainTitle);
             $('#grouping :input[value='+group+']').prop("checked",true);
             $('#yearSelect').val(year);
             $('#datasetSelect').val(dataset);

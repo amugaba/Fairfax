@@ -36,7 +36,7 @@ function getGroupCodes($group, $dataset) {
     }
     if($group == 6) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['B20', 'B22', 'CB3', 'CB1'];
+            return ['B20', 'B22', 'CB3', 'CB2'];
         else
             return ['B20', 'B22', 'CB3', 'CB2'];
     }

@@ -155,7 +155,7 @@ if(!$showIntro) {
                 createCrosstabExplorerTable($('#datatable'), mainSummary, groupSummary, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal);
 
             filterString = makeFilterString(grade, gender, race);
-            titleString = "<h4>"+mainTitle + " - " + year + "</h4>";
+            titleString = "<h4>"+year+"</h4><h4>"+mainTitle+"</h4>";
             if(isGrouped)
                 titleString += "<i>compared to</i><h4>" + groupTitle + "</h4>";
             if(filterString != null)

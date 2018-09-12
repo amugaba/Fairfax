@@ -80,7 +80,7 @@ function getHighlightGroup($cat, $dataset)
     } else if ($cat == 6) {
         $title = "Bullying and Cyberbullying";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['B20', 'B22', 'CB3', 'CB1'];
+            $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
             $labels = ['Bullied Someone at School', 'Had Been Bullied at School', 'Cyberbullied Someone at School', 'Had Been Cyberbullied at School'];
         }
         else {

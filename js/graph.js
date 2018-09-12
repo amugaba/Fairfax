@@ -286,7 +286,7 @@ function exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString) 
     }
     if(dataset != null) {
         exportContent.push({
-            text: "Dataset: " + (dataset==='6th' ? '6th grade' : '8th to 12th grade'),
+            text: "Dataset: " + (dataset==='6th' ? '6th grade' : '8th, 10th, and 12th grades'),
             style: ["description"]
         });
     }
