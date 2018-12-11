@@ -25,7 +25,7 @@ include_once "config/config.php";
             </div>
             <div class="col-md-9">
                 <p>For inquiries regarding the Fairfax County Youth Survey or the Data Explorer website, please contact
-                    <a href="mailto:NCS-Prevention@fairfaxcounty.gov">NCS-Prevention@fairfaxcounty.gov</a></p>
+                    <a href="mailto:OSMDataAnalytics@fairfaxcounty.gov">OSMDataAnalytics@fairfaxcounty.gov</a></p>
             </div>
         </div>
     </div>
