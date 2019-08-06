@@ -29,9 +29,13 @@ if(!$showIntro) {
     //Get Variables
     $mainVar = $ds->getMultiVariable($q1);
     $groupVar = $ds->getMultiVariable($grp);
-
     if ($mainVar == null)
         die("User input was invalid.");
+
+    $mainVariableAvailable = $ds->isVariableInData($q1);
+    $groupVariableAvailable = $grp == 'none' || $ds->isVariableInData($grp);
+}
+if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
     $mainVar->initializeCounts($groupVar);
     //Construct filter
     $filter = $ds->createFilterString($grade, $gender, $race);
@@ -132,7 +136,7 @@ if(!$showIntro) {
             }
             $('#datasetSelect').val(dataset);
 
-            <?php if(!$showIntro): ?>
+            <?php if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable): ?>
             mainTitle = <?php echo json_encode($mainVar->question); ?>;
             mainSummary = <?php echo json_encode($mainVar->summary); ?>;
             groupTitle = <?php echo json_encode($groupQuestion); ?>;
@@ -229,6 +233,7 @@ if(!$showIntro) {
                 <option value="1">Alcohol</option>
                 <option value="12">Tobacco</option>
                 <option value="5">Drugs</option>
+                <option value="20">Vaping</option>
                 <option value="2">Bullying & Cyberbullying</option>
                 <option value="14">Harassment</option>
                 <option value="3" class="hide6">Dating Aggression</option>
@@ -256,6 +261,7 @@ if(!$showIntro) {
                 <option value="1">Alcohol</option>
                 <option value="12">Tobacco</option>
                 <option value="5">Drugs</option>
+                <option value="20">Vaping</option>
                 <option value="2">Bullying & Cyberbullying</option>
                 <option value="14">Harassment</option>
                 <option value="3" class="hide6">Dating Aggression</option>
@@ -278,6 +284,7 @@ if(!$showIntro) {
             </select><br>
             <label class="shadow" style="margin: 10px 0 10px" for="filteryear">3. Select which year to view:</label>
             <select id="filteryear" class="filter selector">
+                <option value="2018">2018</option>
                 <option value="2017">2017</option>
                 <option value="2016">2016</option>
                 <option value="2015">2015</option>
@@ -311,7 +318,14 @@ if(!$showIntro) {
     <div class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
             include "instructions.php";
-        else: ?>
+        elseif(!$mainVariableAvailable || !$groupVariableAvailable): ?>
+            <div style="text-align: center; font-size: 18px">
+                <p>The variable you selected was not collected during the year you selected.<br>Please choose a different year or different variable.</p>
+                <p><b>Variable(s) not available this year:</b>
+                    <?php if(!$mainVariableAvailable) echo '<br>'.$mainVar->summary;
+                    if(!$groupVariableAvailable) echo '<br>'.$groupVar->summary; ?></p>
+            </div>
+        <?php else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
             </div>

@@ -61,8 +61,8 @@ function echo_self() {
     echo htmlspecialchars($_SERVER["PHP_SELF"]);
 }
 function getCurrentYear() {
-    return 2017;
+    return 2018;
 }
 function getAllYears() {
-    return [2015,2016,2017];
+    return [2015,2016,2017,2018];
 }

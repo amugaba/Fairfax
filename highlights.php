@@ -22,6 +22,12 @@ $groupVar = $ds->getMultiVariable($grp);
 $variablesInGraph = [];
 $filter = "1";
 
+//clear question codes from categories that aren't available in certain years
+//a message will display instead of the graph
+if($year < 2018 && $cat == 20) {
+    $highlightGroup->codes = [];
+}
+
 //get data for each question
 for($i = 0; $i < count($highlightGroup->codes); $i++)
 {
@@ -169,6 +175,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
         <div class="col-md-3 sidebar">
             <div class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for<br>
                 <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)" title="Change year drop down">
+                    <option value="2018">2018</option>
                     <option value="2017">2017</option>
                     <option value="2016">2016</option>
                     <option value="2015">2015</option>
@@ -185,6 +192,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                     <li><a data-category="1">Alcohol</a></li>
                     <li><a data-category="2">Tobacco</a></li>
                     <li><a data-category="3">Drugs</a></li>
+                    <?php if($year >= 2018) { ?><li><a data-category="20">Vaping</a></li><?php } ?>
                     <li><a data-category="4">Sexual Health</a></li>
                     <li><a data-category="5">Vehicle Safety</a></li>
                     <li><a data-category="6">Bullying and Cyberbullying</a></li>
@@ -202,7 +210,11 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $highlightGroup->explanation;?></div>
                 <p class="hideIfNoGraph"><b>Mouse over</b> the graph's labels and bars to see in more detail what each element represents.</p>
                 <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">
-                    The 6th grade survey does not ask questions about this topic. You can access the 8th to 12th grade survey or select a different category.
+                    <?php if($dataset == DataService::SIXTH) { ?>
+                        The 6th grade survey does not ask questions about this topic. You can access the 8th to 12th grade survey or select a different category.
+                    <?php } else { ?>
+                        The survey did not ask about this topic in <?php echo $year ?>. Please select a different year or different topic.
+                    <?php } ?>
                 </div>
             </div>
 

@@ -47,6 +47,20 @@ function getHighlightGroup($cat, $dataset)
         }
         $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on selected substances of interest to the Fairfax County community.</p>
         <p>To learn about other substances or to compare substance use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
+    } else if ($cat == 20) {
+        $title = "Vaping";
+        if($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['V1', 'V2', 'V3', 'V4', 'vaping'];
+            $labels = ['Lifetime Vape Use', 'Past Month Vaping Nicotine', 'Past Month Vaping Marijuana', 'Past Month Vaping Flavoring', 'Past Month Vaping Any of the Above'];
+            $explanation = "<p>The Youth Survey asks about vaping nicotine, marijuana, and flavoring in the past 30 days and vape use in lifetime.</p>
+        <p>To compare vaping with substance use or other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
+        }
+        else {
+            //display message that the 6th grade survey doesn't ask about this
+            $qCodes = [];
+            $labels = [];
+            $explanation = "";
+        }
     } else if ($cat == 4) {
         $title = "Sexual Health";
         if($dataset == DataService::EIGHT_TO_TWELVE) {

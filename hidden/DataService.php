@@ -89,6 +89,18 @@ class DataService {
     }
 
     /**
+     * Was this variable collected this survey year?
+     * @param $code string
+     * @return bool
+     */
+    public function isVariableInData($code) {
+        $result = $this->query("SHOW COLUMNS FROM $this->datatable  LIKE '?'",[$code]);
+        if($result->fetch_row())
+            return true;
+        return false;
+    }
+
+    /**
      * Get the weighted count of students that chose each answer for the given question.     *
      * @param MultiVariable $mainVar
      * @param MultiVariable $groupVar
