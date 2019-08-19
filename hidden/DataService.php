@@ -19,6 +19,7 @@ class DataService {
     {
         $cm = new ConnectionManager();
         $this->connection = mysqli_connect($cm->server, $cm->username, $cm->password, $cm->databasename, $cm->port);
+        $this->connection->set_charset('utf8');
         $this->throwExceptionOnError();
     }
 
@@ -100,6 +101,10 @@ class DataService {
         return false;
     }
 
+    public function isDemographics($code) {
+        return $code == 'race_eth' || $code == 'I3' || $code == 'I2' || $code == 'I7';
+    }
+
     /**
      * Get the weighted count of students that chose each answer for the given question.     *
      * @param MultiVariable $mainVar
@@ -110,19 +115,23 @@ class DataService {
     {
         $varcode = $mainVar->code;
 
-        if($groupVar != null)
-        {
+        //don't use weighting for demographics questions
+        if($this->isDemographics($mainVar->code))
+            $counter = "COUNT(1)";
+        else
+            $counter = "COALESCE(SUM(wgt),0)";
+
+        if ($groupVar != null) {
             $groupcode = $groupVar->code;
-            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $varcode as answer, $groupcode as subgroup 
-                FROM $this->datatable 
-                WHERE $varcode IS NOT NULL AND $groupcode IS NOT NULL AND $filter 
-                GROUP BY $varcode, $groupcode");
-        }
-        else {
-            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $varcode as answer 
-                FROM $this->datatable 
-                WHERE $varcode IS NOT NULL AND $filter 
-                GROUP BY $varcode");
+            $stmt = $this->connection->query("SELECT $counter as num, $varcode as answer, $groupcode as subgroup 
+            FROM $this->datatable 
+            WHERE $varcode IS NOT NULL AND $groupcode IS NOT NULL AND $filter 
+            GROUP BY $varcode, $groupcode");
+        } else {
+            $stmt = $this->connection->query("SELECT $counter as num, $varcode as answer 
+            FROM $this->datatable 
+            WHERE $varcode IS NOT NULL AND $filter 
+            GROUP BY $varcode");
         }
         $this->throwExceptionOnError();
 
@@ -142,16 +151,22 @@ class DataService {
     {
         $varcode = $mainVar->code;
 
+        //don't use weighting for demographics questions
+        if($this->isDemographics($mainVar->code))
+            $counter = "COUNT(1)";
+        else
+            $counter = "COALESCE(SUM(wgt),0)";
+
         if($groupVar != null)
         {
             $groupcode = $groupVar->code;
-            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupcode as subgroup 
+            $stmt = $this->connection->query("SELECT $counter as num, $groupcode as subgroup 
                 FROM $this->datatable 
                 WHERE $groupcode IS NOT NULL AND $filter AND $varcode IS NOT NULL 
                 GROUP BY $groupcode");
         }
         else {
-            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num 
+            $stmt = $this->connection->query("SELECT $counter as num 
                 FROM $this->datatable 
                 WHERE $filter AND $varcode IS NOT NULL");
         }

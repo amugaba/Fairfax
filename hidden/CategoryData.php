@@ -52,7 +52,7 @@ function getHighlightGroup($cat, $dataset)
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['V1', 'V2', 'V3', 'V4', 'vaping'];
             $labels = ['Lifetime Vape Use', 'Past Month Vaping Nicotine', 'Past Month Vaping Marijuana', 'Past Month Vaping Flavoring', 'Past Month Vaping Any of the Above'];
-            $explanation = "<p>The Youth Survey asks about vaping nicotine, marijuana, and flavoring in the past 30 days and vape use in lifetime.</p>
+            $explanation = "<p>The Youth Survey asks about vaping nicotine, marijuana, and flavoring in the past 30 days, as well as ever having vaped.</p>
         <p>To compare vaping with substance use or other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
