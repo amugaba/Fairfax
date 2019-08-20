@@ -19,7 +19,9 @@ $ds = DataService::getInstance(getCurrentYear(), $dataset);
 $variables = $ds->getTrendVariables();
 
 $showIntro = $trendGroup == null && $questionCode == null;
-if(!$showIntro)
+if($trendGroup == 20)
+    $showVapingMessage = true;
+if(!$showIntro && !$showVapingMessage)
 {
     //Set up variables (either single question or group)
     $variablesInGraph = [];
@@ -115,7 +117,7 @@ if(!$showIntro)
                     $("#group").val('');
             });
 
-            <?php if(!$showIntro): ?>
+            <?php if(!$showIntro && !$showVapingMessage): ?>
             mainTitle = <?php echo json_encode($graphName); ?>;
             labels = <?php echo json_encode($labels); ?>;
             percentData = <?php echo json_encode($percentData); ?>;
@@ -194,6 +196,7 @@ if(!$showIntro)
                 <option value="1">Alcohol</option>
                 <option value="2">Tobacco</option>
                 <option value="3">Drugs</option>
+                <option value="20" class="hide6">Vaping</option>
                 <option value="4" class="hide6">Sexual Health</option>
                 <option value="5" class="hide6">Vehicle Safety</option>
                 <option value="6">Bullying & Cyberbullying</option>
@@ -237,7 +240,11 @@ if(!$showIntro)
     <div class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
             include "trends-instructions.php";
-        else: ?>
+        elseif ($showVapingMessage): ?>
+            <div style="text-align: center;">
+                <h4>Vaping questions were added in 2018. Trends will not be available until the 2019 survey results are published.</h4>
+            </div>
+        <?php else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
                 <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">

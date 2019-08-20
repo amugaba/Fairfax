@@ -24,6 +24,9 @@ $year = getCurrentYear();
     .slick-arrow, .slick-prev {
         background-color: gray;
     }
+    p  {
+        font-size: 15px;
+    }
 </style>
 <?php include_header(); ?>
 <div class="container" id="main">
@@ -42,15 +45,15 @@ $year = getCurrentYear();
             </ol>
             <div class="carousel-inner">
                 <div class="item active">
-                    <a href="highlights.php"><img src="img/kidslocker.jpg" alt="Highschool kids in front of lockers"></a>
+                    <a href="highlights.php"><img src="img/olderkids2018.jpg" alt="High school kids smiling"></a>
                     <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the <?php echo $year;?> survey!</div>
                 </div>
                 <div class="item">
-                    <a href="graphs.php"><img src="img/kidscircle.jpg" alt="Children laughing in a circle"></a>
+                    <a href="graphs.php"><img src="img/sixthgrade2018.jpg" alt="Children smiling in a circle"></a>
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2017.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
+                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2018.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>
@@ -62,7 +65,7 @@ $year = getCurrentYear();
             </a>
         </div>
     </div>
-    <div style="max-width: 1000px; margin: 20px auto;">
+    <div style="max-width: 1050px; margin: 20px auto;">
         <div class="row">
             <div class="col-md-5">
                 <h2 style="color:#767676">Fairfax County Youth Survey Interactive Data Explorer</h2>
@@ -83,13 +86,29 @@ $year = getCurrentYear();
         </div>
         <div class="row">
             <div class="col-md-5">
-                <h2 style="color:#767676">6th Grade Survey Data<br>Now Available</h2>
+                <h2 style="color:#767676">New Vaping and Prescription<br>Pain Reliever Questions Added</h2>
             </div>
             <div class="col-md-7">
-                <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.
-                    The <b>6th grade data set</b> is now available online. You can access it by selecting '6th grade' at the top of the
+                <p>Two new sets of questions have been added to the survey for 8th to 12th grade students.<br>
+                    See <b><a href="highlights.php?cat=20">Vaping in Survey Highlights</a></b> to view lifetime and past month vape use.<br>
+                    To view <b>prescription pain reliever use without a doctor's order</b>, visit <b><a href="graphs.php">Explore the Data</a></b>
+                    and select the Drugs category.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <h2 style="color:#767676">6th Grade Survey Data</h2>
+            </div>
+            <div class="col-md-7">
+                <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.<br>
+                    You can access the <b>6th grade data set</b> by selecting '6th grade' at the top of
                     <b><a href="highlights.php?ds=6th">Survey Highlights</a></b>, <b><a href="graphs.php?ds=6th">Explore the Data</a></b>, or
-                    <b><a href="trends.php?ds=6th">Trends over Time</a></b> pages.</p>
+                    <b><a href="trends.php?ds=6th">Trends over Time</a></b>.</p>
             </div>
         </div>
         <div class="row">

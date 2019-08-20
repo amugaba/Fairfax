@@ -233,7 +233,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="1">Alcohol</option>
                 <option value="12">Tobacco</option>
                 <option value="5">Drugs</option>
-                <option value="20">Vaping</option>
+                <option value="20" class="hide6">Vaping</option>
                 <option value="2">Bullying & Cyberbullying</option>
                 <option value="14">Harassment</option>
                 <option value="3" class="hide6">Dating Aggression</option>
