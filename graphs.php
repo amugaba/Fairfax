@@ -284,6 +284,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             </select><br>
             <label class="shadow" style="margin: 10px 0 10px" for="filteryear">3. Select which year to view:</label>
             <select id="filteryear" class="filter selector">
+                <option value="2019">2019</option>
                 <option value="2018">2018</option>
                 <option value="2017">2017</option>
                 <option value="2016">2016</option>

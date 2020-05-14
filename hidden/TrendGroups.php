@@ -73,6 +73,12 @@ function getGroupCodes($group, $dataset) {
         else
             return ['PF9', 'PS3', 'PC2', 'LS4'];
     }
+    if($group == 20) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return ['V1', 'V2', 'V3', 'V4'];
+        else
+            return [];
+    }
 }
 function getGroupName($group) {
     if($group == 1)
@@ -99,5 +105,7 @@ function getGroupName($group) {
         return "Civic Engagement and Time Use";
     if($group == 13)
         return "Assets that Build Resiliency";
+    if($group == 20)
+        return "Vaping";
 }
 

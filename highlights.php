@@ -175,6 +175,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
         <div class="col-md-3 sidebar">
             <div class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for<br>
                 <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)" title="Change year drop down">
+                    <option value="2019">2019</option>
                     <option value="2018">2018</option>
                     <option value="2017">2017</option>
                     <option value="2016">2016</option>

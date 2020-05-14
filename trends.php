@@ -19,9 +19,8 @@ $ds = DataService::getInstance(getCurrentYear(), $dataset);
 $variables = $ds->getTrendVariables();
 
 $showIntro = $trendGroup == null && $questionCode == null;
-if($trendGroup == 20)
-    $showVapingMessage = true;
-if(!$showIntro && !$showVapingMessage)
+
+if(!$showIntro)
 {
     //Set up variables (either single question or group)
     $variablesInGraph = [];
@@ -41,6 +40,8 @@ if(!$showIntro && !$showVapingMessage)
 
     //Get data for each year
     $years = getAllYears(); //from config.php
+    if($trendGroup == 20)
+        $years = [2018, 2019]; //vaping added in 2018
     $percentData = [];
     $filter = $ds->createFilterString($grade, $gender, $race);
     foreach ($years as $year) {
@@ -117,7 +118,7 @@ if(!$showIntro && !$showVapingMessage)
                     $("#group").val('');
             });
 
-            <?php if(!$showIntro && !$showVapingMessage): ?>
+            <?php if(!$showIntro): ?>
             mainTitle = <?php echo json_encode($graphName); ?>;
             labels = <?php echo json_encode($labels); ?>;
             percentData = <?php echo json_encode($percentData); ?>;
@@ -240,11 +241,7 @@ if(!$showIntro && !$showVapingMessage)
     <div class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
             include "trends-instructions.php";
-        elseif ($showVapingMessage): ?>
-            <div style="text-align: center;">
-                <h4>Vaping questions were added in 2018. Trends will not be available until the 2019 survey results are published.</h4>
-            </div>
-        <?php else: ?>
+        else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
                 <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">
