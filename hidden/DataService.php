@@ -64,10 +64,12 @@ class DataService {
         $labels = $result->fetch_row();
 
         //add answer labels to Question
-        for ($i = 0; $i < count($labels); $i++) {
-            $label = $labels[$i];
-            if ($label != null && $label != '')
-                $variable->labels[] = $label;
+        if($labels != null) {
+            for ($i = 0; $i < count($labels); $i++) {
+                $label = $labels[$i];
+                if ($label != null && $label != '')
+                    $variable->labels[] = $label;
+            }
         }
 
         return $variable;

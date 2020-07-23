@@ -1,6 +1,5 @@
 <?php
 include_once "config/config.php";
-$year = getCurrentYear();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,10 +29,10 @@ $year = getCurrentYear();
 </style>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row" style="height:630px;background-color: #2e6da4">
-        <div style="width:570px; margin: -10px auto 10px;">
-            <img src="img/fairfax-logo.png" height="100px" style="float: left; padding-right:20px" alt="Fairfax County Youth Survey Logo">
-            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;"><?php echo $year;?> Survey Highlights and Data Explorer</span></h1>
+    <div class="row title" style="height:630px">
+        <div style="width:750px; margin: -10px auto 10px;">
+            <img src="img/fairfaxlogo.png" style="float: left; padding: 30px 30px 0 0" alt="Fairfax County Logo">
+            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2019&ndash;2020 Youth Survey Highlights and Data Explorer</span></h1>
         </div>
 
         <div id="carousel" class="carousel slide" data-ride="carousel" >
@@ -45,15 +44,15 @@ $year = getCurrentYear();
             </ol>
             <div class="carousel-inner">
                 <div class="item active">
-                    <a href="highlights.php"><img src="img/olderkids2018.jpg" alt="High school kids smiling"></a>
-                    <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the <?php echo $year;?> survey!</div>
+                    <a href="highlights.php"><img src="img/olderkids2019.jpg" alt="High school kids smiling"></a>
+                    <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the survey!</div>
                 </div>
                 <div class="item">
-                    <a href="graphs.php"><img src="img/sixthgrade2018.jpg" alt="Children smiling in a circle"></a>
+                    <a href="graphs.php"><img src="img/sixthgrade2019.jpg" alt="Children smiling in a circle"></a>
                     <div class="carousel-caption">Explore individual question data!</div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2018.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
+                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2019-alt.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
                     <div class="carousel-caption">Access the full written report.</div>
                 </div>
             </div>
@@ -86,13 +85,13 @@ $year = getCurrentYear();
         </div>
         <div class="row">
             <div class="col-md-5">
-                <h2 style="color:#767676">New Vaping and Prescription<br>Pain Reliever Questions Added</h2>
+                <h2 style="color:#767676">New Survey Items and Trends<br>Added in 2019 - 2020</h2>
             </div>
             <div class="col-md-7">
-                <p>Two new sets of questions have been added to the survey for 8th to 12th grade students.<br>
-                    See <b><a href="highlights.php?cat=20">Vaping in Survey Highlights</a></b> to view lifetime and past month vape use.<br>
-                    To view <b>prescription pain reliever use without a doctor's order</b>, visit <b><a href="graphs.php">Explore the Data</a></b>
-                    and select the Drugs category.</p>
+                <p>Four new questions&mdash;about how teachers and other adults in school treat students&mdash;have been added to 8th-12th grade survey.
+                    Visit <b><a href="graphs.php">Explore the Data</a></b> to see these new questions under the School category.</p>
+                <p>Vaping questions are now available on the Trends page. See <b><a href="trends.php?ds=8to12&group=20">Trends in Vaping</a></b>
+                    to view lifetime and past month vape use for the past two years.</p>
             </div>
         </div>
         <div class="row">

@@ -186,9 +186,9 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                     <option value="6th">6th grade</option>
                 </select>
             </div>
-            <h1 class="shadowdeep">Select a Category
+            <h2 class="shadowdeep">Select a Category
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
-            </h1>
+            </h2>
                 <ul class="categories shadow">
                     <li><a data-category="1">Alcohol</a></li>
                     <li><a data-category="2">Tobacco</a></li>

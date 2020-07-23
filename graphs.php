@@ -218,7 +218,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
 <body>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row" style="background-color: #2e6da4;">
+    <div class="row title">
         <div class="shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">Using dataset
             <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
                 <option value="8to12">8th-12th grade</option>

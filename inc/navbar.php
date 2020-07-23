@@ -10,7 +10,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php" style="padding: 0 10px"><img src="img/fairfax-logo.png" height="50px" alt="Home Button"></a>
+            <a class="navbar-brand" href="index.php" style="padding: 11px 20px; color: white; font-size: 25px;">
+                <span class="glyphicon glyphicon-home"></span>
+            </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

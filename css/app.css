@@ -120,10 +120,17 @@ table.datatable {
 }
 
 #topbar {
-    background: #eac291;
-    background-image: -moz-linear-gradient(#eac291, #dbb688);
-    border-color: #c4a279;
+    background: #4a3c31;
+    background: linear-gradient(180deg, #635143, #4a3c31);
+    background-image: -moz-linear-gradient(#635143, #4a3c31);
+    border-color: #4a3c31;
     border-radius: 0;
+}
+.navbar-default .navbar-nav>li>a {
+    color: white !important;
+}
+.row.title {
+    background: #265c8a;
 }
 
 #bottombar {
@@ -146,7 +153,7 @@ table.datatable {
 .sidebar {
     margin-bottom: -9999px;
     padding-bottom: 9999px;
-    background-color: #2e6da4;
+    background-color: #265c8a;
     color: #ffffff;
 }
 
@@ -232,7 +239,7 @@ th.clearcell {
 }
 
 .btn-blue {
-    background-color: #70a1c2;
+    background-color: #265c8a;
     border-color: #3276b2;
     color: #ffffff;
 }

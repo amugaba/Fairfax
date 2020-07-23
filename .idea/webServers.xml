@@ -3,19 +3,17 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="4168503b-b570-4a35-aaf7-98dcad502420" name="Angstrom-Test" url="http://angstrom-software.com/fairfax">
-        <fileTransfer host="angstrom-software.com" port="22" rootFolder="/angstrom-software.com" accessType="SFTP" username="davtid4" password="dfcbdf8adfdcdfcfdfd8dfd3df8adfd9dfc7dfcbdfc6dfc6df8adfc4dfdfdfc7dfc8dfcfdfd8">
+        <fileTransfer rootFolder="/home/davtid4/angstrom-software.com" accessType="SFTP" host="angstrom-software.com" port="22" sshConfigId="722e546d-1792-4b00-a575-4e30f56e68fc" sshConfig="Angstrom-Test" username="davtid4" password="dfcbdf8adfdcdfcfdfd8dfd3df8adfd9dfc7dfcbdfc6dfc6df8adfc4dfdfdfc7dfc8dfcfdfd8">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
       <webServer id="17764dec-68a5-425e-b253-3ed1063f70d3" name="Angstrom-Live" url="http://fairfaxcountyyouthsurvey.com">
-        <fileTransfer host="fairfaxcountyyouthsurvey.com" port="22" rootFolder="/home/fairfax_survey/" accessType="SFTP">
+        <fileTransfer rootFolder="/home/fairfax_survey/" accessType="SFTP" host="fairfaxcountyyouthsurvey.com" port="22" sshConfigId="7eb7dd8f-a053-42b8-8957-4cf284133ff8" sshConfig="Angstrom-Live">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>
-          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
     </option>

@@ -32,7 +32,7 @@ class ConnectionManager
             $this->username = "root";
             $this->password = "asdf2423";
             $this->server = "127.0.0.1";
-            $this->databasename = "fairfax";
+            $this->databasename = "fairfaxdb";
         }
     }
 }
