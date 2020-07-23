@@ -45,15 +45,15 @@ include_once "config/config.php";
             <div class="carousel-inner">
                 <div class="item active">
                     <a href="highlights.php"><img src="img/olderkids2019.jpg" alt="High school kids smiling"></a>
-                    <div class="carousel-caption">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the survey!</div>
+                    <div class="carousel-caption"><a href="highlights.php">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the survey!</a></div>
                 </div>
                 <div class="item">
                     <a href="graphs.php"><img src="img/sixthgrade2019.jpg" alt="Children smiling in a circle"></a>
-                    <div class="carousel-caption">Explore individual question data!</div>
+                    <div class="carousel-caption"><a href="graphs.php">Explore individual question data!</a></div>
                 </div>
                 <div class="item">
                     <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2019-alt.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
-                    <div class="carousel-caption">Access the full written report.</div>
+                    <div class="carousel-caption"><a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Access the full written report.</a></div>
                 </div>
             </div>
             <a class="left carousel-control" href="#carousel" data-slide="prev" >

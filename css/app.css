@@ -109,6 +109,10 @@ table.datatable {
     max-width:750px;
     margin: 0 auto;
 }
+.carousel-caption a {
+    color: white !important;
+    text-decoration: none !important;
+}
 
 /* Declare heights because of positioning of img element */
 .carousel .item {
