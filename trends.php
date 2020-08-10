@@ -5,6 +5,7 @@ require_once 'hidden/TrendGroups.php';
 
 //Process user input
 $trendGroup = isset($_GET['group'])? $_GET['group'] : null;
+$category = isset($_GET['cat']) ? $_GET['cat'] : null;
 $questionCode = isset($_GET['question'])? $_GET['question'] : null;
 $grade = isset($_GET['grade']) ? $_GET['grade'] : null;
 $gender = isset($_GET['gender']) ? $_GET['gender'] : null;
@@ -40,13 +41,15 @@ if(!$showIntro)
 
     //Get data for each year
     $years = getAllYears(); //from config.php
-    if($trendGroup == 20)
-        $years = [2018, 2019]; //vaping added in 2018
+    $availableYears = [];
     $percentData = [];
     $filter = $ds->createFilterString($grade, $gender, $race);
     foreach ($years as $year) {
         $ds = DataService::getInstance($year, $dataset);
+        if(!$ds->isVariableInData($variablesInGraph[0]->code))
+            continue; //skip years where variable not in dataset
         $yearData = ["year" => $year];
+        $availableYears[] = $year;
         for($i=0; $i<count($variablesInGraph); $i++) {
             $ds->getCutoffPositives($variablesInGraph[$i], null, $filter);
             $ds->getCutoffTotal($variablesInGraph[$i], null, $filter);
@@ -84,6 +87,7 @@ if(!$showIntro)
             //get user inputs
             var trendGroup = <?php echo json_encode($trendGroup); ?>;
             var questionCode = <?php echo json_encode($questionCode); ?>;
+            var category = <?php echo json_encode($category); ?>;
             var grade = <?php echo json_encode($grade); ?>;
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
@@ -94,9 +98,11 @@ if(!$showIntro)
             }
 
             //persist user inputs in search form
+            if(category != null)
+                $('#category').val(category);
             var groupSelect = $("#group");
             var questionSelect = $("#question");
-            enableSelect2(variables, null, "#question"); //must come before setting question value
+            enableSelect2(variables, "#category", "#question"); //must come before setting question value
             questionSelect.val(questionCode);
             questionSelect.trigger('change');
             groupSelect.val(trendGroup);
@@ -123,7 +129,7 @@ if(!$showIntro)
             labels = <?php echo json_encode($labels); ?>;
             percentData = <?php echo json_encode($percentData); ?>;
             questions = <?php echo json_encode($variablesInGraph); ?>;
-            years = <?php echo json_encode($years); ?>;
+            years = <?php echo json_encode($availableYears); ?>;
             isGrouped = <?php echo json_encode($trendGroup != null); ?>;
 
             if(labels.length > 0) {
@@ -152,6 +158,7 @@ if(!$showIntro)
         }
         function searchData() {
             var group = $("#group").val();
+            var category = $("#category").val();
             var question = $("#question").val();
             var grade = $("#filtergrade").val();
             var gender = $("#filtergender").val();
@@ -166,6 +173,8 @@ if(!$showIntro)
             else
                 return;//if both are blank, do nothing
 
+            if(category != '')
+                url += '&cat='+category;
             if(grade != '')
                 url += "&grade="+grade;
             if(gender != '')
@@ -190,7 +199,7 @@ if(!$showIntro)
                 <option value="6th">6th grade</option>
             </select>
         </div>
-        <div class="searchbar">
+        <div class="searchbar" style="max-width: 740px">
             <label class="shadow" style="width: 250px" for="group">1. Select a group of questions:</label>
             <select id="group" style="width:260px; margin-bottom: 0px" class="selector">
                 <option value="">Select an option</option>
@@ -208,7 +217,30 @@ if(!$showIntro)
                 <option value="12">Civic Engagement and Time Use</option>
                 <option value="13">Assets that Build Resiliency</option>
             </select><br>
-            <label class="shadow" style="width: 250px" for="question">OR Select an individual question:</label>
+            <label class="shadow" style="width: 250px" for="question">OR Select an <br>individual question:</label>
+            <select id="category" style="width:160px" class="selector" title="Select category to filter primary question">
+                <option value="" selected="selected">All categories</option>
+                <option value="1">Alcohol</option>
+                <option value="12">Tobacco</option>
+                <option value="5">Drugs</option>
+                <option value="20" class="hide6">Vaping</option>
+                <option value="2">Bullying & Cyberbullying</option>
+                <option value="14">Harassment</option>
+                <option value="3" class="hide6">Dating Aggression</option>
+                <option value="13">Other Aggressive Behaviors</option>
+                <option value="17" class="hide6">Vehicle Safety</option>
+                <option value="6">Physical Activity</option>
+                <option value="7">Nutrition</option>
+                <option value="19" class="hide6">Unhealthy Weight Loss Behaviors</option>
+                <option value="9">Mental Health</option>
+                <option value="18" class="hide6">Sexual Health</option>
+                <option value="4">School</option>
+                <option value="11">Family</option>
+                <option value="10">Community Support</option>
+                <option value="16">Civic Engagement</option>
+                <option value="15">Time Use</option>
+                <option value="8">Self/Peer Perception</option>
+            </select>
             <select id="question" style="width:300px" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
