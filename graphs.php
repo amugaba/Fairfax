@@ -251,7 +251,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
             </select>
-            <select id="question1" style="width:300px" class="searchbox">
+            <select id="question1" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" for="question2">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
@@ -279,7 +279,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
             </select>
-            <select id="question2" style="width:300px" class="searchbox">
+            <select id="question2" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 10px" for="filteryear">3. Select which year to view:</label>

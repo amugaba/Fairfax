@@ -199,7 +199,7 @@ if(!$showIntro)
                 <option value="6th">6th grade</option>
             </select>
         </div>
-        <div class="searchbar" style="max-width: 740px">
+        <div class="searchbar" style="max-width: 840px">
             <label class="shadow" style="width: 250px" for="group">1. Select a group of questions:</label>
             <select id="group" style="width:260px; margin-bottom: 0px" class="selector">
                 <option value="">Select an option</option>
@@ -241,7 +241,7 @@ if(!$showIntro)
                 <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
             </select>
-            <select id="question" style="width:300px" class="searchbox">
+            <select id="question" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 20px; width: 250px">2. (Optional) Filter data by:</label>

@@ -162,7 +162,7 @@ table.datatable {
 }
 
 .searchbar {
-    max-width: 710px;
+    max-width: 810px;
     border: thin white solid;
     padding: 10px;
     margin: 10px auto;
@@ -175,6 +175,7 @@ table.datatable {
 }
 .searchbox {
     font-size: 9pt;
+    width: 400px;
 }
 
 .categories a {
