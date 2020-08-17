@@ -200,8 +200,8 @@ if(!$showIntro)
             </select>
         </div>
         <div class="searchbar" style="max-width: 840px">
-            <label class="shadow" style="width: 250px" for="group">1. Select a group of questions:</label>
-            <select id="group" style="width:260px; margin-bottom: 0px" class="selector">
+            <label class="shadow" style="width: 414px" for="group">1. Select a group to see highlighted questions:</label>
+            <select id="group" style="width:400px; margin-bottom: 0" class="selector">
                 <option value="">Select an option</option>
                 <option value="1">Alcohol</option>
                 <option value="2">Tobacco</option>
