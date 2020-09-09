@@ -132,12 +132,16 @@ if(!$showIntro)
             years = <?php echo json_encode($availableYears); ?>;
             isGrouped = <?php echo json_encode($trendGroup != null); ?>;
 
-            if(labels.length > 0) {
-                chart = createLineChart(percentData, labels);
+            if(years.length === 1) {
+                $(".hideIfNoGraph").hide();
+                $(".showIfOneYearData").show();
+            }
+            else if(labels.length === 0) {
+                $(".hideIfNoGraph").hide();
+                $(".showIfNoData").show();
             }
             else {
-                $(".hideIfNoGraph").hide();
-                $(".showIfNoGraph").show();
+                chart = createLineChart(percentData, labels);
             }
 
             filterString = makeFilterString(grade, gender, race);
@@ -276,8 +280,11 @@ if(!$showIntro)
         else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
-                <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">
-                    The 6th grade survey does not ask questions about this topic. You can access the 8th to 12th grade survey or select a different category.
+                <div class="showIfOneYearData" style="font-size: 1.3em; margin-top: 20px; display: none">
+                    This variable was added in <?= getCurrentYear()?>. Trends will not be available until the <?= getCurrentYear()+1?> survey results are published.
+                </div>
+                <div class="showIfNoData" style="font-size: 1.3em; margin-top: 20px; display: none">
+                    Trends are not available for this item currently.
                 </div>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">

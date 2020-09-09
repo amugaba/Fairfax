@@ -12,7 +12,7 @@ if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false || strpos($_SERVER['HTTP
 }
 else {
     define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] . "/");
-    define("HTTP_ROOT", "http://" . $_SERVER['HTTP_HOST'] . "/");
+    define("HTTP_ROOT", "https://" . $_SERVER['HTTP_HOST'] . "/");
     define("DEBUG", false);
 }
 
@@ -34,8 +34,8 @@ function include_styles() {
     <link rel='stylesheet' href='$root/css/app.css'>
     <link rel='stylesheet' href='//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.min.css'>
     <script src='//code.jquery.com/jquery-1.10.2.min.js'></script>
-    <link rel='stylesheet' href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-    <script src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+    <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
+    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
     <script src='//code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
     ";
 
