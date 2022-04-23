@@ -8,12 +8,14 @@ require_once 'MultiVariable.php';
 
 class DataService {
 
-    public $connection;
-    protected static $instance = null;
+    public mysqli|null|false $connection;
+    protected static DataService $instance;
     const EIGHT_TO_TWELVE = '8to12';
     const SIXTH = '6th';
-    private $datatable;
-    private $variable_table;
+    private string $datatable;
+    private string $variable_table;
+    private bool $is8to12;
+    private int $year;
 
     protected function __construct ()
     {
@@ -26,11 +28,14 @@ class DataService {
     /** @param $year int
      *  @param $grade string
      *  @return DataService */
-    public static function getInstance($year, $grade) {
-        if(DataService::$instance === null)
+    public static function getInstance(int $year, string $grade): DataService
+    {
+        if(!isset(DataService::$instance))
             DataService::$instance = new DataService();
         DataService::$instance->datatable = 'data_'.$year.'_'.$grade;
         DataService::$instance->variable_table = 'variables_'.$grade;
+        DataService::$instance->is8to12 = $grade == self::EIGHT_TO_TWELVE;
+        DataService::$instance->year = $year;
         return DataService::$instance;
     }
 
@@ -75,19 +80,25 @@ class DataService {
         return $variable;
     }
 
-    /**Get all variables
-     * @return MultiVariable[]     */
-    public function getVariables()
+    /**
+     * Get all variables for the currently selected dataset and year
+     * @return array
+     * @throws Exception
+     */
+    public function getVariables() : array
     {
-        $result = $this->query("SELECT autoid, code, question, summary, category FROM $this->variable_table");
+
+        $result = $this->query("SELECT v.code, v.question, v.summary, v.category FROM $this->variable_table v 
+            JOIN variable_year y ON v.code=y.code WHERE y.year=$this->year AND y.dataset_8to12=?", [($this->is8to12) ? 1 : 0]);
         return $this->fetchAllObjects($result, MultiVariable::class);
     }
 
     /**@return CutoffVariable[]     */
     public function getTrendVariables()
     {
-        $result = $this->query("SELECT autoid, code, question, cutoff_summary, category, low_cutoff, high_cutoff, total_cutoff 
-          FROM $this->variable_table WHERE has_trends=1");
+        $result = $this->query("SELECT v.code, v.question, v.cutoff_summary, v.category, v.low_cutoff, v.high_cutoff, v.total_cutoff 
+          FROM $this->variable_table v JOIN variable_year y ON v.code=y.code 
+            WHERE v.has_trends=1 AND y.year=$this->year AND y.dataset_8to12=?", [($this->is8to12) ? 1 : 0]);
         return $this->fetchAllObjects($result, CutoffVariable::class);
     }
 
@@ -268,7 +279,7 @@ class DataService {
         return $stmt->fetch_row()[0];
     }
 
-    public function createFilterString($grade, $gender, $race) {
+    public function createFilterString($grade, $gender, $race, $sexual_orientation) {
         $filter = " 1 ";
         if ($grade != null)
             $filter .= " AND I2 = ".$this->connection->real_escape_string($grade);
@@ -276,6 +287,8 @@ class DataService {
             $filter .= " AND I3 = ".$this->connection->real_escape_string($gender);
         if ($race != null)
             $filter .= " AND race_eth = ".$this->connection->real_escape_string($race);
+        if ($sexual_orientation != null)
+            $filter .= " AND X9 = ".$this->connection->real_escape_string($sexual_orientation);
         return $filter;
     }
 

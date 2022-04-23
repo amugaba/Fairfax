@@ -5,10 +5,11 @@
  */
 "use strict";
 
-function makeFilterString(grade, gender, race) {
+function makeFilterString(grade, gender, race, sexualOrientation) {
     var grades = ['8th grade','10th grade','12th grade'];
     var genders = ['Female','Male'];
     var races = ['White','Black','Hispanic','Asian/Pacific Islander','Other/Multiple'];
+    var orientations = ['Heterosexual','Gay or lesbian','Bisexual','Not sure'];
 
     var clauses = [];
     if(grade!=null)
@@ -17,6 +18,8 @@ function makeFilterString(grade, gender, race) {
         clauses.push("Gender = " + genders[gender-1]);
     if(race!=null)
         clauses.push("Race/Ethnicity = " + races[race-1]);
+    if(sexualOrientation!=null)
+        clauses.push("Sexual Orientation = " + orientations[sexualOrientation-1]);
 
     if(clauses.length > 0)
         return "Filtered by " + clauses.join(", ");
@@ -60,8 +63,8 @@ function simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year, dataset
     tableToExcel(csv);
 }
 
-function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset) {
-    var csv = getCSVHeader("Question: " + mainTitle, null, year, dataset, null);
+function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset, filterString) {
+    var csv = getCSVHeader("Question: " + mainTitle, null, year, dataset, filterString);
 
     csv += ",Total,% Total\r\n";
 
@@ -75,19 +78,20 @@ function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset)
     tableToExcel(csv);
 }
 
-function simpleTrendCSV(mainTitle, labels, years, percents, dataset, filterString) {
-    var csv = getCSVHeader(mainTitle, null, years[0]+' to '+years[years.length-1], dataset, filterString);
+function simpleTrendCSV(mainTitle, labels, xAxisLabels, percents, year, dataset, filterString, xAxisLabel) {
+    var csv = getCSVHeader(mainTitle, null, year, dataset, filterString);
 
-    csv += ",Year\r\n";
-    for(var i=0; i<years.length; i++){
-        csv += ','+years[i];
+    csv += ","+xAxisLabel+"\r\n";
+    for(var i=0; i<xAxisLabels.length; i++){
+        csv += ','+xAxisLabels[i];
     }
     csv += "\r\n";
 
     for(var i=0; i<labels.length; i++)    {
         csv += '"'+labels[i]+'"';//escape commas
-        for(var j=0; j<years.length; j++) {
-            csv += ',' + percents[j]['v'+i] + '%';
+        for(var j=0; j<xAxisLabels.length; j++) {
+            let val = (percents[j]['v'+i] != null) ? percents[j]['v'+i].toFixed(1)+'%' : 'N/A';
+            csv += ',' + val;
         }
         csv += "\r\n";
     }
@@ -216,25 +220,26 @@ function createSimpleExplorerTable(tableElem, labels, counts, sumTotal) {
         '<td>100.0%</td></tr>');
 }
 
-function simpleTrendTable(tableElem, labels, years, percents) {
+function simpleTrendTable(tableElem, labels, xAxisLabels, percents, xAxisHeader) {
     var table = $(tableElem);
 
     //add "Year" in first row
     table.append('<tr><th class="clearcell" rowspan="2">Answer</th>' +
-        '<th colspan="'+years.length+'" style="text-align: center">Year</th></tr>');
+        '<th colspan="'+xAxisLabels.length+'" style="text-align: center">'+xAxisHeader+'</th></tr>');
 
-    //add individual years as headers in second row
+    //add individual xAxisLabels as headers in second row
     var row = $('<tr></tr>').appendTo(table);
-    for(var i=0; i<years.length; i++){
-        row.append('<th>'+years[i]+'</th>');
+    for(var i=0; i<xAxisLabels.length; i++){
+        row.append('<th>'+xAxisLabels[i]+'</th>');
     }
 
     //add each question as a row
     for(var i=0; i<labels.length; i++){
         var row = $('<tr></tr>').appendTo(table);
         row.append('<th>'+labels[i]+'</th>');
-        for(var j=0; j<years.length; j++) {
-            row.append('<td>'+percents[j]['v'+i].toFixed(1)+'%</td>');
+        for(var j=0; j<xAxisLabels.length; j++) {
+            let val = (percents[j]['v'+i] != null) ? percents[j]['v'+i].toFixed(1)+'%' : 'N/A';
+            row.append('<td>'+val+'</td>');
         }
     }
 }

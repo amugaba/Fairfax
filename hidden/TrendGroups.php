@@ -77,7 +77,7 @@ function getGroupCodes($group, $dataset) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
             return ['V1', 'V2', 'V3', 'V4'];
         else
-            return [];
+            return ['V1', 'V2', 'V3', 'V4'];
     }
 }
 function getGroupName($group) {

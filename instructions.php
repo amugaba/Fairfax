@@ -18,7 +18,7 @@
     <div class="row">
         <ul><li>You optionally can select a second question in the second row. This will compare the first question to the second one.
             <ul><li>For instance, you can explore how cigarette use varies with alcohol use.</li></ul></li>
-        <li>You can filter the data by selecting a year, grade, gender, or race in the last row. This will show only data for the selected group(s).</li></ul>
+        <li>You can filter the data by selecting a grade, gender, race/ethnicity, or sexual orientation in the last row. This will show only data for the selected group(s).</li></ul>
     </div>
 </div>
 

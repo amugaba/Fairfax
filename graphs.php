@@ -23,6 +23,7 @@ $cat2 = isset($_GET['cat2']) ? $_GET['cat2'] : null;
 $grade = isset($_GET['grade']) ? $_GET['grade'] : null;
 $gender = isset($_GET['gender']) ? $_GET['gender'] : null;
 $race = isset($_GET['race']) ? $_GET['race'] : null;
+$sexual_orientation = isset($_GET['so']) ? $_GET['so'] : null;
 
 $showIntro = $q1 == null;
 if(!$showIntro) {
@@ -38,7 +39,7 @@ if(!$showIntro) {
 if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
     $mainVar->initializeCounts($groupVar);
     //Construct filter
-    $filter = $ds->createFilterString($grade, $gender, $race);
+    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation);
 
     //Load data into main Variable
     $ds->getMultiPositives($mainVar, $groupVar, $filter);
@@ -95,6 +96,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             var grade = <?php echo json_encode($grade); ?>;
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
+            var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
             var cat1 = <?php echo json_encode($cat1); ?>;
             var cat2 = <?php echo json_encode($cat2); ?>;
             year = <?php echo json_encode($year); ?>;
@@ -111,7 +113,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 $('#category2').val(cat2);
 
             enableSelect2(questions, "#category1", "#question1");
-            enableSelect2(questions, "#category2", "#question2");
+            enableSelect2(questions, "#category2", "#question2", true);
 
             if(mainCode != null) {
                 $('#question1').val(mainCode);
@@ -122,18 +124,11 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 $("#question2").trigger('change');
             }
 
-            if(year != null) {
-                $('#filteryear').val(year);
-            }
-            if(grade != null) {
-                $('#filtergrade').val(grade);
-            }
-            if(gender != null) {
-                $('#filtergender').val(gender);
-            }
-            if(race != null) {
-                $('#filterrace').val(race);
-            }
+            $('#filteryear').val(year);
+            $('#filtergrade').val(grade);
+            $('#filtergender').val(gender);
+            $('#filterrace').val(race);
+            $('#filtersex').val(sexOrientation);
             $('#datasetSelect').val(dataset);
 
             <?php if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable): ?>
@@ -158,7 +153,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             else
                 createCrosstabExplorerTable($('#datatable'), mainSummary, groupSummary, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal);
 
-            filterString = makeFilterString(grade, gender, race);
+            filterString = makeFilterString(grade, gender, race, sexOrientation);
             titleString = "<h4>"+year+"</h4><h4>"+mainTitle+"</h4>";
             if(isGrouped)
                 titleString += "<i>compared to</i><h4>" + groupTitle + "</h4>";
@@ -171,7 +166,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
         });
         function exportCSV() {
             if(!isGrouped)
-                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset);
+                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset, filterString);
             else
                 crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year, dataset);
         }
@@ -188,6 +183,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             var grade = $("#filtergrade").val();
             var gender = $("#filtergender").val();
             var race = $("#filterrace").val();
+            var sexOrientation = $("#filtersex").val();
 
             if(q1 != '') {
                 var url = 'graphs.php?ds='+dataset+'&q1='+q1;
@@ -206,12 +202,14 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                     url += "&gender="+gender;
                 if(race != '')
                     url += "&race="+race;
+                if(sexOrientation != '')
+                    url += "&so="+sexOrientation;
 
                 window.location.href = url;
             }
         }
-        function changeDataset(ds) {
-            window.location.href = "graphs.php?ds="+ds;
+        function changeDataset() {
+            window.location.href = "graphs.php?ds="+$('#datasetSelect').val()+"&year="+$("#filteryear").val();
         }
     </script>
 </head>
@@ -219,10 +217,20 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
 <?php include_header(); ?>
 <div class="container" id="main">
     <div class="row title">
-        <div class="shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">Using dataset
-            <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
+        <div class="shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">
+            Using dataset
+            <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change dataset drop down">
                 <option value="8to12">8th-12th grade</option>
                 <option value="6th">6th grade</option>
+            </select>
+            and year
+            <select id="filteryear" style="height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change year drop down">
+                <option value="2021">2021</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
             </select>
         </div>
         <div class="searchbar">
@@ -233,7 +241,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="1">Alcohol</option>
                 <option value="12">Tobacco</option>
                 <option value="5">Drugs</option>
-                <option value="20" class="hide6">Vaping</option>
+                <option value="20">Vaping</option>
                 <option value="2">Bullying & Cyberbullying</option>
                 <option value="14">Harassment</option>
                 <option value="3" class="hide6">Dating Aggression</option>
@@ -282,15 +290,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             <select id="question2" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
-            <label class="shadow" style="margin: 10px 0 10px" for="filteryear">3. Select which year to view:</label>
-            <select id="filteryear" class="filter selector">
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-            </select><br>
-            <label class="shadow" style="margin: 10px 0 20px">4. (Optional) Filter data by:</label>
+            <label class="shadow" style="margin: 10px 0 20px">3. (Optional) Filter data by:</label>
             <select id="filtergrade" class="filter selector" title="Grade">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
@@ -309,6 +309,13 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="3">Hispanic</option>
                 <option value="4">Asian/Pacific Islander</option>
                 <option value="5">Other/Multiple</option>
+            </select>
+            <select id="filtersex" class="filter selector" title="Sexual Orientation">
+                <option value="">Sexual Orientation</option>
+                <option value="1">Heterosexual</option>
+                <option value="2">Gay or lesbian</option>
+                <option value="3">Bisexual</option>
+                <option value="4">Not sure</option>
             </select><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">

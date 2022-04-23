@@ -5,7 +5,9 @@
     }
 </style>
 <div style="max-width:1000px; margin: 0 auto">
-    <h3 style="text-align: center">How to Use the Trends Page:</h3>
+    <h3 style="text-align: center">What is Three to Succeed?</h3>
+    <p>[TBD: Put an explanation of 3TS here and links to relevant information.]</p>
+    <h3 style="text-align: center">How to use this page:</h3>
     <h4>1. Select the group or question you want to examine</h4>
     <div class="row">
         <ul>

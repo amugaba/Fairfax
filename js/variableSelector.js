@@ -13,7 +13,7 @@ document.head.appendChild(link);
 
 var variables;
 
-function refreshVariables(category, target) {
+function refreshVariables(category, target, allowClear) {
     $(target).val('');
     $(target).trigger('change');
     $(target).find("option:gt(0)").remove();//remove all but first option
@@ -30,13 +30,15 @@ function refreshVariables(category, target) {
     $(target).select2({data:data,
         containerCssClass: "searchbox",
         dropdownCssClass: "searchbox",
-        placeholder: "Select an option"});
+        placeholder: "Select an option",
+        allowClear: allowClear
+    });
 }
 
-function enableSelect2(variableList, category, target) {
+function enableSelect2(variableList, category, target, allowClear = false) {
     variables = variableList;
-    refreshVariables(category, target);
+    refreshVariables(category, target, allowClear);
     $(category).change(function () {
-        refreshVariables(category, target);
+        refreshVariables(category, target, allowClear);
     });
 }

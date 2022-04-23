@@ -174,8 +174,10 @@ table.datatable {
     font-size: 12pt;
 }
 .searchbox {
-    font-size: 9pt;
     width: 400px;
+}
+.select2-selection__clear {
+    font-size: 20px;
 }
 
 .categories a {
@@ -268,7 +270,7 @@ th.clearcell {
     border-radius: 4px;
     height: 28px;
     color: #444;
-    font-size: 9pt;
+    font-size: 14px;
 
     padding-left: 6px;
 

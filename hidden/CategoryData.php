@@ -4,7 +4,7 @@ require_once "DataService.php";
 /**
  * Provides variables for 2015 categories
  */
-function getHighlightGroup($cat, $dataset)
+function getHighlightGroup($cat, $dataset, $year)
 {
     $connector = "";
     if ($cat == 1) {
@@ -23,8 +23,14 @@ function getHighlightGroup($cat, $dataset)
     else if ($cat == 2) {
         $title = "Tobacco";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['T3', 'T4A', 'T5', 'T2'];
-            $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month E-Cigarette Use', 'Past Month Smokeless Tobacco Use'];
+            if($year >= 2021) {
+                $qCodes = ['T3', 'T4A', 'T2'];
+                $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month Smokeless Tobacco Use'];
+            }
+            else {
+                $qCodes = ['T3', 'T4A', 'T5', 'T2'];
+                $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month E-Cigarette Use', 'Past Month Smokeless Tobacco Use'];
+            }
             $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco, including e-cigarettes.</p>
             <p>To learn about other substances or to compare tobacco use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
@@ -56,10 +62,10 @@ function getHighlightGroup($cat, $dataset)
         <p>To compare vaping with substance use or other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
-            //display message that the 6th grade survey doesn't ask about this
-            $qCodes = [];
-            $labels = [];
-            $explanation = "";
+            $qCodes = ['V1', 'V2', 'V3', 'V4', 'vaping'];
+            $labels = ['Lifetime Vape Use', 'Past Month Vaping Nicotine', 'Past Month Vaping Marijuana', 'Past Month Vaping Flavoring', 'Past Month Vaping Any of the Above'];
+            $explanation = "<p>The Youth Survey asks about vaping nicotine, marijuana, and flavoring in the past 30 days, as well as ever having vaped.</p>
+        <p>To compare vaping with substance use or other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
     } else if ($cat == 4) {
         $title = "Sexual Health";
@@ -151,16 +157,28 @@ function getHighlightGroup($cat, $dataset)
     } else if ($cat == 11) {
         $title = "Mental Health";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['M5', 'M1', 'M4'];
-            $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
+            if($year >= 2021) {
+                $qCodes = ['M5A', 'M1', 'M4'];
+                $labels = ['Frequently Felt Stressed', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
+            }
+            else {
+                $qCodes = ['M5', 'M1', 'M4'];
+                $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
+            }
             $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
             highlights students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row 
             (which may indicate risk for depression), and those who attempted suicide.</p>
         <p>To learn more about these topics, as well as suicidal ideation and unhealthy weight loss behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
-            $qCodes = ['M5', 'M1'];
-            $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
+            if($year >= 2021) {
+                $qCodes = ['M5A', 'M1'];
+                $labels = ['Frequently Felt Stressed', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
+            }
+            else {
+                $qCodes = ['M5', 'M1'];
+                $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
+            }
             $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
             highlights students who reported high levels of stress and those who felt sad or helpless two or more weeks in a row 
             (which may indicate risk for depression).</p>

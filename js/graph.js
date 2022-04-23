@@ -182,14 +182,14 @@ function addLineBreaks(label, item, axis) {
     return newstring;
 }
 
-function createLineChart(percentData, labels) {
+function createLineChart(percentData, labels, xAxisLabel) {
     var graphs = [];
     for(var i = 0; i < labels.length; i++) {
         graphs.push({
             "id": "g"+i,
             "balloonText": "[[value]]%",
             "balloonFunction": function (graphDataItem, graph) {
-                return graphDataItem.values.value.toFixed(1) +"%";
+                return graphDataItem.values.value != null ? graphDataItem.values.value.toFixed(1) +"%" : 'N/A';
             },
             "bullet": "round",
             "bulletBorderAlpha": 1,
@@ -219,13 +219,13 @@ function createLineChart(percentData, labels) {
         "chartCursor": {
 
         },
-        "categoryField": "year",
+        "categoryField": "answer",
         "categoryAxis": {
             "parseDates": false,
             "axisColor": "#DADADA",
             "dashLength": 1,
             "minorGridEnabled": true,
-            "title": "Year"
+            "title": xAxisLabel
         },
         "export": {
             "enabled": true
@@ -237,7 +237,7 @@ function createLineChart(percentData, labels) {
             "valueFunction": function (graphDataItem) {
                 if(graphDataItem.values == null)
                     return "";
-                return graphDataItem.values.value.toFixed(1) +"%";
+                return graphDataItem.values.value != null ? graphDataItem.values.value.toFixed(1) +"%" : 'N/A';
             }
         }
     });
@@ -245,10 +245,11 @@ function createLineChart(percentData, labels) {
     return chart;
 }
 
-function makeFilterString(grade, gender, race) {
+function makeFilterString(grade, gender, race, sexualOrientation) {
     var grades = ['8th grade','10th grade','12th grade'];
     var genders = ['Female','Male'];
     var races = ['White','Black','Hispanic','Asian/Pacific Islander','Other/Multiple'];
+    var orientations = ['Heterosexual','Gay or lesbian','Bisexual','Not sure'];
 
     var clauses = [];
     if(grade!=null)
@@ -257,6 +258,8 @@ function makeFilterString(grade, gender, race) {
         clauses.push("Gender = " + genders[gender-1]);
     if(race!=null)
         clauses.push("Race/Ethnicity = " + races[race-1]);
+    if(sexualOrientation!=null)
+        clauses.push("Sexual Orientation = " + orientations[sexualOrientation-1]);
 
     if(clauses.length > 0)
         return "Filtered by " + clauses.join(", ");

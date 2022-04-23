@@ -21,6 +21,7 @@
                 <li><a href="highlights.php">Highlights</a></li>
                 <li><a href="graphs.php">Explore the Data</a></li>
                 <li><a href="trends.php">Trends</a></li>
+                <li><a href="three-to-succeed.php">Three to Succeed</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
