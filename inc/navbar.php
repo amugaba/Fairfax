@@ -26,7 +26,7 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="contact.php">Contact</a></li>
-                <li><a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Survey Home</a></li>
+                <li><a href="https://www.fairfaxcounty.gov/data/youth-survey/" target="_blank">Survey Home</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

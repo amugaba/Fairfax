@@ -52,8 +52,8 @@ include_once "config/config.php";
                     <div class="carousel-caption"><a href="graphs.php">Explore individual question data!</a></div>
                 </div>
                 <div class="item">
-                    <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank"><img src="img/report2019-alt.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
-                    <div class="carousel-caption"><a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Access the full written report.</a></div>
+                    <a href="https://www.fairfaxcounty.gov/data/youth-survey/" target="_blank"><img src="img/report2019-alt.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
+                    <div class="carousel-caption"><a href="https://www.fairfaxcounty.gov/data/youth-survey/" target="_blank">Access the full written report.</a></div>
                 </div>
             </div>
             <a class="left carousel-control" href="#carousel" data-slide="prev" >
