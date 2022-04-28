@@ -5,7 +5,12 @@
  * It sets environment variables, starts session, and contains utility functions such as
  * importing header and footer.
  */
-if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false || strpos($_SERVER['HTTP_HOST'], "angstrom") !== false) {
+if(strpos($_SERVER['HTTP_HOST'], "localhost") !== false) {
+    define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] . "/fairfax/");
+    define("HTTP_ROOT", "http://" . $_SERVER['HTTP_HOST'] . "/fairfax/");
+    define("DEBUG", true);
+}
+else if(strpos($_SERVER['HTTP_HOST'], "angstrom") !== false) {
     define("ROOT_PATH", $_SERVER['DOCUMENT_ROOT'] . "/fairfax/");
     define("HTTP_ROOT", "https://" . $_SERVER['HTTP_HOST'] . "/fairfax/");
     define("DEBUG", true);

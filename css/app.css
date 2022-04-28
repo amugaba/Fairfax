@@ -23,7 +23,22 @@ html, body{
     border-color: #1f2746;
     padding: 10px;
 }
-
+.button-link {
+    display: inline-block;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+    font-size: 22px;
+}
+.text-link {
+    color: white;
+    text-decoration: underline
+}
+.text-link:hover {
+    color: #e0e0e0;
+    text-decoration: none;
+}
 div.groupbox {
     border: 1px solid #CCC;
     border-radius: 6px;
@@ -32,7 +47,12 @@ div.groupbox {
     /*background-color: #2e6da4;
     color: #ffffff;*/
 }
-
+@media (min-width: 768px) {
+    .grid-item {
+        width: 33.3333%;
+        float: left;
+    }
+}
 .accordion div {
    padding: 0px 10px;
     font-size: 11pt;
@@ -124,14 +144,17 @@ table.datatable {
 }
 
 #topbar {
-    background: #4a3c31;
-    background: linear-gradient(180deg, #635143, #4a3c31);
-    background-image: -moz-linear-gradient(#635143, #4a3c31);
-    border-color: #4a3c31;
+    background: #091f2f;
+    background: linear-gradient(180deg, #273a48, #091f2f);
+    background-image: -moz-linear-gradient(#273a48, #091f2f);
+    border-color: #091f2f;
     border-radius: 0;
 }
 .navbar-default .navbar-nav>li>a {
     color: white !important;
+}
+.bg-fill {
+    background: #265c8a;
 }
 .row.title {
     background: #265c8a;
