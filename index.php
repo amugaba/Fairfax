@@ -23,103 +23,81 @@ include_once "config/config.php";
     .slick-arrow, .slick-prev {
         background-color: gray;
     }
-    p  {
-        font-size: 15px;
-    }
 </style>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row title" style="height:630px">
-        <div style="width:750px; margin: -10px auto 10px;">
-            <img src="img/fairfaxlogo.png" style="float: left; padding: 30px 30px 0 0" alt="Fairfax County Logo">
-            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2021&ndash;2022 Youth Survey Highlights and Data Explorer</span></h1>
-        </div>
-
-        <div id="carousel" class="carousel slide" data-ride="carousel" >
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-                <li data-target="#carousel" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel" data-slide-to="1"></li>
-                <li data-target="#carousel" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="item active">
-                    <a href="highlights.php"><img src="img/olderkids2019.jpg" alt="High school kids smiling"></a>
-                    <div class="carousel-caption"><a href="highlights.php">View the <span style="color:#dd9a3d">HIGHLIGHTS</span> of the survey!</a></div>
+    <div class="row title" style="padding-top: 20px; padding-bottom: 20px">
+        <div class="col-sm-6" style="color: white">
+            <div style="text-align: center; margin: 0 0 0 auto">
+                <div style="margin-top: 30px;">
+                    <img src="img/fairfaxlogo.png"  alt="Fairfax County Logo">
                 </div>
-                <div class="item">
-                    <a href="graphs.php"><img src="img/sixthgrade2019.jpg" alt="Children smiling in a circle"></a>
-                    <div class="carousel-caption"><a href="graphs.php">Explore individual question data!</a></div>
-                </div>
-                <div class="item">
-                    <a href="https://www.fairfaxcounty.gov/data/youth-survey/" target="_blank"><img src="img/report2019-alt.jpg" alt="Cover of Fairfax County Youth Survey report"></a>
-                    <div class="carousel-caption"><a href="https://www.fairfaxcounty.gov/data/youth-survey/" target="_blank">Access the full written report.</a></div>
+                <h1 class="shadowdeep" style="margin-top: 20px">2021&ndash;2022 Youth Survey Interactive Data Explorer</h1>
+                <div style="margin-top: 40px">
+                    <h2 style="max-width: 700px; margin: 0 auto">Generate custom graphs and data tables on the questions you find most interesting!</h2>
+                    <a href="highlights.php" class="button-link" style="margin: 30px auto">Check Out the Highlights</a>
+                    <p style="font-size: 22px">Or build your own graphs at:<br> <a href="graphs.php" class="text-link">Explore the Data</a>,
+                        <a href="trends.php" class="text-link">Trends Over Time</a>, and <a href="three-to-succeed.php" class="text-link">Three to Succeed</a>.</p>
                 </div>
             </div>
-            <a class="left carousel-control" href="#carousel" data-slide="prev" >
-                <span class="glyphicon glyphicon-chevron-left"></span><span style="display:none">Previous Image</span>
-            </a>
-            <a class="right carousel-control" href="#carousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span><span style="display:none">Next Image</span>
-            </a>
+        </div>
+        <div class="col-sm-6">
+            <div style="text-align: left">
+                <img src="img/olderkids2019.jpg" alt="High school kids smiling">
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 20px; max-width: 1050px; margin: 0 auto; font-size: 16px">
+        <h1 style="text-align: center">Learn More About the Survey and Data Explorer</h1>
+        <div class="grid">
+            <div class="grid-item">
+                <div style="margin: 10px">
+                    <div class="figure" style="margin-bottom: 10px">
+                        <img alt="Open books" src="img/tablet-graph.png" style="width: 100%">
+                    </div>
+                    <h2>Data Explorer Features</h2>
+                    <p><b><a href="highlights.php">Survey Highlights</a></b> shows selected results from various topics.</p>
+                    <p><b><a href="graphs.php">Explore the Data</a></b> lets you create a graph from any question in the survey.</p>
+                    <p><b><a href="trends.php">Trends Over Time</a></b> shows how survey responses vary by year.</p>
+                    <p><b><a href="three-to-succeed.php">Three to Succeed</a></b> displays how survey responses vary with a student's number of protective assets.</p>
+                </div>
+            </div>
+            <div class="grid-item">
+                <div style="margin: 10px">
+                    <div class="figure" style="margin-bottom: 10px">
+                        <img alt="Open books" src="img/calculator-graph.png" style="width: 100%">
+                    </div>
+                    <h2>New 2021 Survey Items</h2>
+                    <p>The <b>8th-12th grade survey</b> now contains questions on transgender status, falling asleep while driving, past month hookah use, and overall vegetable consumption.</p>
+                    <p>For the <b>6th grade survey</b>, four vaping questions were added. These questions were already present in the 8th-12th grade survey.</p>
+                    <p>In both surveys, the following questions were added or revised: language used at home, physical abuse by parent, and past month stress level.</p>
+                </div>
+            </div>
+            <div class="grid-item">
+                <div style="margin: 10px">
+                    <div class="figure" style="margin-bottom: 10px">
+                        <img alt="Open books" src="img/students-square.png" style="width: 100%">
+                    </div>
+                    <h2>6th Grade Survey</h2>
+                    <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.</p>
+                    <p>You can access the <b>6th grade data set</b> by selecting '6th grade' at the top of
+                        <b><a href="highlights.php?ds=6th">Survey Highlights</a></b>, <b><a href="graphs.php?ds=6th">Explore the Data</a></b>,
+                        <b><a href="trends.php?ds=6th">Trends over Time</a></b>, or <b><a href="three-to-succeed.php?ds=6th">Three to Succeed</a></b>.</p>
+                </div>
+            </div>
         </div>
     </div>
     <div style="max-width: 1050px; margin: 20px auto;">
         <div class="row">
-            <div class="col-md-5">
-                <h2 style="color:#767676">Fairfax County Youth Survey Interactive Data Explorer</h2>
-            </div>
-            <div class="col-md-7">
-                <p>The <b>interactive data explorer</b> allows you to generate custom graphs and data tables on the questions and demographics that you find most interesting.</p>
-                <ul>
-                    <li>Head to <b><a href="highlights.php">Survey Highlights</a></b> to see selected results from various topics.</li>
-                    <li><b><a href="graphs.php">Explore the Data</a></b> to create and export your own graphs from any question in the survey.</li>
-                    <li>View <b><a href="trends.php">Trends over Time</a></b> to see how survey responses vary by year.</li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-md-12">
                 <hr>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5">
-                <h2 style="color:#767676">New Survey Items and Trends<br>Added in 2019 - 2020</h2>
+            <div class="col-md-3">
+                <h2 style="color:#767676">About the Survey</h2>
             </div>
-            <div class="col-md-7">
-                <p>Four new questions&mdash;about how teachers and other adults in school treat students&mdash;have been added to 8th-12th grade survey.
-                    Visit <b><a href="graphs.php">Explore the Data</a></b> to see these new questions under the School category.</p>
-                <p>Vaping questions are now available on the Trends page. See <b><a href="trends.php?ds=8to12&group=20">Trends in Vaping</a></b>
-                    to view lifetime and past month vape use for the past two years.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <hr>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <h2 style="color:#767676">6th Grade Survey Data</h2>
-            </div>
-            <div class="col-md-7">
-                <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.<br>
-                    You can access the <b>6th grade data set</b> by selecting '6th grade' at the top of
-                    <b><a href="highlights.php?ds=6th">Survey Highlights</a></b>, <b><a href="graphs.php?ds=6th">Explore the Data</a></b>, or
-                    <b><a href="trends.php?ds=6th">Trends over Time</a></b>.</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <hr>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <h2 style="color:#767676">Learn More About the Survey</h2>
-            </div>
-            <div class="col-md-7">
+            <div class="col-md-9" style="font-size: 16px">
                 <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in sixth, eighth, tenth, and twelfth grades.
                     It examines behaviors, experiences, and other factors that influence the health and well-being of the county's youth.
                     The survey is co-sponsored by the Fairfax County Board of Supervisors and the Fairfax County School Board, and has been administered since 2001.</p>

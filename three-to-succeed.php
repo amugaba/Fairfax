@@ -38,12 +38,12 @@ if(!$showIntro) {
         if (!$ds->isVariableInData($questionCode))
             $unavailableVariables[] = $var;
         else {
-            $graphName = $var->summary;
+            $graphName = '"'.$var->summary.'" by Number of Assets';
             $variablesInGraph[] = $var;
         }
     } else {
         $groupCodes = getGroupCodes($trendGroup, $dataset);
-        $graphName = "Trend Group: " . getGroupName($trendGroup);
+        $graphName = "\"Trend Group: " . getGroupName($trendGroup) . "\" by Number of Assets";
         foreach ($groupCodes as $code) {
             $variable = $ds->getCutoffVariable($code);
             if (!$ds->isVariableInData($code))
