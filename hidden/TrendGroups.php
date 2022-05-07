@@ -60,9 +60,9 @@ function getGroupCodes($group, $dataset) {
     }
     if($group == 11) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['M5', 'M1', 'M2', 'M4'];
+            return ['M5', 'M5A', 'M1', 'M2', 'M4'];
         else
-            return ['M5', 'M1'];
+            return ['M5', 'M5A', 'M1'];
     }
     if($group == 12) {
         return ['C2', 'C11', 'C12', 'extracurric'];
@@ -75,9 +75,9 @@ function getGroupCodes($group, $dataset) {
     }
     if($group == 20) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['V1', 'V2', 'V3', 'V4'];
+            return ['V1', 'V2', 'V3', 'V4','vaping'];
         else
-            return ['V1', 'V2', 'V3', 'V4'];
+            return ['V1', 'V2', 'V3', 'V4','vaping'];
     }
 }
 function getGroupName($group) {
@@ -90,7 +90,7 @@ function getGroupName($group) {
     if($group == 4)
         return "Sexual Health";
     if($group == 5)
-        return "Vehicle Safety";
+        return "Vehicle  (12th Graders Only)";
     if($group == 6)
         return "Bullying and Cyberbullying";
     if($group == 7)

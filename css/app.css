@@ -48,8 +48,12 @@ div.groupbox {
     color: #ffffff;*/
 }
 @media (min-width: 768px) {
-    .grid-item {
+    .grid-third {
         width: 33.3333%;
+        float: left;
+    }
+    .grid-half {
+        width: 50%;
         float: left;
     }
 }

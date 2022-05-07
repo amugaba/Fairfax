@@ -11,7 +11,7 @@ function getHighlightGroup($cat, $dataset, $year)
         $title = "Alcohol";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['A2A', 'A3A', 'A4'];
-            $labels = ['Lifetime Alcohol Use', 'Past Month Alcohol Use', 'Binge Drinking (5+ Drinks in a Row)'];
+            $labels = ['Lifetime Alcohol Use', 'Past Month Alcohol Use', 'Past Month Binge Drinking (5+ Drinks in a Row)'];
         }
         else {
             $qCodes = ['A2B', 'A3B'];
@@ -86,7 +86,7 @@ function getHighlightGroup($cat, $dataset, $year)
         $title = "Vehicle Safety";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['A5', 'S3'];
-            $labels = ['Driving after Drinking', 'Texting while Driving'];
+            $labels = ['Past Month Driving after Drinking', 'Past Month Texting while Driving'];
             $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
             after drinking and texting while driving.</p><p style='font-style: italic; text-decoration: underline'>Data are for 12th grade students only.</p>
             <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
@@ -101,11 +101,11 @@ function getHighlightGroup($cat, $dataset, $year)
         $title = "Bullying and Cyberbullying";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
-            $labels = ['Bullied Someone at School', 'Had Been Bullied at School', 'Cyberbullied Someone at School', 'Had Been Cyberbullied at School'];
+            $labels = ['Past Year Bullied Someone at School', 'Past Year Had Been Bullied at School', 'Past Year Cyberbullied Someone at School', 'Past Year Had Been Cyberbullied at School'];
         }
         else {
             $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
-            $labels = ['Bullied Someone at School', 'Had Been Bullied at School', 'Cyberbullied Someone at School', 'Had Been Cyberbullied at School'];
+            $labels = ['Past Year Bullied Someone at School', 'Past Year Had Been Bullied at School', 'Past Year Cyberbullied Someone at School', 'Past Year Had Been Cyberbullied at School'];
         }
         $explanation = "<p>The Youth Survey asks questions about both bullying in-person and bullying online (called cyberbullying).</p>
         <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore the Data</a>.</p>";
@@ -128,14 +128,14 @@ function getHighlightGroup($cat, $dataset, $year)
         $title = "Harassment and Aggressive Behaviors";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['B2A', 'B10A', 'B11', 'W5'];
-            $labels = ["Insulted Someone's Race or Culture", 'Had Race or Culture Insulted', 'Had Been Sexually Harassed', 'Carried a Weapon'];
+            $labels = ["Past Year Insulted Someone's Race or Culture", 'Past Year Had Race or Culture Insulted', 'Past Year Had Been Sexually Harassed', 'Past Month Carried a Weapon'];
             $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
             provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who reported carrying a weapon.</p>
             <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             $qCodes = ['B2A', 'B10A', 'W5'];
-            $labels = ["Insulted Someone's Race or Culture", 'Had Race or Culture Insulted', 'Carried a Weapon'];
+            $labels = ["Past Year Insulted Someone's Race or Culture", 'Past Year Had Race or Culture Insulted', 'Past Month Carried a Weapon'];
             $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
             provides information on racial/cultural harassment and on youth who reported carrying a weapon.</p>
             <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
@@ -158,12 +158,12 @@ function getHighlightGroup($cat, $dataset, $year)
         $title = "Mental Health";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             if($year >= 2021) {
-                $qCodes = ['M5A', 'M1', 'M4'];
-                $labels = ['Frequently Felt Stressed', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
+                $qCodes = ['M5A', 'M1', 'M2', 'M4'];
+                $labels = ['Past Month Felt Stress Most or All of the Time', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Past Year Considered Suicide', 'Past Year Attempted Suicide'];
             }
             else {
-                $qCodes = ['M5', 'M1', 'M4'];
-                $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Attempted Suicide'];
+                $qCodes = ['M5', 'M1', 'M2', 'M4'];
+                $labels = ['Past Month Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row', 'Past Year Considered Suicide', 'Past Year Attempted Suicide'];
             }
             $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
             highlights students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row 
@@ -173,11 +173,11 @@ function getHighlightGroup($cat, $dataset, $year)
         else {
             if($year >= 2021) {
                 $qCodes = ['M5A', 'M1'];
-                $labels = ['Frequently Felt Stressed', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
+                $labels = ['Past Month Felt Stress Most or All of the Time', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
             }
             else {
                 $qCodes = ['M5', 'M1'];
-                $labels = ['Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
+                $labels = ['Past Month Had High Stress', 'Felt Sad or Hopeless for Two or More Weeks in a Row'];
             }
             $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
             highlights students who reported high levels of stress and those who felt sad or helpless two or more weeks in a row 

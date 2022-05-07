@@ -43,14 +43,14 @@ include_once "config/config.php";
         </div>
         <div class="col-sm-6">
             <div style="text-align: left">
-                <img src="img/olderkids2019.jpg" alt="High school kids smiling">
+                <img src="img/olderkids2021.jpg" alt="High school kids smiling">
             </div>
         </div>
     </div>
     <div class="row" style="padding-top: 20px; max-width: 1050px; margin: 0 auto; font-size: 16px">
         <h1 style="text-align: center">Learn More About the Survey and Data Explorer</h1>
         <div class="grid">
-            <div class="grid-item">
+            <div class="grid-third">
                 <div style="margin: 10px">
                     <div class="figure" style="margin-bottom: 10px">
                         <img alt="Open books" src="img/tablet-graph.png" style="width: 100%">
@@ -62,10 +62,10 @@ include_once "config/config.php";
                     <p><b><a href="three-to-succeed.php">Three to Succeed</a></b> displays how survey responses vary with a student's number of protective assets.</p>
                 </div>
             </div>
-            <div class="grid-item">
+            <div class="grid-third">
                 <div style="margin: 10px">
                     <div class="figure" style="margin-bottom: 10px">
-                        <img alt="Open books" src="img/calculator-graph.png" style="width: 100%">
+                        <img alt="Open books" src="img/keyboard-survey.jpg" style="width: 330px; height: 283px;">
                     </div>
                     <h2>New 2021 Survey Items</h2>
                     <p>The <b>8th-12th grade survey</b> now contains questions on transgender status, falling asleep while driving, past month hookah use, and overall vegetable consumption.</p>
@@ -73,10 +73,10 @@ include_once "config/config.php";
                     <p>In both surveys, the following questions were added or revised: language used at home, physical abuse by parent, and past month stress level.</p>
                 </div>
             </div>
-            <div class="grid-item">
+            <div class="grid-third">
                 <div style="margin: 10px">
                     <div class="figure" style="margin-bottom: 10px">
-                        <img alt="Open books" src="img/students-square.png" style="width: 100%">
+                        <img alt="Open books" src="img/sixthgrade2021-square.jpg" style="width: 100%">
                     </div>
                     <h2>6th Grade Survey</h2>
                     <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.</p>
