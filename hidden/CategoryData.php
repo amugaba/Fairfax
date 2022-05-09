@@ -194,16 +194,9 @@ function getHighlightGroup($cat, $dataset, $year)
         <p>To see more specific level of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
     } else if ($cat == 13) {
         $title = "Assets that Build Resiliency";
-        if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['PF9', 'PS3', 'PC2', 'PC11','LS4'];
-            $labels = ['Parents Available to Help', 'Teacher Notices Good Job',
-                'Adults in Community to Talk to', 'Availability of Extracurricular Activities','Accepting Responsibility for Actions and Mistakes'];
-        }
-        else {
-            $qCodes = ['PF9', 'PS3', 'PC2', 'LS4'];
-            $labels = ['Parents Available to Help', 'Teacher Notices Good Job',
-                'Adults in Community to Talk to', 'Accepting Responsibility for Actions and Mistakes'];
-        }
+        $qCodes = ['PF9', 'C2', 'LS4', 'C10', 'PS3', 'PC2'];
+        $labels = ['Can Ask Parents for Help with Personal Problems', 'Performs Community Service Once a Month or More', 'Feels It Is Important to Accept Responsibility for Actions',
+            'Does Extracurricular Activities Once a Month or More', 'Teachers Recognize Good Work', 'Lots of Adults in Community are Available to Talk to'];
         $explanation = "<p>The Youth Survey asks about assets that are strengths in young people, their families, schools, and 
             communities that help them thrive in health, in school, and daily life, and in a safe environment.  The more assets an individual 
             has in his or her life, the fewer risk behaviors are reported.  This highlights page focuses on selected assets that build resiliency in youth.</p>

@@ -102,6 +102,15 @@ class DataService {
         return $this->fetchAllObjects($result, CutoffVariable::class);
     }
 
+    /**@return CutoffVariable[]     */
+    public function get3TSVariables()
+    {
+        $result = $this->query("SELECT v.code, v.question, v.cutoff_summary, v.category, v.low_cutoff, v.high_cutoff, v.total_cutoff 
+          FROM $this->variable_table v JOIN variable_year y ON v.code=y.code 
+            WHERE v.has_trends=1 AND y.year=$this->year AND y.dataset_8to12=? AND v.code NOT IN ('PF9', 'C2', 'LS4', 'C10', 'PS3', 'PC2')", [($this->is8to12) ? 1 : 0]);
+        return $this->fetchAllObjects($result, CutoffVariable::class);
+    }
+
     /**
      * Was this variable collected this survey year?
      * @param $code string

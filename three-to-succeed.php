@@ -23,7 +23,7 @@ else
     $dataset = DataService::EIGHT_TO_TWELVE;
 
 $ds = DataService::getInstance($year, $dataset);
-$variables = $ds->getTrendVariables(); //this would be all variable if we weren't showing trends
+$variables = $ds->get3TSVariables();
 
 $showIntro = $trendGroup == null && $questionCode == null;
 $threeToSucceedCode = "assets_3TS";
@@ -290,7 +290,6 @@ if(!$showIntro && $variableAvailable)
                 <option value="10">Nutrition and Physical Activity</option>
                 <option value="11">Mental Health</option>
                 <option value="12">Civic Engagement and Time Use</option>
-                <option value="13">Assets that Build Resiliency</option>
             </select><br>
             <label class="shadow" style="width: 250px" for="question">OR Select an <br>individual question:</label>
             <select id="category" style="width:160px" class="selector" title="Select category to filter primary question">

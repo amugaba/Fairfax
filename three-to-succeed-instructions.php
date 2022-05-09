@@ -11,28 +11,20 @@
     <p>The graphs on this page show how <span class="bluetext">students' behaviors vary in relation to their number of assets</span>.
         For example, select the "Alcohol" category to see how the percentage of students that use alcohol changes based on their number of assets.</p>
     <div class="row">
-        <h3 style="text-align: center">Asset Questions by Grade Level</h3>
+        <h3 style="text-align: center">The Six Assets in this Graph Are...</h3>
         <div class="grid">
             <div class="grid-half">
-                <p><span class="bluetext">For 6th grade students</span>, the six assets are:</p>
                 <ul>
-                    <li>Having Parents Available for Help</li>
-                    <li>Performing Community Service</li>
-                    <li>Having High Personal Integrity</li>
-                    <li>Participating in Extracurricular Activities</li>
-                    <li>Having Teachers Recognize Good Work</li>
-                    <li>Having Community Adults to Talk to</li>
+                    <li>Can Ask Parents for Help with Personal Problems</li>
+                    <li>Performs Community Service Once a Month or More</li>
+                    <li>Feels It Is Important to Accept Responsibility for Actions</li>
                 </ul>
             </div>
             <div class="grid-half">
-                <p><span class="bluetext">For 8th-12th grade students</span>, the six assets are:</p>
                 <ul>
-                    <li>Having Parents Available for Help</li>
-                    <li>Performing Community Service</li>
-                    <li>Parents Involve Student in Decisions About Them</li>
-                    <li>Parents Know Where Student Is When Not Home</li>
-                    <li>Family Doesn't Insult or Yell at Each Other</li>
-                    <li>Parents Disapprove of Student Smoking Marijuana</li>
+                    <li>Does Extracurricular Activities Once a Month or More</li>
+                    <li>Teachers Recognize Good Work</li>
+                    <li>Lots of Adults in Community are Available to Talk to</li>
                 </ul>
             </div>
         </div>

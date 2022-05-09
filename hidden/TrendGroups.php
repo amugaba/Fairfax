@@ -68,10 +68,7 @@ function getGroupCodes($group, $dataset) {
         return ['C2', 'C11', 'C12', 'extracurric'];
     }
     if($group == 13) {
-        if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['PF9', 'PS3', 'PC2', 'PC11','LS4'];
-        else
-            return ['PF9', 'PS3', 'PC2', 'LS4'];
+        return ['PF9', 'C2', 'LS4', 'C10', 'PS3', 'PC2'];
     }
     if($group == 20) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
