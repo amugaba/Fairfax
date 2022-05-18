@@ -54,7 +54,7 @@ function getGroupCodes($group, $dataset) {
     }
     if($group == 10) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['fruitveg', 'H7', 'H3', 'H20', 'H2'];
+            return ['fruitveg', 'fruitveg2021', 'H7', 'H3', 'H20', 'H2'];
         else
             return ['fruitveg', 'H7', 'H3', 'H2'];
     }
@@ -76,6 +76,7 @@ function getGroupCodes($group, $dataset) {
         else
             return ['V1', 'V2', 'V3', 'V4','vaping'];
     }
+    return null;
 }
 function getGroupName($group) {
     if($group == 1)
@@ -104,5 +105,18 @@ function getGroupName($group) {
         return "Assets that Build Resiliency";
     if($group == 20)
         return "Vaping";
+    return null;
+}
+
+function getGroupNotes($group, $dataset) {
+    if($group == 10) {
+        if($dataset == DataService::EIGHT_TO_TWELVE)
+            return "The questions used to calculate \"Ate Fruits and Vegetables at least 5 Times per Day\" were changed in 2021.";
+        else
+            return null;
+    }
+    if($group == 11)
+        return "The question measuring stress level was changed in 2021.";
+    return null;
 }
 

@@ -67,6 +67,7 @@ if(!$showIntro)
     foreach ($variablesInGraph as $variable) {
         $labels[] = $variable->summary;
     }
+    $trendNotes = getGroupNotes($trendGroup, $dataset);
 }
 ?>
 
@@ -97,7 +98,6 @@ if(!$showIntro)
             var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
             if(dataset === '6th') {
-                $("#filtergrade").hide();
                 $(".hide6").hide();
             }
 
@@ -218,7 +218,7 @@ if(!$showIntro)
                 <option value="1">Alcohol</option>
                 <option value="2">Tobacco</option>
                 <option value="3">Drugs</option>
-                <option value="20" class="hide6">Vaping</option>
+                <option value="20">Vaping</option>
                 <option value="4" class="hide6">Sexual Health</option>
                 <option value="5" class="hide6">Vehicle Safety</option>
                 <option value="6">Bullying & Cyberbullying</option>
@@ -235,7 +235,7 @@ if(!$showIntro)
                 <option value="1">Alcohol</option>
                 <option value="12">Tobacco</option>
                 <option value="5">Drugs</option>
-                <option value="20" class="hide6">Vaping</option>
+                <option value="20">Vaping</option>
                 <option value="2">Bullying & Cyberbullying</option>
                 <option value="14">Harassment</option>
                 <option value="3" class="hide6">Dating Aggression</option>
@@ -257,7 +257,7 @@ if(!$showIntro)
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 20px; width: 250px">2. (Optional) Filter data by:</label>
-            <select id="filtergrade" class="filter selector" title="Grade">
+            <select id="filtergrade" class="filter selector hide6" title="Grade">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
                 <option value="2">10th</option>
@@ -276,7 +276,7 @@ if(!$showIntro)
                 <option value="4">Asian/Pacific Islander</option>
                 <option value="5">Other/Multiple</option>
             </select>
-            <select id="filtersex" class="filter selector" title="Sexual Orientation">
+            <select id="filtersex" class="filter selector hide6" title="Sexual Orientation">
                 <option value="">Sexual Orientation</option>
                 <option value="1">Heterosexual</option>
                 <option value="2">Gay or lesbian</option>
@@ -307,6 +307,13 @@ if(!$showIntro)
             </div>
 
             <div id="chartdiv" style="width100%; height:700px;"></div>
+
+        <?php if($trendNotes != null) {
+            echo "<div style='text-align: center'>
+                    <p><b>Note:</b> $trendNotes</p>
+                  </div>";
+        }
+        ?>
 
             <div style="text-align: center; margin-bottom: 20px;" class="hideIfNoGraph">
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the percentage of students in each category. To save this data, click Export to CSV."></div></h3>

@@ -102,7 +102,6 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             year = <?php echo json_encode($year); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
             if(dataset === '6th') {
-                $("#filtergrade").hide();
                 $(".hide6").hide();
             }
 
@@ -291,7 +290,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 20px">3. (Optional) Filter data by:</label>
-            <select id="filtergrade" class="filter selector" title="Grade">
+            <select id="filtergrade" class="filter selector hide6" title="Grade">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
                 <option value="2">10th</option>
@@ -310,7 +309,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="4">Asian/Pacific Islander</option>
                 <option value="5">Other/Multiple</option>
             </select>
-            <select id="filtersex" class="filter selector" title="Sexual Orientation">
+            <select id="filtersex" class="filter selector hide6" title="Sexual Orientation">
                 <option value="">Sexual Orientation</option>
                 <option value="1">Heterosexual</option>
                 <option value="2">Gay or lesbian</option>

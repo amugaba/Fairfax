@@ -12,7 +12,7 @@
         For example, select the "Alcohol" category to see how the percentage of students that use alcohol changes based on their number of assets.</p>
     <div class="row">
         <h3 style="text-align: center">The Six Assets in this Graph Are...</h3>
-        <div class="grid">
+        <div class="grid" style="font-size: 16px; line-height: 32px">
             <div class="grid-half">
                 <ul>
                     <li>Can Ask Parents for Help with Personal Problems</li>
@@ -24,7 +24,7 @@
                 <ul>
                     <li>Does Extracurricular Activities Once a Month or More</li>
                     <li>Teachers Recognize Good Work</li>
-                    <li>Lots of Adults in Community are Available to Talk to</li>
+                    <li>Could Talk to Adults in Community about Something Important</li>
                 </ul>
             </div>
         </div>

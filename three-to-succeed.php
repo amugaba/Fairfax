@@ -372,6 +372,20 @@ if(!$showIntro && $variableAvailable)
             </div>
 
             <div id="chartdiv" style="width100%; height:700px;"></div>
+            <div style="text-align: center">
+                <div class="grid" style="font-size: 14px; display: inline-block; max-width:850px; width:100%; padding: 10px 10px 0 10px; border-radius: 20px; border: 2px solid">
+                    <div class="grid-half">
+                        <p>Can Ask Parents for Help with Personal Problems</p>
+                        <p>Performs Community Service Once a Month or More</p>
+                        <p>Feels It Is Important to Accept Responsibility for Actions</p>
+                    </div>
+                    <div class="grid-half">
+                        <p>Does Extracurricular Activities Once a Month or More</p>
+                        <p>Teachers Recognize Good Work</p>
+                        <p>Could Talk to Adults in Community about Something Important</p>
+                    </div>
+                </div>
+            </div>
 
             <div style="text-align: center; margin-bottom: 20px;" class="hideIfNoGraph">
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the percentage of students in each category. To save this data, click Export to CSV."></div></h3>

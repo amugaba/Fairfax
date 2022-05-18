@@ -101,11 +101,11 @@ function getHighlightGroup($cat, $dataset, $year)
         $title = "Bullying and Cyberbullying";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
-            $labels = ['Past Year Bullied Someone at School', 'Past Year Had Been Bullied at School', 'Past Year Cyberbullied Someone at School', 'Past Year Had Been Cyberbullied at School'];
+            $labels = ['Past Year Bullied Someone at School', 'Past Year Had Been Bullied at School', 'Past Year Cyberbullied a Schoolmate', 'Past Year Had Been Cyberbullied by a Schoolmate'];
         }
         else {
             $qCodes = ['B20', 'B22', 'CB3', 'CB2'];
-            $labels = ['Past Year Bullied Someone at School', 'Past Year Had Been Bullied at School', 'Past Year Cyberbullied Someone at School', 'Past Year Had Been Cyberbullied at School'];
+            $labels = ['Past Year Bullied Someone at School', 'Past Year Had Been Bullied at School', 'Past Year Cyberbullied a Schoolmate', 'Past Year Had Been Cyberbullied by a Schoolmate'];
         }
         $explanation = "<p>The Youth Survey asks questions about both bullying in-person and bullying online (called cyberbullying).</p>
         <p>Information specifically about bullying at school is available on the highlights page, while a broader range of activities (out-of-school behavior) is also available: <a href='graphs.php'>Explore the Data</a>.</p>";
@@ -143,14 +143,19 @@ function getHighlightGroup($cat, $dataset, $year)
     } else if ($cat == 10) {
         $title = "Nutrition and Physical Activity";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['fruitveg', 'H7', 'H3', 'H20', 'H2'];
+            if($year >= 2021) {
+                $qCodes = ['fruitveg2021', 'H7', 'H3', 'H20', 'H2'];
+            }
+            else {
+                $qCodes = ['fruitveg', 'H7', 'H3', 'H20', 'H2'];
+            }
             $labels = ['Ate Fruits and Vegetables at least 5 Times per Day', 'Drank No Soda during Past Week', 'Had One Hour of Physical Activity at least 5 Days per Week',
-                'Get Eight or More Hours of Sleep on a School Night','Use Computer or Play Video Games for 3+ Hours per Day'];
+                'Got Eight or More Hours of Sleep on a School Night','Used Computer or Played Video Games for 3+ Hours per Day'];
         }
         else {
             $qCodes = ['fruitveg', 'H7', 'H3', 'H2'];
             $labels = ['Ate Fruits and Vegetables at least 5 Times per Day', 'Drank No Soda during Past Week', 'Had One Hour of Physical Activity at least 5 Days per Week',
-                'Use Computer or Play Video Games for 3+ Hours per Day'];
+                'Used Computer or Played Video Games for 3+ Hours per Day'];
         }
         $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sweetened beverages, level of physical activity, and other questions related to physical health.</p>
         <p>To learn more about behaviors related to nutrition and physical health, including unhealthy weight loss and food insecurity (hunger), <a href='graphs.php'>Explore the Data</a>.</p>";
