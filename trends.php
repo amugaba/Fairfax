@@ -63,11 +63,12 @@ if(!$showIntro)
 
     //get labels and counts for data table
     $labels = [];
+    $trendNotes = "";
     $tooltips = [];
     foreach ($variablesInGraph as $variable) {
         $labels[] = $variable->summary;
+        $trendNotes .= getQuestionNote($variable->code, $dataset);
     }
-    $trendNotes = getGroupNotes($trendGroup, $dataset);
 }
 ?>
 
@@ -308,9 +309,9 @@ if(!$showIntro)
 
             <div id="chartdiv" style="width100%; height:700px;"></div>
 
-        <?php if($trendNotes != null) {
+        <?php if(strlen($trendNotes) > 0) {
             echo "<div style='text-align: center'>
-                    <p><b>Note:</b> $trendNotes</p>
+                    <p><b>**Note:</b> $trendNotes</p>
                   </div>";
         }
         ?>

@@ -20,5 +20,6 @@
     <div class="row">
         <ul><li>You optionally can filter the data by selecting a grade, gender, race/ethnicity, or sexual orientation in the last row. This will show only data for the selected group(s).</li></ul>
     </div>
+    <h3 style="text-align: center">Note: There was no survey conducted in 2020 due to the COVID-19 pandemic.</h3>
 </div>
 

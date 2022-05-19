@@ -108,15 +108,15 @@ function getGroupName($group) {
     return null;
 }
 
-function getGroupNotes($group, $dataset) {
-    if($group == 10) {
+function getQuestionNote($question, $dataset) {
+    if($question == 'fruitveg2021') {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return "The questions used to calculate \"Ate Fruits and Vegetables at least 5 Times per Day\" were changed in 2021.";
+            return "The question and answer options were changed in 2021 and direct comparison between 2021 and previous years' data is not recommended";
         else
             return null;
     }
-    if($group == 11)
-        return "The question measuring stress level was changed in 2021.";
+    if($question == 'M5A')
+        return "The question and answer options were changed in 2021 and direct comparison between 2021 and previous years' data is not recommended";
     return null;
 }
 
