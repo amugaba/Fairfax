@@ -219,7 +219,7 @@ if(!$showIntro)
                 <option value="1">Alcohol</option>
                 <option value="2">Tobacco</option>
                 <option value="3">Drugs</option>
-                <option value="20">Vaping</option>
+                <option value="20" class="hide6">Vaping</option>
                 <option value="4" class="hide6">Sexual Health</option>
                 <option value="5" class="hide6">Vehicle Safety</option>
                 <option value="6">Bullying & Cyberbullying</option>

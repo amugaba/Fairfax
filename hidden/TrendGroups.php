@@ -12,7 +12,7 @@ function getGroupCodes($group, $dataset) {
     }
     if($group == 2) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['T3', 'T4A', 'T5', 'T2'];
+            return ['T3', 'T4A', 'T2','T6'];
         else
             return ['T3', 'T4B'];
     }
@@ -30,7 +30,7 @@ function getGroupCodes($group, $dataset) {
     }
     if($group == 5) {
         if($dataset == DataService::EIGHT_TO_TWELVE)
-            return ['A5', 'S3'];
+            return ['A5', 'S3','S4'];
         else
             return [];
     }

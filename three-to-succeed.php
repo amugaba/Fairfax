@@ -288,7 +288,6 @@ if(!$showIntro && $variableAvailable)
                 <option value="8">Harassment and Aggressive Behaviors</option>
                 <option value="10">Nutrition and Physical Activity</option>
                 <option value="11">Mental Health</option>
-                <option value="12">Civic Engagement and Time Use</option>
             </select><br>
             <label class="shadow" style="width: 250px" for="question">OR Select an <br>individual question:</label>
             <select id="category" style="width:160px" class="selector" title="Select category to filter primary question">
