@@ -271,16 +271,22 @@ class DataService {
      */
     public function getNoResponseCount($mainVar, $groupVar, $filter)
     {
+        //don't use weighting for demographics questions
+        if($this->isDemographics($mainVar->code))
+            $counter = "COUNT(1)";
+        else
+            $counter = "COALESCE(SUM(wgt),0)";
+
         $varcode = $mainVar->code;
 
         if($groupVar != null)
         {
             $groupcode = $groupVar->code;
-            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num FROM $this->datatable 
+            $stmt = $this->connection->query("SELECT $counter as num FROM $this->datatable 
                 WHERE ($varcode IS NULL OR $groupcode IS NULL) AND $filter");
         }
         else {
-            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num FROM $this->datatable 
+            $stmt = $this->connection->query("SELECT $counter as num FROM $this->datatable 
                 WHERE ($varcode IS NULL) AND $filter");
         }
         $this->throwExceptionOnError();
