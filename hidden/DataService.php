@@ -124,7 +124,7 @@ class DataService {
     }
 
     public function isDemographics($code) {
-        return $code == 'race_eth' || $code == 'I3' || $code == 'I2' || $code == 'I7';
+        return in_array($code, ['race_eth', 'I3', 'I2', 'I7', 'X9', 'I3A', 'I7A']);
     }
 
     /**
