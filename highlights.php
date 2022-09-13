@@ -22,12 +22,6 @@ $groupVar = $ds->getMultiVariable($grp);
 $variablesInGraph = [];
 $filter = "1";
 
-//clear question codes from categories that aren't available in certain years
-//a message will display instead of the graph
-if($year < 2018 && $cat == 20) {
-    $highlightGroup->codes = [];
-}
-
 //get data for each question
 for($i = 0; $i < count($highlightGroup->codes); $i++)
 {
@@ -112,6 +106,10 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
             category = <?php echo json_encode($cat); ?>;
             group = <?php echo json_encode($grp); ?>;
 
+            if(dataset === '6th') {
+                $(".hide6").hide();
+            }
+
             if(percentData.length > 0) {
                 createBarGraph(percentData, mainTitle, groupSummary, groupLabels, tooltips);
 
@@ -194,11 +192,11 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                     <li><a data-category="1">Alcohol</a></li>
                     <li><a data-category="2">Tobacco</a></li>
                     <li><a data-category="3">Drugs</a></li>
-                    <?php if($year >= 2018) { ?><li><a data-category="20">Vaping</a></li><?php } ?>
-                    <li><a data-category="4">Sexual Health</a></li>
-                    <li><a data-category="5">Vehicle Safety</a></li>
+                    <li><a data-category="20">Vaping</a></li>
+                    <li class="hide6"><a data-category="4">Sexual Health</a></li>
+                    <li class="hide6"><a data-category="5">Vehicle Safety</a></li>
                     <li><a data-category="6">Bullying and Cyberbullying</a></li>
-                    <li><a data-category="7">Dating Aggression</a></li>
+                    <li class="hide6"><a data-category="7">Dating Aggression</a></li>
                     <li><a data-category="8">Harassment and Aggressive Behaviors</a></li>
                     <li><a data-category="10">Nutrition and Physical Activity</a></li>
                     <li><a data-category="11">Mental Health</a></li>
@@ -212,11 +210,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $highlightGroup->explanation;?></div>
                 <p class="hideIfNoGraph"><b>Mouse over</b> the graph's labels and bars to see in more detail what each element represents.</p>
                 <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">
-                    <?php if($dataset == DataService::SIXTH) { ?>
-                        The 6th grade survey does not ask questions about this topic. You can access the 8th to 12th grade survey or select a different category.
-                    <?php } else { ?>
-                        The survey did not ask about this topic in <?php echo $year ?>. Please select a different year or different topic.
-                    <?php } ?>
+                    The survey did not ask about this topic in <?php echo $year ?>. Please select a different year, grade level, or topic.
                 </div>
             </div>
 
