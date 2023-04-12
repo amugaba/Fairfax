@@ -24,8 +24,14 @@ $grade = isset($_GET['grade']) ? $_GET['grade'] : null;
 $gender = isset($_GET['gender']) ? $_GET['gender'] : null;
 $race = isset($_GET['race']) ? $_GET['race'] : null;
 $sexual_orientation = isset($_GET['so']) ? $_GET['so'] : null;
+//$pyramid = isset($_GET['pyr']) ? $_GET['pyr'] : null;
+$pyramid = null;
 
 $showIntro = $q1 == null;
+$below_threshold = false;
+$mainVariableAvailable = false;
+$groupVariableAvailable = false;
+
 if(!$showIntro) {
     //Get Variables
     $mainVar = $ds->getMultiVariable($q1);
@@ -39,11 +45,12 @@ if(!$showIntro) {
 if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
     $mainVar->initializeCounts($groupVar);
     //Construct filter
-    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation);
+    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid);
 
     //Load data into main Variable
     $ds->getMultiPositives($mainVar, $groupVar, $filter);
     $ds->getMultiTotals($mainVar, $groupVar, $filter);
+    $below_threshold = $ds->checkAnonymityThreshold($mainVar, $groupVar);
     $mainVar->calculatePercents();
 
     //Group variables
@@ -97,6 +104,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
             var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
+            var pyramid = <?php echo json_encode($pyramid); ?>;
             var cat1 = <?php echo json_encode($cat1); ?>;
             var cat2 = <?php echo json_encode($cat2); ?>;
             year = <?php echo json_encode($year); ?>;
@@ -118,7 +126,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 $('#question1').val(mainCode);
                 $("#question1").trigger('change');
             }
-            if(groupCode != null && groupCode != 'none') {
+            if(groupCode != null && groupCode !== 'none') {
                 $('#question2').val(groupCode);
                 $("#question2").trigger('change');
             }
@@ -128,9 +136,10 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             $('#filtergender').val(gender);
             $('#filterrace').val(race);
             $('#filtersex').val(sexOrientation);
+            $('#filterpyramid').val(pyramid);
             $('#datasetSelect').val(dataset);
 
-            <?php if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable): ?>
+            <?php if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable && !$below_threshold): ?>
             mainTitle = <?php echo json_encode($mainVar->question); ?>;
             mainSummary = <?php echo json_encode($mainVar->summary); ?>;
             groupTitle = <?php echo json_encode($groupQuestion); ?>;
@@ -152,7 +161,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             else
                 createCrosstabExplorerTable($('#datatable'), mainSummary, groupSummary, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal);
 
-            filterString = makeFilterString(grade, gender, race, sexOrientation);
+            filterString = makeFilterString(grade, gender, race, sexOrientation, pyramid);
             titleString = "<h4>"+year+"</h4><h4>"+mainTitle+"</h4>";
             if(isGrouped)
                 titleString += "<i>compared to</i><h4>" + groupTitle + "</h4>";
@@ -183,6 +192,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             var gender = $("#filtergender").val();
             var race = $("#filterrace").val();
             var sexOrientation = $("#filtersex").val();
+            var pyramid = $("#filterpyramid").val();
 
             if(q1 != '') {
                 var url = 'graphs.php?ds='+dataset+'&q1='+q1;
@@ -203,6 +213,8 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                     url += "&race="+race;
                 if(sexOrientation != '')
                     url += "&so="+sexOrientation;
+                if(pyramid != '')
+                    url += "&pyr="+pyramid;
 
                 window.location.href = url;
             }
@@ -224,6 +236,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             </select>
             and year
             <select id="filteryear" style="height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change year drop down">
+                <option value="2022">2022</option>
                 <option value="2021">2021</option>
                 <option value="2019">2019</option>
                 <option value="2018">2018</option>
@@ -315,7 +328,13 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="2">Gay or lesbian</option>
                 <option value="3">Bisexual</option>
                 <option value="4">Not sure</option>
-            </select><br>
+            </select>
+            <!--<select id="filterpyramid" class="filter selector" title="Pyramid">
+                <option value="">Pyramid</option>
+                <?php for($i=1; $i<=25; $i++) {
+                    echo "<option value='$i'>$i</option>";
+                } ?>
+            </select>--><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'graphs.php'">
@@ -331,6 +350,12 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <p><b>Variable(s) not available this year:</b>
                     <?php if(!$mainVariableAvailable) echo '<br>'.$mainVar->summary;
                     if(!$groupVariableAvailable) echo '<br>'.$groupVar->summary; ?></p>
+            </div>
+        <?php elseif($below_threshold): ?>
+            <div style="text-align: center; font-size: 18px">
+                <p>The demographic variables you chose to filter by are too specific.</p>
+                <p>To keep survey responses anonymous, the explorer cannot generate this graph.
+                    Please select fewer filters and then generate the graph again.</p>
             </div>
         <?php else: ?>
             <div style="text-align: center;">

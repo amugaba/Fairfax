@@ -32,7 +32,7 @@ include_once "config/config.php";
                 <div style="margin-top: 30px;">
                     <img src="img/fairfaxlogo.png"  alt="Fairfax County Logo">
                 </div>
-                <h1 class="shadowdeep" style="margin-top: 20px">2021&ndash;2022 Youth Survey Interactive Data Explorer</h1>
+                <h1 class="shadowdeep" style="margin-top: 20px">2022&ndash;2023 Youth Survey Interactive Data Explorer</h1>
                 <div style="margin-top: 40px">
                     <h2 style="max-width: 700px; margin: 0 auto">Generate custom graphs and data tables on the questions you find most interesting!</h2>
                     <a href="highlights.php" class="button-link" style="margin: 30px auto">Check Out the Highlights</a>
@@ -67,7 +67,7 @@ include_once "config/config.php";
                     <div class="figure" style="margin-bottom: 10px">
                         <img alt="Open books" src="img/keyboard-survey.jpg" style="width: 330px; height: 283px;">
                     </div>
-                    <h2>New 2021 Survey Items</h2>
+                    <h2>New 2022 Survey Items - TBD</h2>
                     <p>The <b>8th-12th grade survey</b> now contains questions on transgender status, falling asleep while driving, past month hookah use, and overall vegetable consumption.</p>
                     <p>For the <b>6th grade survey</b>, four vaping questions were added. These questions were already present in the 8th-12th grade survey.</p>
                     <p>In both surveys, the following questions were added or revised: language used at home, physical abuse by parent, and past month stress level.</p>

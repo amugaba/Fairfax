@@ -123,8 +123,17 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 $(".showIfNoGraph").show();
             }
             if(dataset === '6th') {
-                $(".groupbox").width(400);
+                //if(year >= 2019)
+                //    $(".groupbox").width(460); //pyramid code exists
+                //else
+                    $(".groupbox").width(380);
                 $("#gradeButton").hide();
+            }
+            else {
+                //if(year >= 2019)
+                //    $(".groupbox").width(530); //pyramid code exists
+                //else
+                    $(".groupbox").width(450);
             }
 
             $("#graphTitle").html(year + " Highlights: " + mainTitle);
@@ -143,10 +152,10 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
             });
         });
         function changeYear(yr) {
-            window.location = generateHighlightLink(yr, dataset, category, group);
+            window.location = generateHighlightLink(yr, dataset, category, 'none');
         }
         function changeDataset(ds) {
-            window.location = generateHighlightLink(year, ds, category, group);
+            window.location = generateHighlightLink(year, ds, category, 'none');
         }
         function exportCSV() {
             if(!isGrouped)
@@ -173,6 +182,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
         <div class="col-md-3 sidebar">
             <div class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for<br>
                 <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)" title="Change year drop down">
+                    <option value="2022">2022</option>
                     <option value="2021">2021</option>
                     <option value="2019">2019</option>
                     <option value="2018">2018</option>
@@ -214,13 +224,19 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 </div>
             </div>
 
-            <div id="grouping" class="groupbox hideIfNoGraph" style="width:500px; margin: 20px auto 0">
+            <div id="grouping" class="groupbox hideIfNoGraph" style="width:550px; margin: 20px auto 0">
                 <span style="font-weight: bold">Group data by:</span>
                 <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
                 <span id="gradeButton"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
-                <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
+                <?php //if($year >= 2019) {
+                    if(false) { ?>
+                    <input id="pyramid" name="grouping" type="radio" value="Pyramid_Code"/><label for="pyramid">Pyramid</label>
+                    <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, race, or pyramid to see how each group answered."></div>
+                <?php } else { ?>
+                    <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
+                <?php } ?>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">

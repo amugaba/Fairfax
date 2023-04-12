@@ -14,7 +14,7 @@ include_once "config/config.php";
     <div class="row title">
         <div style="width:750px; margin: -10px auto 10px;">
             <img src="img/fairfaxlogo.png" style="float: left; padding: 30px 30px 0 0" alt="Fairfax County Logo">
-            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2021&ndash;2022 Youth Survey Highlights and Data Explorer</span></h1>
+            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2022&ndash;2023 Youth Survey Highlights and Data Explorer</span></h1>
         </div>
 
     </div>

@@ -123,8 +123,61 @@ class DataService {
         return false;
     }
 
+    public function isUnweighted($code) {
+        return in_array($code, ['I2', 'I3', 'gender_p', 'I4', 'race_eth', 'race', 'I7', 'X9', 'I3A', 'I7A', 'language']);
+    }
+
     public function isDemographics($code) {
-        return in_array($code, ['race_eth', 'I3', 'I2', 'I7', 'X9', 'I3A', 'I7A']);
+        return in_array($code, ['I2', 'I3', 'gender_p', 'I4', 'race_eth', 'race', 'I7', 'I8', 'X9', 'I3A', 'I7A', 'language', 'Pyramid_Code']);
+    }
+
+    /**
+     * @param $mainVar MultiVariable
+     * @param MultiVariable|null $groupVar MultiVariable
+     * @return bool
+     */
+    public function checkAnonymityThreshold(MultiVariable $mainVar, ?MultiVariable $groupVar) : bool {
+        $threshold = 10;
+        return false;
+
+        if($this->isDemographics($mainVar->code) && $this->isDemographics($groupVar?->code)) {
+            //each value must be over threshold
+            foreach ($mainVar->counts as $count_group) {
+                foreach ($count_group as $count) {
+                    if ($count < $threshold)
+                        return true;
+                }
+            }
+        }
+        else if($this->isDemographics($mainVar->code)) {
+            //each main Total must be over threshold (main total = sum of values in count group)
+            foreach ($mainVar->counts as $count_group) {
+                $mainTotal = 0;
+                foreach ($count_group as $count) {
+                    $mainTotal += $count;
+                }
+                if ($mainTotal < $threshold && $mainTotal > 0)
+                    return true;
+            }
+        }
+        else if($this->isDemographics($groupVar?->code)) {
+            //each group Total must be over threshold, this is already calculated
+            foreach ($mainVar->totals as $total) {
+                if ($total < $threshold && $total > 0)
+                    return true;
+            }
+        }
+        else {
+            //overall total must be over threshold
+            $overallTotal = 0;
+            foreach ($mainVar->totals as $total) {
+                $overallTotal += $total;
+            }
+            if ($overallTotal < $threshold && $overallTotal > 0)
+                return true;
+        }
+
+        return false;
     }
 
     /**
@@ -138,7 +191,7 @@ class DataService {
         $varcode = $mainVar->code;
 
         //don't use weighting for demographics questions
-        if($this->isDemographics($mainVar->code))
+        if($this->isUnweighted($mainVar->code))
             $counter = "COUNT(1)";
         else
             $counter = "COALESCE(SUM(wgt),0)";
@@ -174,7 +227,7 @@ class DataService {
         $varcode = $mainVar->code;
 
         //don't use weighting for demographics questions
-        if($this->isDemographics($mainVar->code))
+        if($this->isUnweighted($mainVar->code))
             $counter = "COUNT(1)";
         else
             $counter = "COALESCE(SUM(wgt),0)";
@@ -272,7 +325,7 @@ class DataService {
     public function getNoResponseCount($mainVar, $groupVar, $filter)
     {
         //don't use weighting for demographics questions
-        if($this->isDemographics($mainVar->code))
+        if($this->isUnweighted($mainVar->code))
             $counter = "COUNT(1)";
         else
             $counter = "COALESCE(SUM(wgt),0)";
@@ -294,7 +347,7 @@ class DataService {
         return $stmt->fetch_row()[0];
     }
 
-    public function createFilterString($grade, $gender, $race, $sexual_orientation) {
+    public function createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid) {
         $filter = " 1 ";
         if ($grade != null)
             $filter .= " AND I2 = ".$this->connection->real_escape_string($grade);
@@ -304,6 +357,8 @@ class DataService {
             $filter .= " AND race_eth = ".$this->connection->real_escape_string($race);
         if ($sexual_orientation != null)
             $filter .= " AND X9 = ".$this->connection->real_escape_string($sexual_orientation);
+        if ($pyramid != null)
+            $filter .= " AND Pyramid_Code = ".$this->connection->real_escape_string($pyramid);
         return $filter;
     }
 

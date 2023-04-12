@@ -245,7 +245,7 @@ function createLineChart(percentData, labels, xAxisLabel) {
     return chart;
 }
 
-function makeFilterString(grade, gender, race, sexualOrientation) {
+function makeFilterString(grade, gender, race, sexualOrientation, pyramid) {
     var grades = ['8th grade','10th grade','12th grade'];
     var genders = ['Female','Male'];
     var races = ['White','Black','Hispanic','Asian/Pacific Islander','Other/Multiple'];
@@ -260,6 +260,8 @@ function makeFilterString(grade, gender, race, sexualOrientation) {
         clauses.push("Race/Ethnicity = " + races[race-1]);
     if(sexualOrientation!=null)
         clauses.push("Sexual Orientation = " + orientations[sexualOrientation-1]);
+    if(pyramid!=null)
+        clauses.push("Pyramid = " + pyramid);
 
     if(clauses.length > 0)
         return "Filtered by " + clauses.join(", ");

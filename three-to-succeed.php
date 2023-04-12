@@ -11,6 +11,8 @@ $grade = isset($_GET['grade']) ? $_GET['grade'] : null;
 $gender = isset($_GET['gender']) ? $_GET['gender'] : null;
 $race = isset($_GET['race']) ? $_GET['race'] : null;
 $sexual_orientation = isset($_GET['so']) ? $_GET['so'] : null;
+//$pyramid = isset($_GET['pyr']) ? $_GET['pyr'] : null;
+$pyramid = null;
 
 if(isset($_GET['year']))
     $year = intval($_GET['year']);
@@ -57,7 +59,7 @@ if(!$showIntro) {
 }
 if($variableAvailable){
     $groupVar = $ds->getMultiVariable($threeToSucceedCode);
-    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation);
+    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid);
 
     foreach ($variablesInGraph as $variable) {
         $variable->initializeCounts($groupVar);
@@ -155,6 +157,7 @@ if(!$showIntro && $variableAvailable)
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
             var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
+            var pyramid = <?php echo json_encode($pyramid); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
             if(dataset === '6th') {
                 $(".hide6").hide();
@@ -174,6 +177,7 @@ if(!$showIntro && $variableAvailable)
             $('#filtergender').val(gender);
             $('#filterrace').val(race);
             $('#filtersex').val(sexOrientation);
+            $('#filterpyramid').val(pyramid);
             $('#datasetSelect').val(dataset);
 
             //If Group is selected, make Question blank and vice versa
@@ -199,7 +203,7 @@ if(!$showIntro && $variableAvailable)
 
             chart = createLineChart(percentData, labels, 'Number of Assets');
 
-            filterString = makeFilterString(grade, gender, race, sexOrientation);
+            filterString = makeFilterString(grade, gender, race, sexOrientation, pyramid);
             var titleString = "<h4>"+mainTitle+"</h4>";
             if(filterString != null)
                 titleString += "<i>" + filterString + "</i>";
@@ -224,6 +228,7 @@ if(!$showIntro && $variableAvailable)
             var gender = $("#filtergender").val();
             var race = $("#filterrace").val();
             var sexOrientation = $("#filtersex").val();
+            var pyramid = $("#filterpyramid").val();
 
             if(group !== '')
                 url = 'three-to-succeed.php?ds='+dataset+'&group='+group;
@@ -245,6 +250,8 @@ if(!$showIntro && $variableAvailable)
                 url += "&race="+race;
             if(sexOrientation != '')
                 url += "&so="+sexOrientation;
+            if(pyramid != '')
+                url += "&pyr="+pyramid;
 
             window.location.href = url;
         }
@@ -265,6 +272,7 @@ if(!$showIntro && $variableAvailable)
             </select>
             and year
             <select id="filteryear" style="height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change year drop down">
+                <option value="2022">2022</option>
                 <option value="2021">2021</option>
                 <option value="2019">2019</option>
                 <option value="2018">2018</option>
@@ -273,7 +281,7 @@ if(!$showIntro && $variableAvailable)
                 <option value="2015">2015</option>
             </select>
         </div>
-        <div class="searchbar" style="max-width: 840px">
+        <div class="searchbar" style="max-width: 850px">
             <label class="shadow" style="width: 414px" for="group">1. Select a group to see highlighted questions:</label>
             <select id="group" style="width:400px; margin-bottom: 0" class="selector">
                 <option value="">Select an option</option>
@@ -342,7 +350,13 @@ if(!$showIntro && $variableAvailable)
                 <option value="2">Gay or lesbian</option>
                 <option value="3">Bisexual</option>
                 <option value="4">Not sure</option>
-            </select><br>
+            </select>
+            <!--<select id="filterpyramid" class="filter selector" title="Pyramid">
+                <option value="">Pyramid</option>
+                <?php for($i=1; $i<=25; $i++) {
+                    echo "<option value='$i'>$i</option>";
+                } ?>
+            </select>--><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'three-to-succeed.php'">
