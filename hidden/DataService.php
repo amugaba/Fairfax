@@ -89,7 +89,7 @@ class DataService {
     {
 
         $result = $this->query("SELECT v.code, v.question, v.summary, v.category FROM $this->variable_table v 
-            JOIN variable_year y ON v.code=y.code WHERE y.year=$this->year AND y.dataset_8to12=?", [($this->is8to12) ? 1 : 0]);
+            JOIN variable_year y ON v.code=y.code WHERE y.year=$this->year AND y.dataset_8to12=? ORDER BY v.display_order", [($this->is8to12) ? 1 : 0]);
         return $this->fetchAllObjects($result, MultiVariable::class);
     }
 
@@ -98,7 +98,7 @@ class DataService {
     {
         $result = $this->query("SELECT v.code, v.question, v.cutoff_summary, v.category, v.low_cutoff, v.high_cutoff, v.total_cutoff 
           FROM $this->variable_table v JOIN variable_year y ON v.code=y.code 
-            WHERE v.has_trends=1 AND y.year=$this->year AND y.dataset_8to12=?", [($this->is8to12) ? 1 : 0]);
+            WHERE v.has_trends=1 AND y.year=$this->year AND y.dataset_8to12=? ORDER BY v.display_order", [($this->is8to12) ? 1 : 0]);
         return $this->fetchAllObjects($result, CutoffVariable::class);
     }
 
@@ -107,7 +107,7 @@ class DataService {
     {
         $result = $this->query("SELECT v.code, v.question, v.cutoff_summary, v.category, v.low_cutoff, v.high_cutoff, v.total_cutoff 
           FROM $this->variable_table v JOIN variable_year y ON v.code=y.code 
-            WHERE v.has_trends=1 AND y.year=$this->year AND y.dataset_8to12=? AND v.code NOT IN ('PF9', 'C2', 'LS4', 'C10', 'PS3', 'PC2')", [($this->is8to12) ? 1 : 0]);
+            WHERE v.has_trends=1 AND y.year=$this->year AND y.dataset_8to12=? AND v.code NOT IN ('PF9', 'C2', 'LS4', 'C10', 'PS3', 'PC2') ORDER BY v.display_order", [($this->is8to12) ? 1 : 0]);
         return $this->fetchAllObjects($result, CutoffVariable::class);
     }
 
@@ -124,11 +124,11 @@ class DataService {
     }
 
     public function isUnweighted($code) {
-        return in_array($code, ['I2', 'I3', 'gender_p', 'I4', 'race_eth', 'race', 'I7', 'X9', 'I3A', 'I7A', 'language']);
+        return in_array($code, ['I2', 'I3', 'gender_c', 'I4', 'race_eth', 'race', 'I7', 'X9', 'I3A', 'I7A', 'language']);
     }
 
     public function isDemographics($code) {
-        return in_array($code, ['I2', 'I3', 'gender_p', 'I4', 'race_eth', 'race', 'I7', 'I8', 'X9', 'I3A', 'I7A', 'language', 'Pyramid_Code']);
+        return in_array($code, ['I2', 'I3', 'gender_c', 'I4', 'race_eth', 'race', 'I7', 'I8', 'X9', 'I3A', 'I7A', 'language', 'Pyramid_Code']);
     }
 
     /**
@@ -138,13 +138,12 @@ class DataService {
      */
     public function checkAnonymityThreshold(MultiVariable $mainVar, ?MultiVariable $groupVar) : bool {
         $threshold = 10;
-        return false;
 
         if($this->isDemographics($mainVar->code) && $this->isDemographics($groupVar?->code)) {
             //each value must be over threshold
             foreach ($mainVar->counts as $count_group) {
                 foreach ($count_group as $count) {
-                    if ($count < $threshold)
+                    if ($count < $threshold && $count > 0)
                         return true;
                 }
             }
