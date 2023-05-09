@@ -67,10 +67,9 @@ include_once "config/config.php";
                     <div class="figure" style="margin-bottom: 10px">
                         <img alt="Open books" src="img/keyboard-survey.jpg" style="width: 330px; height: 283px;">
                     </div>
-                    <h2>New 2022 Survey Items - TBD</h2>
-                    <p>The <b>8th-12th grade survey</b> now contains questions on transgender status, falling asleep while driving, past month hookah use, and overall vegetable consumption.</p>
-                    <p>For the <b>6th grade survey</b>, four vaping questions were added. These questions were already present in the 8th-12th grade survey.</p>
-                    <p>In both surveys, the following questions were added or revised: language used at home, physical abuse by parent, and past month stress level.</p>
+                    <h2>New Survey Items</h2>
+                    <p>No new questions were added in this year's survey.</p><p></p>However, trends are now available for questions that were added in the previous year,
+                        such as falling asleep while driving, past month hookah use, overall vegetable consumption, and stress level.</p>
                 </div>
             </div>
             <div class="grid-third">
