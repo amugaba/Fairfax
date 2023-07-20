@@ -219,7 +219,7 @@ if(!$showIntro && $variableAvailable){
             <label class="shadow" style="margin: 10px 0 20px; width: 250px">2. (Optional) Group data by:</label>
             <select id="groupSelect" class="filter selector" title="Group data by">
                 <option value="">None</option>
-                <option value="1">Grade</option>
+                <option value="1" class="hide6">Grade</option>
                 <option value="2">Gender</option>
                 <option value="3" class="isPyramid">Race (simplified)</option>
                 <option value="4" class="notPyramid">Race</option>
