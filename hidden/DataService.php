@@ -124,11 +124,11 @@ class DataService {
     }
 
     public function isUnweighted($code) {
-        return in_array($code, ['I2', 'I3', 'gender_c', 'I4', 'race_eth', 'race', 'I7', 'X9', 'I3A', 'I7A', 'language', 'Pyramid_Code']);
+        return in_array($code, ['I1','I2','I3','gender_c','I3A','I4','race_eth','race','I7','I7A','language','X9','Pyramid_Code']);
     }
 
     public function isIdentifying($code) {
-        return in_array($code, ['I1','I2','I3','gender_c','I4','race_eth','race','I7','I8','I9','X9','I3A','I7A','language','Pyramid_Code']);
+        return in_array($code, ['I1','I2','I3','gender_c','I3A','I4','race_eth','race','I7','I7A','language','I8','I9','X9','RS1','RS2','RC17','B3','M4','SHD7','Pyramid_Code']);
     }
 
     /**

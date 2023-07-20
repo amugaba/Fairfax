@@ -375,10 +375,50 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                     if(!$groupVariableAvailable) echo '<br>'.$groupVar->summary; ?></p>
             </div>
         <?php elseif($below_threshold): ?>
-            <div style="text-align: center; font-size: 18px">
-                <p>The demographic variables you chose to filter by are too specific.</p>
-                <p>To keep survey responses anonymous, the explorer cannot generate this graph.
-                    Please select fewer filters and then generate the graph again.</p>
+            <div style="font-size: 18px; width: 800px; margin: 0 auto">
+                <h3 style="text-align: center;">Anonymity Warning</h3>
+                <p>This graph cannot be displayed because one or more of the <b>identifying cells</b> would have <b>< 10</b> responses.</p>
+
+                <h3 style="text-align: center; margin-top: 25px">Identifying Cells Methodology</h3>
+                <p>What cells are considered identify depends on whether 0, 1, or 2 of the questions selected are identifying questions. See the list of identifying questions below.</p>
+                <p><b>Zero identifying questions</b> - The overall total for the graph must be <b>>= 10</b>.</p>
+                <p><b>One identifying question</b> (e.g. "Gender") - The totals for each answer choice ("Female, "Male") must be <b>>= 10</b>.</p>
+                <p><b>Two identifying questions</b> (e.g. "Gender" vs. "Race/Ethnicity") - Each cell ("Female-White", "Female-Black", etc.) must be <b>>= 10</b>.</p>
+
+                <h3 style="text-align: center; margin-top: 25px">Solutions/Recommendations</h3>
+                <ol>
+                    <li>Choose fewer filters to increase the total number of respondents in your graph.</li>
+                    <li>Some <b>identifying questions</b> have small population sizes for certain answers (e.g. "Transgender Status", "Sexual Orientation").
+                        Don't compare those questions or use them with multiple filters.</li>
+                </ol>
+
+                <h3 style="text-align: center; margin-top: 25px">List of Identifying Questions</h3>
+                <div class="grid" style="font-size: 16px; line-height: 32px">
+                    <div class="grid-half">
+                        <ul>
+                            <li>Age</li>
+                            <li>Grade</li>
+                            <li>Gender</li>
+                            <li>Transgender status</li>
+                            <li>Race/Ethnicity</li>
+                            <li>Language used at home</li>
+                            <li>Sexual orientation</li>
+                            <li>Pyramid</li>
+                        </ul>
+                    </div>
+                    <div class="grid-half">
+                        <ul>
+                            <li>Parent/guardian served in military</li>
+                            <li>Family member in military</li>
+                            <li>Average grades</li>
+                            <li>Days of school skipped</li>
+                            <li>Times moving since kindergarten</li>
+                            <li>Suspended from school</li>
+                            <li>Number of suicide attempts, past year</li>
+                            <li>Reported an act of sexual misconduct</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         <?php else: ?>
             <div style="text-align: center;">
