@@ -377,10 +377,11 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
         <?php elseif($below_threshold): ?>
             <div style="font-size: 18px; width: 800px; margin: 0 auto">
                 <h3 style="text-align: center;">Anonymity Warning</h3>
-                <p>This graph cannot be displayed because one or more of the <b>identifying cells</b> would have <b>< 10</b> responses.</p>
+                <p>This graph cannot be displayed because one or more of the <b>potentially identifying cells</b> would have <b>< 10</b> responses.</p>
 
                 <h3 style="text-align: center; margin-top: 25px">Identifying Cells Methodology</h3>
-                <p>What cells are considered identify depends on whether 0, 1, or 2 of the questions selected are identifying questions. See the list of identifying questions below.</p>
+                <p>What cells are considered potentially identifying depends on whether 0, 1, or 2 of the questions selected are identifying questions.
+                    (See the list of identifying questions at the bottom of the page).</p>
                 <p><b>Zero identifying questions</b> - The overall total for the graph must be <b>>= 10</b>.</p>
                 <p><b>One identifying question</b> (e.g. "Gender") - The totals for each answer choice ("Female, "Male") must be <b>>= 10</b>.</p>
                 <p><b>Two identifying questions</b> (e.g. "Gender" vs. "Race/Ethnicity") - Each cell ("Female-White", "Female-Black", etc.) must be <b>>= 10</b>.</p>
