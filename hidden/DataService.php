@@ -124,11 +124,11 @@ class DataService {
     }
 
     public function isUnweighted($code) {
-        return in_array($code, ['I2', 'I3', 'gender_c', 'I4', 'race_eth', 'race', 'I7', 'X9', 'I3A', 'I7A', 'language']);
+        return in_array($code, ['I2', 'I3', 'gender_c', 'I4', 'race_eth', 'race', 'I7', 'X9', 'I3A', 'I7A', 'language', 'Pyramid_Code']);
     }
 
-    public function isDemographics($code) {
-        return in_array($code, ['I2', 'I3', 'gender_c', 'I4', 'race_eth', 'race', 'I7', 'I8', 'X9', 'I3A', 'I7A', 'language', 'Pyramid_Code']);
+    public function isIdentifying($code) {
+        return in_array($code, ['I1','I2','I3','gender_c','I4','race_eth','race','I7','I8','I9','X9','I3A','I7A','language','Pyramid_Code']);
     }
 
     /**
@@ -139,7 +139,7 @@ class DataService {
     public function checkAnonymityThreshold(MultiVariable $mainVar, ?MultiVariable $groupVar) : bool {
         $threshold = 10;
 
-        if($this->isDemographics($mainVar->code) && $this->isDemographics($groupVar?->code)) {
+        if($this->isIdentifying($mainVar->code) && $this->isIdentifying($groupVar?->code)) {
             //each value must be over threshold
             foreach ($mainVar->counts as $count_group) {
                 foreach ($count_group as $count) {
@@ -148,7 +148,7 @@ class DataService {
                 }
             }
         }
-        else if($this->isDemographics($mainVar->code)) {
+        else if($this->isIdentifying($mainVar->code)) {
             //each main Total must be over threshold (main total = sum of values in count group)
             foreach ($mainVar->counts as $count_group) {
                 $mainTotal = 0;
@@ -159,7 +159,7 @@ class DataService {
                     return true;
             }
         }
-        else if($this->isDemographics($groupVar?->code)) {
+        else if($this->isIdentifying($groupVar?->code)) {
             //each group Total must be over threshold, this is already calculated
             foreach ($mainVar->totals as $total) {
                 if ($total < $threshold && $total > 0)
@@ -346,7 +346,7 @@ class DataService {
         return $stmt->fetch_row()[0];
     }
 
-    public function createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid) {
+    public function createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified = null) {
         $filter = " 1 ";
         if ($grade != null)
             $filter .= " AND I2 = ".$this->connection->real_escape_string($grade);
@@ -356,8 +356,10 @@ class DataService {
             $filter .= " AND race_eth = ".$this->connection->real_escape_string($race);
         if ($sexual_orientation != null)
             $filter .= " AND X9 = ".$this->connection->real_escape_string($sexual_orientation);
-        if ($pyramid != null)
+        if ($pyramid != null && $pyramid != '')
             $filter .= " AND Pyramid_Code = ".$this->connection->real_escape_string($pyramid);
+        if ($race_simplified != null)
+            $filter .= " AND race = ".$this->connection->real_escape_string($race_simplified);
         return $filter;
     }
 

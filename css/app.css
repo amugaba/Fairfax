@@ -311,3 +311,15 @@ th.clearcell {
 .select2-results__options {
     max-height: 300px !important;
 }
+.dataset-controls {
+    font-size: 18px;
+}
+.dataset-controls label {
+    width: 75px;
+}
+.dataset-controls .selector {
+    height: 28px;
+    font-size: 18px;
+    padding-top: 1px;
+    margin-left: 5px;
+}

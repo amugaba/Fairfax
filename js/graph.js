@@ -245,31 +245,7 @@ function createLineChart(percentData, labels, xAxisLabel) {
     return chart;
 }
 
-function makeFilterString(grade, gender, race, sexualOrientation, pyramid) {
-    var grades = ['8th grade','10th grade','12th grade'];
-    var genders = ['Female','Male'];
-    var races = ['White','Black','Hispanic','Asian/Pacific Islander','Other/Multiple'];
-    var orientations = ['Heterosexual','Gay or lesbian','Bisexual','Not sure'];
-
-    var clauses = [];
-    if(grade!=null)
-        clauses.push("Grade = " + grades[grade-1]);
-    if(gender!=null)
-        clauses.push("Gender = " + genders[gender-1]);
-    if(race!=null)
-        clauses.push("Race/Ethnicity = " + races[race-1]);
-    if(sexualOrientation!=null)
-        clauses.push("Sexual Orientation = " + orientations[sexualOrientation-1]);
-    if(pyramid!=null)
-        clauses.push("Pyramid = " + pyramid);
-
-    if(clauses.length > 0)
-        return "Filtered by " + clauses.join(", ");
-    else
-        return null;
-}
-
-function exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString) {
+function exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString, pyramid) {
     var exportContent = [
         {
             text: "Fairfax County Youth Survey "+year,
@@ -289,12 +265,10 @@ function exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString) 
                 style: ["subheader"]
             });
     }
-    if(dataset != null) {
-        exportContent.push({
-            text: "Dataset: " + (dataset==='6th' ? '6th grade' : '8th, 10th, and 12th grades'),
-            style: ["description"]
-        });
-    }
+    exportContent.push({
+        text: "Dataset = " + (dataset==='6th' ? '6th grade' : '8th, 10th, and 12th grades') + ", Pyramid = " + (pyramid > 0 ? pyramid : 'All'),
+        style: ["description"]
+    });
     if(filterString != null) {
         exportContent.push({
             text: filterString,

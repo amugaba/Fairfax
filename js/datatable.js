@@ -5,23 +5,24 @@
  */
 "use strict";
 
-function makeFilterString(grade, gender, race, sexualOrientation, pyramid) {
-    var grades = ['8th grade','10th grade','12th grade'];
-    var genders = ['Female','Male'];
-    var races = ['White','Black','Hispanic','Asian/Pacific Islander','Other/Multiple'];
-    var orientations = ['Heterosexual','Gay or lesbian','Bisexual','Not sure'];
+function makeFilterString(grade, gender, race, sexualOrientation, raceSimple) {
+    let grades = ['8th grade','10th grade','12th grade'];
+    let genders = ['Female','Male'];
+    let races = ['White','Black','Hispanic','Asian/Pacific Islander','Other/Multiple'];
+    let racesSimple = ['White','Non-white'];
+    let orientations = ['Heterosexual','Gay or lesbian','Bisexual','Not sure'];
 
-    var clauses = [];
-    if(grade!=null)
+    let clauses = [];
+    if(grade != null)
         clauses.push("Grade = " + grades[grade-1]);
-    if(gender!=null)
+    if(gender != null)
         clauses.push("Gender = " + genders[gender-1]);
-    if(race!=null)
+    if(race != null)
         clauses.push("Race/Ethnicity = " + races[race-1]);
-    if(sexualOrientation!=null)
+    if(raceSimple != null)
+        clauses.push("Race (simplified) = " + racesSimple[raceSimple-1]);
+    if(sexualOrientation != null)
         clauses.push("Sexual Orientation = " + orientations[sexualOrientation-1]);
-    if(pyramid!=null)
-        clauses.push("Pyramid = " + pyramid);
 
     if(clauses.length > 0)
         return "Filtered by " + clauses.join(", ");
@@ -36,10 +37,11 @@ function isIE() {
         return false;
 }
 
-function getCSVHeader(mainTitle, groupTitle, year, dataset, filterString) {
+function getCSVHeader(mainTitle, groupTitle, year, dataset, filterString, pyramid) {
     var csv = "Fairfax County Youth Survey Data Explorer\r\n";
     csv += "Year: " + year + "\r\n";
     csv += "\"Dataset: " + (dataset==='6th' ? '6th grade' : '8th, 10th, and 12th grades') + "\"\r\n";
+    csv += "\"Pyramid: " + (pyramid ? pyramid: 'All') + "\"\r\n";
     csv += '"' + mainTitle + '"\r\n';
     if(groupTitle != null)
         csv += '"Compared to Question: ' + groupTitle + '"\r\n';
@@ -50,23 +52,23 @@ function getCSVHeader(mainTitle, groupTitle, year, dataset, filterString) {
     return csv;
 }
 
-function simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year, dataset) {
-    var csv = getCSVHeader("Highlights: " + mainTitle, null, year, dataset, null);
+function simpleHighlightCSV(mainTitle, mainLabels, percentData, totals, year, dataset, pyramid) {
+    var csv = getCSVHeader("Highlights: " + mainTitle, null, year, dataset, null, pyramid);
 
-    csv += ",Total Positive,Total Possible, % Positive\r\n";
+    csv += ",% Reported,Total Responses\r\n";
 
     for(var i=0; i<mainLabels.length; i++)
     {
-        csv += mainLabels[i].replace("<br>"," ")+","+Math.round(counts[i][0]) + ",";
-        csv += Math.round(totals[i]) + ",";
-        csv += (counts[i][0]/totals[i]*100).toFixed(1) + "%\r\n";
+        csv += mainLabels[i].replace("<br>"," ")+",";
+        csv += percentData[i]['v0'].toFixed(1) + '%,';
+        csv += Math.round(totals[i]) + "\r\n";
     }
 
     tableToExcel(csv);
 }
 
-function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset, filterString) {
-    var csv = getCSVHeader("Question: " + mainTitle, null, year, dataset, filterString);
+function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset, filterString, pyramid) {
+    var csv = getCSVHeader("Question: " + mainTitle, null, year, dataset, filterString, pyramid);
 
     csv += ",Total,% Total\r\n";
 
@@ -101,28 +103,28 @@ function simpleTrendCSV(mainTitle, labels, xAxisLabels, percents, year, dataset,
     tableToExcel(csv);
 }
 
-function crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year, dataset) {
-    var csv = getCSVHeader("Highlights: " + mainTitle, groupTitle, year, dataset, null);
+function crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, percentData, totals, year, dataset, pyramid) {
+    var csv = getCSVHeader("Highlights: " + mainTitle, groupTitle, year, dataset, null, pyramid);
 
     csv += ',,"'+groupTitle+'"\r\n';
     csv += ",,"+groupLabels.join(",");
-    csv += ",Total Positive,Total Possible, % Positive\r\n";
+    csv += ",Total Responses\r\n";
     csv += '"'+mainTitle+'"';
 
     for(var i=0; i<mainLabels.length; i++)
     {
         csv += ',"'+mainLabels[i].replace("<br>"," ")+'",';
         for(var j=0; j<groupLabels.length; j++) {
-            csv += Math.round(counts[i][j]) + ",";
+            csv += percentData[i]['v'+j].toFixed(1) + '%,';
         }
-        csv += Math.round(sumPositives[i]) + "," + Math.round(totals[i]) + "," + (sumPositives[i]/totals[i]*100).toFixed(1) + "%\r\n";
+        csv += Math.round(totals[i]) + "\r\n";
     }
 
     tableToExcel(csv);
 }
 
-function crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, totals, groupTotals, sumTotal, filterString, year, dataset) {
-    var csv = getCSVHeader("Question: " + mainTitle, groupTitle, year, dataset, filterString);
+function crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, totals, groupTotals, sumTotal, filterString, year, dataset, pyramid) {
+    var csv = getCSVHeader("Question: " + mainTitle, groupTitle, year, dataset, filterString, pyramid);
 
     csv += ',,"'+groupTitle+'"\r\n';
     csv += ",,"+groupLabels.join(",");
@@ -181,22 +183,21 @@ function tableToExcel(csv) {
     }
 }
 
-function createSimpleHighlightTable(tableElem, labels, counts, totals) {
+function createSimpleHighlightTable(tableElem, labels, percentData, totals) {
     var table = $(tableElem);
 
     //add header in first row
     table.append('<tr><th class="clearcell">Category</th>' +
-        '<th style="text-align: center">Total<br>Positive</th>' +
-        '<th style="text-align: center">Total<br>Possible</th>' +
-        '<th style="text-align: center">% Positive</th></tr>');
+        '<th style="text-align: center">% Reported</th>' +
+        '<th style="text-align: center">Total<br>Responses</th></tr>');
 
     //add a row for each answer
     for(var i=0; i<labels.length; i++) {
         var row = $('<tr></tr>').appendTo(table);
         row.append('<th>' + labels[i] + '</th>');
-        row.append('<td>' + Math.round(counts[i][0]).toLocaleString() + '</td>');
-        row.append('<td>' + Math.round(totals[i]).toLocaleString() + '</td>');
-        row.append('<td>' + (counts[i][0]/totals[i]*100).toFixed(1) + '%</td>');
+        row.append('<td>' + percentData[i]['v0'].toFixed(1) + '%</td>'); //percent positive
+        row.append('<td>' + Math.round(totals[i]).toLocaleString() + '</td>'); //total
+
     }
 }
 
@@ -246,7 +247,7 @@ function simpleTrendTable(tableElem, labels, xAxisLabels, percents, xAxisHeader)
     }
 }
 
-function createCrosstabHighlightTable(tableElem, mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals) {
+function createCrosstabHighlightTable(tableElem, mainTitle, groupTitle, mainLabels, groupLabels, percentData, totals) {
     var table = $(tableElem);
 
     //add group title in first row
@@ -254,9 +255,7 @@ function createCrosstabHighlightTable(tableElem, mainTitle, groupTitle, mainLabe
     row.append('<th colspan="2" rowspan="2" class="clearcell">Category</th>' +
         '<th colspan="'+groupLabels.length+'" style="text-align: center">'+groupTitle+'</th>');
 
-    row.append('<th rowspan="2" style="text-align: center">Total<br>Positive</th>' +
-        '<th rowspan="2" style="text-align: center">Total<br>Possible</th>' +
-        '<th rowspan="2" style="text-align: center">% Positive</th>');
+    row.append('<th rowspan="2" style="text-align: center">Total<br>Responses</th>');
 
     //add group answers in second row
     var groupHeader = $('<tr></tr>').appendTo(table);
@@ -275,13 +274,11 @@ function createCrosstabHighlightTable(tableElem, mainTitle, groupTitle, mainLabe
         //answer label in second column, followed by data
         row.append('<th>'+mainLabels[i]+'</th>');
         for(var j=0; j<groupLabels.length; j++) {
-                row.append('<td>'+Math.round(counts[i][j]).toLocaleString()+'</td>');
+                row.append('<td>'+ percentData[i]['v'+j].toFixed(1) + '%</td>');
         }
 
         //end row with total and percentage
-        row.append('<td>'+Math.round(sumPositives[i]).toLocaleString()+'</td>' +
-            '<td>' + Math.round(totals[i]).toLocaleString() + '</td>' +
-            '<td>' + (sumPositives[i]/totals[i]*100).toFixed(1) + '%</td>');
+        row.append('<td>' + Math.round(totals[i]).toLocaleString() + '</td>');
     }
 }
 

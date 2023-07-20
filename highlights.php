@@ -14,13 +14,14 @@ else
     $dataset = DataService::EIGHT_TO_TWELVE;
 
 $ds = DataService::getInstance($year, $dataset);
-$cat = isset($_GET['cat'])? $_GET['cat'] : 1;
-$grp = isset($_GET['grp'])? $_GET['grp'] : 'none';
+$cat = $_GET['cat'] ?? 1;
+$grp = $_GET['grp'] ?? 'none';
+$pyramid = $_GET['pyr'] ?? '';
 
 $highlightGroup = getHighlightGroup($cat, $dataset, $year);
 $groupVar = $ds->getMultiVariable($grp);
 $variablesInGraph = [];
-$filter = "1";
+$filter = $ds->createFilterString(null,null,null,null,$pyramid);
 
 //get data for each question
 for($i = 0; $i < count($highlightGroup->codes); $i++)
@@ -105,6 +106,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
             dataset = <?php echo json_encode($dataset); ?>;
             category = <?php echo json_encode($cat); ?>;
             group = <?php echo json_encode($grp); ?>;
+            pyramid = <?php echo json_encode($pyramid); ?>;
 
             if(dataset === '6th') {
                 $(".hide6").hide();
@@ -114,64 +116,66 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 createBarGraph(percentData, mainTitle, groupSummary, groupLabels, tooltips);
 
                 if (!isGrouped)
-                    createSimpleHighlightTable($('#datatable'), mainLabels, counts, totals);
+                    createSimpleHighlightTable($('#datatable'), mainLabels, percentData, totals);
                 else
-                    createCrosstabHighlightTable($('#datatable'), mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals);
+                    createCrosstabHighlightTable($('#datatable'), mainTitle, groupTitle, mainLabels, groupLabels, percentData, totals);
             }
             else {
                 $(".hideIfNoGraph").hide();
                 $(".showIfNoGraph").show();
             }
             if(dataset === '6th') {
-                //if(year >= 2019)
-                //    $(".groupbox").width(460); //pyramid code exists
-                //else
-                    $(".groupbox").width(380);
+                $(".groupbox").width(380);
                 $("#gradeButton").hide();
             }
             else {
-                //if(year >= 2019)
-                //    $(".groupbox").width(530); //pyramid code exists
-                //else
                     $(".groupbox").width(450);
+            }
+            if(category == 5) {
+                $("#gradeButton").hide(); //vehicle safety
+                $(".groupbox").width(380);
             }
 
             $("#graphTitle").html(year + " Highlights: " + mainTitle);
             $('#grouping :input[value='+group+']').prop("checked",true);
             $('#yearSelect').val(year);
             $('#datasetSelect').val(dataset);
+            $('#pyramidSelect').val(pyramid);
             $('#grouping').buttonset();
             $('#grouping :input').click(function() {
-                window.location = generateHighlightLink(year, dataset, category, this.value);
+                window.location = generateHighlightLink(year, dataset, category, this.value, pyramid);
             });
             $('[data-toggle="tooltip"]').tooltip();
 
             //set category links, preserve year and dataset, reset grouping
             $('.categories li a').each(function(){
-                $(this).attr('href', generateHighlightLink(year, dataset, $(this).data('category'), 'none'));
+                $(this).attr('href', generateHighlightLink(year, dataset, $(this).data('category'), 'none', pyramid));
             });
         });
         function changeYear(yr) {
-            window.location = generateHighlightLink(yr, dataset, category, 'none');
+            window.location = generateHighlightLink(yr, dataset, category, 'none', pyramid);
         }
         function changeDataset(ds) {
-            window.location = generateHighlightLink(year, ds, category, 'none');
+            window.location = generateHighlightLink(year, ds, category, 'none', pyramid);
+        }
+        function changePyramid(pyramid) {
+            window.location = generateHighlightLink(year, dataset, category, 'none', pyramid);
         }
         function exportCSV() {
             if(!isGrouped)
-                simpleHighlightCSV(mainTitle, mainLabels, counts, totals, year, dataset);
+                simpleHighlightCSV(mainTitle, mainLabels, percentData, totals, year, dataset, pyramid);
             else
-                crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, totals, year, dataset);
+                crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, percentData, totals, year, dataset, pyramid);
         }
         function exportGraph() {
             exportToPDF(chart, mainTitle, groupTitle, year, dataset, null);
         }
         //create a link to highlights page based on current year, dataset, category, and group variables
-        function generateHighlightLink(yr, ds, cat, grp){
+        function generateHighlightLink(yr, ds, cat, grp, pyramid){
             if(ds === '6th' && grp === 'I2')
-                return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat;
+                return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat+"&pyr="+pyramid;
             else
-                return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat+"&grp="+grp;
+                return "highlights.php?year="+yr+"&ds="+ds+"&cat="+cat+"&grp="+grp+"&pyr="+pyramid;
         }
     </script>
 </head>
@@ -180,20 +184,36 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
 <div class="container" id="main">
     <div class="row">
         <div class="col-md-3 sidebar">
-            <div class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for<br>
-                <select id="yearSelect" style="width:85px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeYear(this.value)" title="Change year drop down">
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                    <option value="2019">2019</option>
-                    <option value="2018">2018</option>
-                    <option value="2017">2017</option>
-                    <option value="2016">2016</option>
-                    <option value="2015">2015</option>
-                </select>
-                <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
-                    <option value="8to12">8th-12th grade</option>
-                    <option value="6th">6th grade</option>
-                </select>
+            <div class="dataset-controls">
+                <p class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for</p>
+                <div>
+                    <label for="yearSelect" class="categories">Year:</label>
+                    <select id="yearSelect" class="selector" onchange="changeYear(this.value)" title="Change year drop down">
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="datasetSelect">Dataset:</label>
+                    <select id="datasetSelect" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
+                        <option value="8to12">8th-12th grade</option>
+                        <option value="6th">6th grade</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="pyramidSelect">Pyramid:</label>
+                    <select id="pyramidSelect" class="selector" onchange="changePyramid(this.value)" title="Change pyramid drop down">
+                        <option value="">All</option>
+                        <?php for($i=1; $i<=25; $i++) {
+                            echo "<option value='$i'>$i</option>";
+                        } ?>
+                    </select>
+                </div>
             </div>
             <h2 class="shadowdeep">Select a Category
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
@@ -230,13 +250,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <span id="gradeButton"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
-                <?php //if($year >= 2019) {
-                    if(false) { ?>
-                    <input id="pyramid" name="grouping" type="radio" value="Pyramid_Code"/><label for="pyramid">Pyramid</label>
-                    <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, race, or pyramid to see how each group answered."></div>
-                <?php } else { ?>
-                    <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
-                <?php } ?>
+                <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">
@@ -247,6 +261,9 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
+                <?php if($grp == 'I3') { ?>
+                    <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.</p>
+                <?php } ?>
                 <input type="button" onclick="exportCSV()" class="btn btn-blue" value="Export to CSV" style="margin-top: 10px">
             </div>
         </div>

@@ -16,16 +16,21 @@ $ds = DataService::getInstance($year, $dataset);
 $variables = $ds->getVariables();
 
 //Process user input
-$q1 = isset($_GET['q1']) ? $_GET['q1'] : null;
-$grp = isset($_GET['grp']) ? $_GET['grp'] : 'none';
-$cat1 = isset($_GET['cat1']) ? $_GET['cat1'] : null;
-$cat2 = isset($_GET['cat2']) ? $_GET['cat2'] : null;
-$grade = isset($_GET['grade']) ? $_GET['grade'] : null;
-$gender = isset($_GET['gender']) ? $_GET['gender'] : null;
-$race = isset($_GET['race']) ? $_GET['race'] : null;
-$sexual_orientation = isset($_GET['so']) ? $_GET['so'] : null;
-//$pyramid = isset($_GET['pyr']) ? $_GET['pyr'] : null;
-$pyramid = null;
+$q1 = $_GET['q1'] ?? null;
+$grp = $_GET['grp'] ?? 'none';
+$cat1 = $_GET['cat1'] ?? null;
+$cat2 = $_GET['cat2'] ?? null;
+$grade = $_GET['grade'] ?? null;
+$gender = $_GET['gender'] ?? null;
+$race = $_GET['race'] ?? null;
+$race_simplified = $_GET['rsim'] ?? null;
+$sexual_orientation = $_GET['so'] ?? null;
+$pyramid = $_GET['pyr'] ?? '';
+
+if($pyramid > 0) {
+    $race = null;
+    $sexual_orientation = null;
+}
 
 $showIntro = $q1 == null;
 $below_threshold = false;
@@ -35,6 +40,8 @@ $groupVariableAvailable = false;
 if(!$showIntro) {
     //Get Variables
     $mainVar = $ds->getMultiVariable($q1);
+    if($ds->isUnweighted($q1))
+        $mainVar->question .= " (Data are unweighted)";
     $groupVar = $ds->getMultiVariable($grp);
     if ($mainVar == null)
         die("User input was invalid.");
@@ -45,7 +52,7 @@ if(!$showIntro) {
 if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
     $mainVar->initializeCounts($groupVar);
     //Construct filter
-    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid);
+    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified);
 
     //Load data into main Variable
     $ds->getMultiPositives($mainVar, $groupVar, $filter);
@@ -103,14 +110,20 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             var grade = <?php echo json_encode($grade); ?>;
             var gender = <?php echo json_encode($gender); ?>;
             var race = <?php echo json_encode($race); ?>;
+            var raceSimplified = <?php echo json_encode($race_simplified); ?>;
             var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
-            var pyramid = <?php echo json_encode($pyramid); ?>;
+            pyramid = <?php echo json_encode($pyramid); ?>;
             var cat1 = <?php echo json_encode($cat1); ?>;
             var cat2 = <?php echo json_encode($cat2); ?>;
             year = <?php echo json_encode($year); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
             if(dataset === '6th') {
                 $(".hide6").hide();
+            }
+            if(pyramid > 0) {
+                $("#filterrace").hide();
+                $("#filtersex").hide();
+                $("#filterracesimple").show();
             }
 
             //persist user inputs in search form
@@ -131,13 +144,14 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 $("#question2").trigger('change');
             }
 
-            $('#filteryear').val(year);
+            $('#datasetSelect').val(dataset);
+            $('#yearSelect').val(year);
+            $('#pyramidSelect').val(pyramid);
             $('#filtergrade').val(grade);
             $('#filtergender').val(gender);
             $('#filterrace').val(race);
+            $('#filterracesimple').val(raceSimplified);
             $('#filtersex').val(sexOrientation);
-            $('#filterpyramid').val(pyramid);
-            $('#datasetSelect').val(dataset);
 
             <?php if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable && !$below_threshold): ?>
             mainTitle = <?php echo json_encode($mainVar->question); ?>;
@@ -161,8 +175,8 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             else
                 createCrosstabExplorerTable($('#datatable'), mainSummary, groupSummary, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal);
 
-            filterString = makeFilterString(grade, gender, race, sexOrientation, pyramid);
-            titleString = "<h4>"+year+"</h4><h4>"+mainTitle+"</h4>";
+            filterString = makeFilterString(grade, gender, race, sexOrientation, raceSimplified);
+            titleString = "<h4>"+mainTitle+"</h4>";
             if(isGrouped)
                 titleString += "<i>compared to</i><h4>" + groupTitle + "</h4>";
             if(filterString != null)
@@ -171,56 +185,57 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             <?php endif; ?>
 
             $('[data-toggle="tooltip"]').tooltip();
+
+            $("#searchform").on( "submit", searchData);
         });
         function exportCSV() {
             if(!isGrouped)
-                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset, filterString);
+                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset, filterString, pyramid);
             else
-                crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year, dataset);
+                crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year, dataset, pyramid);
         }
         function exportGraph() {
-            exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString);
+            exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString, pyramid);
         }
 
-        function searchData() {
-            var q1 = $('#question1').val();
-            var q2 = $('#question2').val();
-            var cat1 = $('#category1').val();
-            var cat2 = $('#category2').val();
-            var year = $("#filteryear").val();
-            var grade = $("#filtergrade").val();
-            var gender = $("#filtergender").val();
-            var race = $("#filterrace").val();
-            var sexOrientation = $("#filtersex").val();
-            var pyramid = $("#filterpyramid").val();
 
-            if(q1 != '') {
-                var url = 'graphs.php?ds='+dataset+'&q1='+q1;
+        function searchData(e) {
+            e.preventDefault();
+            let q1 = $('#question1').val();
+            let q2 = $('#question2').val();
+            let cat1 = $('#category1').val();
+            let cat2 = $('#category2').val();
+            let grade = $("#filtergrade").val();
+            let gender = $("#filtergender").val();
+            let race = $("#filterrace").val();
+            let raceSimplified = $("#filterracesimple").val();
+            let sexOrientation = $("#filtersex").val();
 
-                if(q2 != '')
+            if(q1 !== '') {
+                let url = 'graphs.php?ds='+dataset+"&year="+year+"&pyr="+pyramid+'&q1='+q1;
+
+                if(q2 !== '')
                     url += '&grp='+q2;
-                if(cat1 != '')
+                if(cat1 !== '')
                     url += '&cat1='+cat1;
-                if(cat2 != '')
+                if(cat2 !== '')
                     url += '&cat2='+cat2;
-                if(year != '')
-                    url += "&year="+year;
-                if(grade != '')
+                if(grade !== '')
                     url += "&grade="+grade;
-                if(gender != '')
+                if(gender !== '')
                     url += "&gender="+gender;
-                if(race != '')
+                if(race !== '')
                     url += "&race="+race;
-                if(sexOrientation != '')
+                if(raceSimplified !== '')
+                    url += "&rsim="+raceSimplified;
+                if(sexOrientation !== '')
                     url += "&so="+sexOrientation;
-                if(pyramid != '')
-                    url += "&pyr="+pyramid;
 
                 window.location.href = url;
             }
         }
         function changeDataset() {
-            window.location.href = "graphs.php?ds="+$('#datasetSelect').val()+"&year="+$("#filteryear").val();
+            window.location.href = "graphs.php?ds="+$('#datasetSelect').val()+"&year="+$("#yearSelect").val()+"&pyr="+$("#pyramidSelect").val();
         }
     </script>
 </head>
@@ -228,14 +243,14 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
 <?php include_header(); ?>
 <div class="container" id="main">
     <div class="row title">
-        <div class="shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">
-            Using dataset
-            <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change dataset drop down">
+        <div class="dataset-controls shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">
+            Dataset:
+            <select id="datasetSelect" class="selector" onchange="changeDataset()" title="Change dataset drop down">
                 <option value="8to12">8th-12th grade</option>
                 <option value="6th">6th grade</option>
             </select>
-            and year
-            <select id="filteryear" style="height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change year drop down">
+            &nbsp;Year:
+            <select id="yearSelect" class="selector" onchange="changeDataset()" title="Change year drop down">
                 <option value="2022">2022</option>
                 <option value="2021">2021</option>
                 <option value="2019">2019</option>
@@ -244,8 +259,15 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="2016">2016</option>
                 <option value="2015">2015</option>
             </select>
+            &nbsp;Pyramid:
+            <select id="pyramidSelect" class="selector" onchange="changeDataset()" title="Change pyramid drop down">
+                <option value="">All</option>
+                <?php for($i=1; $i<=25; $i++) {
+                    echo "<option value='$i'>$i</option>";
+                } ?>
+            </select>
         </div>
-        <div class="searchbar">
+        <form id="searchform" class="searchbar">
             <label class="shadow" for="question1">1. Select primary question:</label>
             <select id="category1" style="width:160px" class="selector" title="Select category to filter primary question">
                 <option value="" selected="selected">All categories</option>
@@ -271,7 +293,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
             </select>
-            <select id="question1" class="searchbox">
+            <select id="question1" class="searchbox" required>
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" for="question2">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
@@ -322,24 +344,23 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="4">Asian/Pacific Islander</option>
                 <option value="5">Other/Multiple</option>
             </select>
+            <select id="filterracesimple" class="filter selector" title="Race" style="display: none">
+                <option value="">Race</option>
+                <option value="1">White</option>
+                <option value="2">Non-white</option>
+            </select>
             <select id="filtersex" class="filter selector hide6" title="Sexual Orientation">
                 <option value="">Sexual Orientation</option>
                 <option value="1">Heterosexual</option>
                 <option value="2">Gay or lesbian</option>
                 <option value="3">Bisexual</option>
                 <option value="4">Not sure</option>
-            </select>
-            <!--<select id="filterpyramid" class="filter selector" title="Pyramid">
-                <option value="">Pyramid</option>
-                <?php for($i=1; $i<=25; $i++) {
-                    echo "<option value='$i'>$i</option>";
-                } ?>
-            </select>--><br>
+            </select><br>
             <div style="text-align: center;">
-                <input type="button" value="Generate Graph" class="btn" onclick="searchData()">
+                <input type="submit" value="Generate Graph" class="btn">
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'graphs.php'">
             </div>
-        </div>
+        </form>
     </div>
     <div class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
