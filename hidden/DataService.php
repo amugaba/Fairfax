@@ -346,7 +346,7 @@ class DataService {
         return $stmt->fetch_row()[0];
     }
 
-    public function createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified = null) {
+    public function createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified = null, $num_assets = null) {
         $filter = " 1 ";
         if ($grade != null)
             $filter .= " AND I2 = ".$this->connection->real_escape_string($grade);
@@ -360,6 +360,8 @@ class DataService {
             $filter .= " AND Pyramid_Code = ".$this->connection->real_escape_string($pyramid);
         if ($race_simplified != null)
             $filter .= " AND race = ".$this->connection->real_escape_string($race_simplified);
+        if ($num_assets != null)
+            $filter .= " AND assets_3TS = ".$this->connection->real_escape_string($num_assets);
         return $filter;
     }
 
@@ -410,7 +412,7 @@ class DataService {
         return $objs;
     }
     /**@param $result mysqli_result
-     * @param $class ReflectionClass
+     * @param $class string
      * @return mixed|null Returns null if no rows in result set. */
     private function fetchObject($result, $class) {
         if($row = $result->fetch_object()) {

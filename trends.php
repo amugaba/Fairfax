@@ -4,15 +4,22 @@ require_once 'hidden/DataService.php';
 require_once 'hidden/TrendGroups.php';
 
 //Process user input
-$trendGroup = isset($_GET['group'])? $_GET['group'] : null;
-$category = isset($_GET['cat']) ? $_GET['cat'] : null;
-$questionCode = isset($_GET['question'])? $_GET['question'] : null;
-$grade = isset($_GET['grade']) ? $_GET['grade'] : null;
-$gender = isset($_GET['gender']) ? $_GET['gender'] : null;
-$race = isset($_GET['race']) ? $_GET['race'] : null;
-$sexual_orientation = isset($_GET['so']) ? $_GET['so'] : null;
-//$pyramid = isset($_GET['pyr']) ? $_GET['pyr'] : null;
-$pyramid = null;
+$category = $_GET['cat'] ?? null;
+$questionCode = $_GET['question'] ?? null;
+$grp = $_GET['grp'] ?? null;
+$pyramid = $_GET['pyr'] ?? '';
+
+if($pyramid > 0 && $grp > 3)
+    $grp = null;
+
+$groupCode = match ($grp) {
+    '1' => 'I2',
+    '2' => 'I3',
+    '3' => 'race',
+    '4' => 'race_eth',
+    '5' => 'X9',
+    default => null
+};
 
 if(isset($_GET['ds']) && $_GET['ds'] == '6th')
     $dataset = DataService::SIXTH;
@@ -22,55 +29,37 @@ else
 $ds = DataService::getInstance(getCurrentYear(), $dataset);
 $variables = $ds->getTrendVariables();
 
-$showIntro = $trendGroup == null && $questionCode == null;
+$showIntro = $questionCode == null;
 
 if(!$showIntro)
 {
-    //Set up variables (either single question or group)
-    $variablesInGraph = [];
-    if($questionCode != null) {
-        $variable = $ds->getCutoffVariable($questionCode);
-        $graphName = $variable->summary;
-        $variablesInGraph[] = $variable;
-    }
-    else {
-        $groupCodes = getGroupCodes($trendGroup, $dataset);
-        $graphName = "Trend Group: " . getGroupName($trendGroup);
-        foreach ($groupCodes as $code) {
-            $variable = $ds->getCutoffVariable($code);
-            $variablesInGraph[] = $variable;
-        }
-    }
+    $variable = $ds->getCutoffVariable($questionCode);
+    $groupVar = $ds->getMultiVariable($groupCode);
+    $graphName = $variable->summary;
+    $filter = $ds->createFilterString(null, null, null, null, $pyramid, null);
 
     //Get data for each year
     $years = getAllYears(); //from config.php
     $availableYears = [];
     $percentData = [];
-    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid);
     foreach ($years as $year) {
         $ds = DataService::getInstance($year, $dataset);
         $yearData = ["answer" => $year];
         $availableYears[] = $year;
-        for($i=0; $i<count($variablesInGraph); $i++) {
-            if(!$ds->isVariableInData($variablesInGraph[$i]->code)) //this is so slow
-                $yearData['v'.$i] = null; //skip years where variable not in dataset
-            else {
-                $ds->getCutoffPositives($variablesInGraph[$i], null, $filter);
-                $ds->getCutoffTotal($variablesInGraph[$i], null, $filter);
-                $yearData['v' . $i] = round($variablesInGraph[$i]->getPercent(1) * 100, 1);
-            }
+        if(!$ds->isVariableInData($variable->code)) //this is so slow
+            $yearData['v0'] = null; //skip years where variable not in dataset
+        else {
+            $ds->getCutoffPositives($variable, $groupVar, $filter);
+            $ds->getCutoffTotal($variable, $groupVar, $filter);
+            for ($i = 0; $i < count($variable->counts); $i++)
+                $yearData['v'.$i] = round($variable->getPercent($i+1) * 100, 1);
         }
         $percentData[] = $yearData;
     }
 
     //get labels and counts for data table
-    $labels = [];
-    $trendNotes = "";
-    $tooltips = [];
-    foreach ($variablesInGraph as $variable) {
-        $labels[] = $variable->summary;
-        $trendNotes .= getQuestionNote($variable->code, $dataset);
-    }
+    $labels = $groupVar ? $groupVar->getLabels() : [$variable->summary];
+    $trendNotes = getQuestionNote($variable->code, $dataset); //from TrendGroups.php
 }
 ?>
 
@@ -92,55 +81,35 @@ if(!$showIntro)
         $(function() {
             variables = <?php echo json_encode($variables); ?>;
             //get user inputs
-            var trendGroup = <?php echo json_encode($trendGroup); ?>;
             var questionCode = <?php echo json_encode($questionCode); ?>;
+            var group = <?php echo json_encode($grp); ?>;
             var category = <?php echo json_encode($category); ?>;
-            var grade = <?php echo json_encode($grade); ?>;
-            var gender = <?php echo json_encode($gender); ?>;
-            var race = <?php echo json_encode($race); ?>;
-            var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
-            var pyramid = <?php echo json_encode($pyramid); ?>;
+            pyramid = <?php echo json_encode($pyramid); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
-            if(dataset === '6th') {
+
+            if(dataset === '6th')
                 $(".hide6").hide();
-            }
+            if(pyramid > 0)
+                $(".notPyramid").hide();
+            else
+                $(".isPyramid").hide();
 
             //persist user inputs in search form
             if(category != null)
                 $('#category').val(category);
-            var groupSelect = $("#group");
             var questionSelect = $("#question");
             enableSelect2(variables, "#category", "#question"); //must come before setting question value
             questionSelect.val(questionCode);
             questionSelect.trigger('change');
-            groupSelect.val(trendGroup);
-            $('#filtergrade').val(grade);
-            $('#filtergender').val(gender);
-            $('#filterrace').val(race);
-            $('#filtersex').val(sexOrientation);
-            $('#filterpyramid').val(pyramid);
             $('#datasetSelect').val(dataset);
-
-            //If Group is selected, make Question blank and vice versa
-            var blockEvent = false;
-            groupSelect.change(function () {
-                blockEvent = true;
-                questionSelect.val('');
-                questionSelect.trigger('change');
-                blockEvent = false;
-            });
-            questionSelect.change(function () {
-                if(!blockEvent)
-                    $("#group").val('');
-            });
+            $('#pyramidSelect').val(pyramid);
+            $('#groupSelect').val(group);
 
             <?php if(!$showIntro): ?>
             mainTitle = <?php echo json_encode($graphName); ?>;
             labels = <?php echo json_encode($labels); ?>;
             percentData = <?php echo json_encode($percentData); ?>;
-            questions = <?php echo json_encode($variablesInGraph); ?>;
             years = <?php echo json_encode($availableYears); ?>;
-            isGrouped = <?php echo json_encode($trendGroup != null); ?>;
 
             if(years.length === 1) {
                 $(".hideIfNoGraph").hide();
@@ -154,58 +123,40 @@ if(!$showIntro)
                 chart = createLineChart(percentData, labels);
             }
 
-            filterString = makeFilterString(grade, gender, race, sexOrientation, pyramid);
-            var titleString = "<h4>"+mainTitle+"</h4>";
-            if(filterString != null)
-                titleString += "<i>" + filterString + "</i>";
+            let titleString = "<h4>"+mainTitle+"</h4>";
             $("#graphTitle").html(titleString);
 
             simpleTrendTable($('#datatable'), labels, years, percentData, "Years");
             <?php endif; ?>
+
+            $('[data-toggle="tooltip"]').tooltip();
         });
         function exportCSV() {
-            var title = isGrouped ? mainTitle : "Trends: "+mainTitle;
-            simpleTrendCSV(title, labels, years, percentData, years[0]+' to '+years[years.length-1], dataset, filterString, "Years");
+            let title = "Trends: "+mainTitle;
+            simpleTrendCSV(title, labels, years, percentData, years[0]+' to '+years[years.length-1], dataset, "", "Years", pyramid);
         }
         function exportGraph() {
-            exportToPDF(chart, mainTitle, null, years[0]+' to '+years[years.length-1], dataset, filterString);
+            exportToPDF(chart, mainTitle, null, years[0]+' to '+years[years.length-1], dataset, "", pyramid);
         }
         function searchData() {
-            var group = $("#group").val();
-            var category = $("#category").val();
-            var question = $("#question").val();
-            var grade = $("#filtergrade").val();
-            var gender = $("#filtergender").val();
-            var race = $("#filterrace").val();
-            var sexOrientation = $("#filtersex").val();
-            var pyramid = $("#filterpyramid").val();
-            var url = '';
+            let group = $("#groupSelect").val();
+            let category = $("#category").val();
+            let question = $("#question").val();
 
-            if(group != '')
-                url = 'trends.php?ds='+dataset+'&group='+group;
-            else if(question != '') {
-                url = 'trends.php?ds='+dataset+'&question=' + question;
-            }
-            else
-                return;//if both are blank, do nothing
+            if(question === '')
+                return;//if blank, do nothing
 
-            if(category != '')
+            let url = 'trends.php?ds=' + dataset + "&pyr=" + pyramid + "&question=" + question;
+
+            if(category !== '')
                 url += '&cat='+category;
-            if(grade != '')
-                url += "&grade="+grade;
-            if(gender != '')
-                url += "&gender="+gender;
-            if(race != '')
-                url += "&race="+race;
-            if(sexOrientation != '')
-                url += "&so="+sexOrientation;
-            if(pyramid != '')
-                url += "&pyr="+pyramid;
+            if(group !== '')
+                url += '&grp='+group;
 
             window.location.href = url;
         }
-        function changeDataset(ds) {
-            window.location.href = "trends.php?ds="+ds;
+        function changeDataset() {
+            window.location.href = "trends.php?ds="+$("#datasetSelect").val()+"&pyr="+$("#pyramidSelect").val();
         }
     </script>
 </head>
@@ -213,31 +164,24 @@ if(!$showIntro)
 <?php include_header(); ?>
 <div class="container" id="main">
     <div class="row title">
-        <div class="shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">Using dataset
+        <div class="dataset-controls shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">
+            Dataset:
             <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
                 <option value="8to12">8th-12th grade</option>
                 <option value="6th">6th grade</option>
             </select>
+            &nbsp;Pyramid:
+            <select id="pyramidSelect" class="selector" onchange="changeDataset()" title="Change pyramid drop down">
+                <option value="">All</option>
+                <?php for($i=1; $i<=25; $i++) {
+                    echo "<option value='$i'>$i</option>";
+                } ?>
+            </select>
+            <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
+                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>
         </div>
         <div class="searchbar" style="max-width: 850px">
-            <label class="shadow" style="width: 414px" for="group">1. Select a group to see highlighted questions:</label>
-            <select id="group" style="width:400px; margin-bottom: 0" class="selector">
-                <option value="">Select an option</option>
-                <option value="1">Alcohol</option>
-                <option value="2">Tobacco</option>
-                <option value="3">Drugs</option>
-                <option value="20" class="hide6">Vaping</option>
-                <option value="4" class="hide6">Sexual Health</option>
-                <option value="5" class="hide6">Vehicle Safety</option>
-                <option value="6">Bullying & Cyberbullying</option>
-                <option value="7" class="hide6">Dating Aggression</option>
-                <option value="8">Harassment and Aggressive Behaviors</option>
-                <option value="10">Nutrition and Physical Activity</option>
-                <option value="11">Mental Health</option>
-                <option value="12">Civic Engagement and Time Use</option>
-                <option value="13">Assets that Build Resiliency</option>
-            </select><br>
-            <label class="shadow" style="width: 250px" for="question">OR Select an <br>individual question:</label>
+            <label class="shadow" style="width: 250px" for="question">1. Select a question:</label>
             <select id="category" style="width:160px" class="selector" title="Select category to filter primary question">
                 <option value="" selected="selected">All categories</option>
                 <option value="1">Alcohol</option>
@@ -264,39 +208,15 @@ if(!$showIntro)
             <select id="question" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
-            <label class="shadow" style="margin: 10px 0 20px; width: 250px">2. (Optional) Filter data by:</label>
-            <select id="filtergrade" class="filter selector hide6" title="Grade">
-                <option value="">Grade</option>
-                <option value="1">8th</option>
-                <option value="2">10th</option>
-                <option value="3">12th</option>
-            </select>
-            <select id="filtergender" class="filter selector" title="Gender">
-                <option value="">Gender</option>
-                <option value="1">Female</option>
-                <option value="2">Male</option>
-            </select>
-            <select id="filterrace" class="filter selector" title="Race">
-                <option value="">Race</option>
-                <option value="1">White</option>
-                <option value="2">Black</option>
-                <option value="3">Hispanic</option>
-                <option value="4">Asian/Pacific Islander</option>
-                <option value="5">Other/Multiple</option>
-            </select>
-            <select id="filtersex" class="filter selector hide6" title="Sexual Orientation">
-                <option value="">Sexual Orientation</option>
-                <option value="1">Heterosexual</option>
-                <option value="2">Gay or lesbian</option>
-                <option value="3">Bisexual</option>
-                <option value="4">Not sure</option>
-            </select>
-            <!--<select id="filterpyramid" class="filter selector" title="Pyramid">
-                <option value="">Pyramid</option>
-                <?php for($i=1; $i<=25; $i++) {
-                    echo "<option value='$i'>$i</option>";
-                } ?>
-            </select>--><br>
+            <label class="shadow" style="margin: 10px 0 20px; width: 250px">2. (Optional) Group data by:</label>
+            <select id="groupSelect" class="filter selector" title="Group data by">
+                <option value="">None</option>
+                <option value="1">Grade</option>
+                <option value="2">Gender</option>
+                <option value="3" class="isPyramid">Race (simplified)</option>
+                <option value="4" class="notPyramid">Race</option>
+                <option value="5" class="notPyramid hide6">Sexual Orientation</option>
+            </select><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'trends.php'">
@@ -322,7 +242,7 @@ if(!$showIntro)
 
             <div id="chartdiv" style="width100%; height:700px;"></div>
 
-        <?php if(strlen($trendNotes) > 0) {
+        <?php if($trendNotes != null) {
             echo "<div style='text-align: center'>
                     <p><b>**Note:</b> $trendNotes</p>
                   </div>";

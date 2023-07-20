@@ -82,8 +82,8 @@ function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset,
     tableToExcel(csv);
 }
 
-function simpleTrendCSV(mainTitle, labels, xAxisLabels, percents, year, dataset, filterString, xAxisLabel) {
-    var csv = getCSVHeader(mainTitle, null, year, dataset, filterString);
+function simpleTrendCSV(mainTitle, labels, xAxisLabels, percents, year, dataset, filterString, xAxisLabel, pyramid) {
+    var csv = getCSVHeader(mainTitle, null, year, dataset, filterString, pyramid);
 
     csv += ","+xAxisLabel+"\r\n";
     for(var i=0; i<xAxisLabels.length; i++){

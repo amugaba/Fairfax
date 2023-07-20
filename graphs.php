@@ -266,6 +266,8 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                     echo "<option value='$i'>$i</option>";
                 } ?>
             </select>
+            <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
+                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>
         </div>
         <form id="searchform" class="searchbar">
             <label class="shadow" for="question1">1. Select primary question:</label>
