@@ -108,9 +108,22 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
             group = <?php echo json_encode($grp); ?>;
             pyramid = <?php echo json_encode($pyramid); ?>;
 
-            if(dataset === '6th') {
+            //hide some inputs based on dataset or category
+            if(dataset === '6th')
                 $(".hide6").hide();
+            if(category === 5)
+                $("#gradeButton").hide(); //vehicle safety
+
+            //set width of Group buttons box, depending on number of buttons
+            //460 = default, 530 = Race (simplified), 380 = No Grade, 450 = No Grade, Race (simplified)
+            if(dataset === '6th' || category === 5) {
+                if(pyramid > 0)
+                    $(".groupbox").width(450);
+                else
+                    $(".groupbox").width(380);
             }
+            else if(pyramid > 0)
+                $(".groupbox").width(530);
 
             if(percentData.length > 0) {
                 createBarGraph(percentData, mainTitle, groupSummary, groupLabels, tooltips);
@@ -123,17 +136,6 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
             else {
                 $(".hideIfNoGraph").hide();
                 $(".showIfNoGraph").show();
-            }
-            if(dataset === '6th') {
-                $(".groupbox").width(380);
-                $("#gradeButton").hide();
-            }
-            else {
-                    $(".groupbox").width(450);
-            }
-            if(category == 5) {
-                $("#gradeButton").hide(); //vehicle safety
-                $(".groupbox").width(380);
             }
 
             $("#graphTitle").html(year + " Highlights: " + mainTitle);
@@ -213,6 +215,8 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                             echo "<option value='$i'>$i</option>";
                         } ?>
                     </select>
+                    <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
+                         title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>
                 </div>
             </div>
             <h2 class="shadowdeep">Select a Category
@@ -244,12 +248,13 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 </div>
             </div>
 
-            <div id="grouping" class="groupbox hideIfNoGraph" style="width:550px; margin: 20px auto 0">
+            <div id="grouping" class="groupbox hideIfNoGraph" style="width:460px; margin: 20px auto 0">
                 <span style="font-weight: bold">Group data by:</span>
                 <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
-                <span id="gradeButton"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
+                <span id="gradeButton" class="hide6"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
-                <input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
+                <?php if($pyramid == ''): ?><input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
+                <?php else: ?><input id="raceSimple" name="grouping" type="radio" value="race"/><label for="raceSimple">Race (simplified)</label><?php endif; ?>
                 <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race to see how each group answered."></div>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
