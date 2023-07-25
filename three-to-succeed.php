@@ -54,7 +54,7 @@ if(!$showIntro && $variableAvailable){
     $percentData = [];
     for ($assetNum = 0; $assetNum <= 6; $assetNum++) {
         $assetData = ["answer" => $assetNum];
-        $filter = $ds->createFilterString(null, null, null, null, $pyramid, null, $assetNum);
+        $filter = $ds->createFilterString(null, null, null, null, $pyramid, null, $assetNum+1); //add 1 b/c answer1 = 0, answer2 = 1
         $ds->getCutoffPositives($variable, $groupVar, $filter);
         $ds->getCutoffTotal($variable, $groupVar, $filter);
 

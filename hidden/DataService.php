@@ -360,7 +360,7 @@ class DataService {
             $filter .= " AND Pyramid_Code = ".$this->connection->real_escape_string($pyramid);
         if ($race_simplified != null)
             $filter .= " AND race = ".$this->connection->real_escape_string($race_simplified);
-        if ($num_assets != null)
+        if ($num_assets !== null)
             $filter .= " AND assets_3TS = ".$this->connection->real_escape_string($num_assets);
         return $filter;
     }
