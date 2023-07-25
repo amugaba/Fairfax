@@ -112,6 +112,7 @@ if(!$showIntro && $variableAvailable){
             $('#datasetSelect').val(dataset);
             $('#pyramidSelect').val(pyramid);
             $('#groupSelect').val(group);
+            $('#yearSelect').val(year);
 
             <?php if(!$showIntro && $variableAvailable): ?>
             mainTitle = <?php echo json_encode($graphName); ?>;
