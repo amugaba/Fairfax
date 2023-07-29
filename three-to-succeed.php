@@ -44,9 +44,6 @@ if(!$showIntro) {
 if(!$showIntro && $variableAvailable){
     $graphName = '"'.$variable->summary.'" by Number of Assets';
     $groupVar = $ds->getMultiVariable($groupCode);
-    //$groupVar = $ds->getMultiVariable($threeToSucceedCode);
-
-    $variable->initializeCounts($groupVar);
 
     //Create the data structure used by AmCharts for line graphs
     //[['answer' => 0, 'v0' => Variable0 percent, 'v1' => Variable1 percent, ...], ['answer' => 1, ...]]
@@ -55,6 +52,7 @@ if(!$showIntro && $variableAvailable){
     for ($assetNum = 0; $assetNum <= 6; $assetNum++) {
         $assetData = ["answer" => $assetNum];
         $filter = $ds->createFilterString(null, null, null, null, $pyramid, null, $assetNum+1); //add 1 b/c answer1 = 0, answer2 = 1
+        $variable->initializeCounts($groupVar);
         $ds->getCutoffPositives($variable, $groupVar, $filter);
         $ds->getCutoffTotal($variable, $groupVar, $filter);
 
