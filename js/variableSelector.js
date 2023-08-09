@@ -30,7 +30,7 @@ function refreshVariables(category, target, allowClear) {
     $(target).select2({data:data,
         containerCssClass: "searchbox",
         dropdownCssClass: "searchbox",
-        placeholder: "Select an option",
+        placeholder: "Select a question",
         allowClear: allowClear
     });
 }
