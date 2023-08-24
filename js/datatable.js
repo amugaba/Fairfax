@@ -41,7 +41,8 @@ function getCSVHeader(mainTitle, groupTitle, year, dataset, filterString, pyrami
     var csv = "Fairfax County Youth Survey Data Explorer\r\n";
     csv += "Year: " + year + "\r\n";
     csv += "\"Dataset: " + (dataset==='6th' ? '6th grade' : '8th, 10th, and 12th grades') + "\"\r\n";
-    csv += "\"Pyramid: " + (pyramid ? pyramid: 'All') + "\"\r\n";
+    if(pyramid > 0)
+        csv += "\"Pyramid: " + pyramid + "\"\r\n";
     csv += '"' + mainTitle + '"\r\n';
     if(groupTitle != null)
         csv += '"Compared to Question: ' + groupTitle + '"\r\n';

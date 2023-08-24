@@ -7,7 +7,7 @@ require_once 'hidden/TrendGroups.php';
 $category = $_GET['cat'] ?? null;
 $questionCode = $_GET['question'] ?? null;
 $grp = $_GET['grp'] ?? null;
-$pyramid = $_GET['pyr'] ?? '';
+$pyramid = ''; //$_GET['pyr'] ?? ''; Uncomment to re-enable
 
 if($pyramid > 0 && $grp > 3)
     $grp = null;
@@ -44,6 +44,8 @@ if(!$showIntro) {
 if(!$showIntro && $variableAvailable){
     $graphName = '"'.$variable->summary.'" by Number of Assets';
     $groupVar = $ds->getMultiVariable($groupCode);
+    if($groupVar != null)
+        $groupVar->labels[] = "Total";
 
     //Create the data structure used by AmCharts for line graphs
     //[['answer' => 0, 'v0' => Variable0 percent, 'v1' => Variable1 percent, ...], ['answer' => 1, ...]]
@@ -177,7 +179,7 @@ if(!$showIntro && $variableAvailable){
                 <option value="2016">2016</option>
                 <option value="2015">2015</option>
             </select>
-            &nbsp;Pyramid:
+            <!--&nbsp;Pyramid:
             <select id="pyramidSelect" class="selector" onchange="changeDataset()" title="Change pyramid drop down">
                 <option value="">All</option>
                 <?php for($i=1; $i<=25; $i++) {
@@ -185,7 +187,7 @@ if(!$showIntro && $variableAvailable){
                 } ?>
             </select>
             <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
-                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>
+                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>-->
         </div>
         <div class="searchbar" style="max-width: 850px">
             <label class="shadow" style="width: 250px" for="question">1. Select a question:</label>
@@ -272,6 +274,9 @@ if(!$showIntro && $variableAvailable){
                 </table>
                 <?php if($groupCode == 'I3') { ?>
                     <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.</p>
+                <?php } ?>
+                <?php if($questionCode === 'A5' || $questionCode === 'S3' || $questionCode === 'S4') { ?>
+                    <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
                 <?php } ?>
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>

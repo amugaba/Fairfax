@@ -266,7 +266,7 @@ function exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString, 
             });
     }
     exportContent.push({
-        text: "Dataset = " + (dataset==='6th' ? '6th grade' : '8th, 10th, and 12th grades') + ", Pyramid = " + (pyramid > 0 ? pyramid : 'All'),
+        text: "Dataset = " + (dataset==='6th' ? '6th grade' : '8th, 10th, and 12th grades') + (pyramid > 0 ? ", Pyramid = " + pyramid : ''),
         style: ["description"]
     });
     if(filterString != null) {

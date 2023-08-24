@@ -23,14 +23,8 @@ function getHighlightGroup($cat, $dataset, $year)
     else if ($cat == 2) {
         $title = "Tobacco";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            if($year >= 2021) {
-                $qCodes = ['T3', 'T4A', 'T2'];
-                $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month Smokeless Tobacco Use'];
-            }
-            else {
-                $qCodes = ['T3', 'T4A', 'T5', 'T2'];
-                $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month E-Cigarette Use', 'Past Month Smokeless Tobacco Use'];
-            }
+            $qCodes = ['T3', 'T4A', 'T5', 'T2', 'T6'];
+            $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month E-Cigarette Use', 'Past Month Smokeless Tobacco Use', 'Past Month Hookah Use'];
             $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco, including e-cigarettes.</p>
             <p>To learn about other substances or to compare tobacco use with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
@@ -90,8 +84,8 @@ function getHighlightGroup($cat, $dataset, $year)
     } else if ($cat == 5) {
         $title = "Vehicle Safety";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['A5', 'S3'];
-            $labels = ['Past Month Driving after Drinking', 'Past Month Texting while Driving'];
+            $qCodes = ['A5', 'S3', 'S4'];
+            $labels = ['Past Month Driving after Drinking', 'Past Month Texting while Driving', 'Past Month Fell Asleep while Driving'];
             $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
             after drinking and texting while driving.</p><p style='font-style: italic; text-decoration: underline'>Data are for 12th grade students only.</p>
             <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
@@ -117,8 +111,8 @@ function getHighlightGroup($cat, $dataset, $year)
     } else if ($cat == 7) {
         $title = "Dating Aggression";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['B15', 'B16'];
-            $labels = ['Had a Partner that Always Wanted to Know Whereabouts', 'Had a Partner that Verbally Abused'];
+            $qCodes = ['B15', 'B16', 'B24', 'B25'];
+            $labels = ['Had a Partner that Always Wanted to Know Whereabouts', 'Had a Partner that Verbally Abused', 'Past Year Was Physically Hurt by Partner', 'Past Year Was Forced to Do Sexual Things by Partner'];
             $explanation = "<p>There are a variety of behaviors that might be classified as dating aggression, or that might signify 
             a risk of dating aggression. These range from a partner always wanting to know his or her partner's whereabouts to pressuring a partner to have sex.</p>
             <p>To learn more about behaviors related to dating aggression, including physical abuse, <a href='graphs.php'>Explore the Data</a>.</p>";
@@ -132,39 +126,30 @@ function getHighlightGroup($cat, $dataset, $year)
     } else if ($cat == 8) {
         $title = "Harassment and Aggressive Behaviors";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['B2A', 'B10A', 'B11', 'W5'];
-            $labels = ["Past Year Insulted Someone's Race or Culture", 'Past Year Had Race or Culture Insulted', 'Past Year Had Been Sexually Harassed', 'Past Month Carried a Weapon'];
+            $qCodes = ['B2A', 'B10A', 'B11', 'W5', 'B14A', 'B14B'];
+            $labels = ["Past Year Insulted Someone's Race or Culture", 'Past Year Had Race or Culture Insulted', 'Past Year Had Been Sexually Harassed', 'Past Month Carried a Weapon',
+                'Past Year Was Verbally Abused by Parent', 'Past Year Was Physically Hurt by Parent'];
             $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
             provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who reported carrying a weapon.</p>
             <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
-            $qCodes = ['B2A', 'B10A', 'W5'];
-            $labels = ["Past Year Insulted Someone's Race or Culture", 'Past Year Had Race or Culture Insulted', 'Past Month Carried a Weapon'];
+            $qCodes = ['B2A', 'B10A', 'W5', 'B14A', 'B14B'];
+            $labels = ["Past Year Insulted Someone's Race or Culture", 'Past Year Had Race or Culture Insulted', 'Past Month Carried a Weapon',
+                'Past Year Was Verbally Abused by Parent', 'Past Year Was Physically Hurt by Parent'];
             $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
             provides information on racial/cultural harassment and on youth who reported carrying a weapon.</p>
             <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
-    } else if ($cat == 10) {
-        $title = "Nutrition and Physical Activity";
-        if($dataset == DataService::EIGHT_TO_TWELVE) {
-            if($year >= 2021) {
-                $qCodes = ['fruitveg2021', 'H7', 'H3', 'H20', 'H2'];
-            }
-            else {
-                $qCodes = ['fruitveg', 'H7', 'H3', 'H20', 'H2'];
-            }
-            $labels = ['Ate Fruits and Vegetables at least 5 Times per Day', 'Drank No Soda during Past Week', 'Had One Hour of Physical Activity at least 5 Days per Week',
-                'Got Eight or More Hours of Sleep on a School Night','Used Computer or Played Video Games for 3+ Hours per Day'];
-        }
-        else {
-            $qCodes = ['fruitveg', 'H7', 'H3', 'H2'];
-            $labels = ['Ate Fruits and Vegetables at least 5 Times per Day', 'Drank No Soda during Past Week', 'Had One Hour of Physical Activity at least 5 Days per Week',
-                'Used Computer or Played Video Games for 3+ Hours per Day'];
-        }
-        $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sweetened beverages, level of physical activity, and other questions related to physical health.</p>
-        <p>To learn more about behaviors related to nutrition and physical health, including unhealthy weight loss and food insecurity (hunger), <a href='graphs.php'>Explore the Data</a>.</p>";
-    } else if ($cat == 11) {
+    }
+    else if ($cat == 10) {
+        $title = "Nutrition";
+        $qCodes = ['fruitveg', 'fruitveg2021', 'H7', 'RF31'];
+        $labels = ['Ate Fruits and Vegetables at least 5 Times per Day', 'Ate Fruits and Vegetables at least 5 Times per Day', 'Drank No Soda during Past Week', 'Past Month Went Hungry (Food Insecurity)'];
+        $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sweetened beverages, and going hungry due to food insecurity.</p>
+        <p>To learn more about behaviors related to nutrition, including energy drink and sports drink consumption, <a href='graphs.php'>Explore the Data</a>.</p>";
+    }
+    else if ($cat == 11) {
         $title = "Mental Health";
         if($dataset == DataService::EIGHT_TO_TWELVE) {
             if($year >= 2021) {
@@ -194,15 +179,18 @@ function getHighlightGroup($cat, $dataset, $year)
             (which may indicate risk for depression).</p>
         <p>To learn more about these topics, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
-    } else if ($cat == 12) {
+    }
+    else if ($cat == 12) {
         $title = "Civic Engagement and Time Use";
-        $qCodes = ['C2', 'C11', 'C12', 'extracurric'];
-        $labels = ['Volunteered to do Community Service Regularly', 'Did Homework for 3+ Hours per Day', 'Went to Work for 3+ Hours per Day', 'Did Extracurriculars for 3+ Hours per Day'];
+        $qCodes = ['C2', 'C11', 'C12', 'extracurric', 'C4'];
+        $labels = ['Volunteered to do Community Service Regularly', 'Did Homework for 1+ Hours per Day', 'Went to Work for 1+ Hours per Day', 'Did Extracurriculars for 1+ Hours per Day',
+            'Past Year Served as a Leader in a Group'];
         $explanation = "<p>The Youth Survey asks questions related to civic engagement and use of time outside of school hours, 
             including volunteering for community service and time spent on homework, working at a job, and participating in extracurricular 
             activities. This page shows the percentage of students who volunteer regularly and spend 3 or more hours on selected activities outside of school hours.</p>
         <p>To see more specific level of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
-    } else if ($cat == 13) {
+    }
+    else if ($cat == 13) {
         $title = "Assets that Build Resiliency";
         $qCodes = ['PF9', 'C2', 'LS4', 'C10', 'PS3', 'PC2'];
         $labels = ['Can Ask Parents for Help with Personal Problems', 'Performs Community Service Once a Month or More', 'Feels It Is Important to Accept Responsibility for Actions',
@@ -212,7 +200,16 @@ function getHighlightGroup($cat, $dataset, $year)
             has in his or her life, the fewer risk behaviors are reported.  This highlights page focuses on selected assets that build resiliency in youth.</p>
         <p>To learn about other assets or to compare prevalence of risk behaviors with assets, <a href='graphs.php'>Explore the Data</a> 
         under the following categories:  School, Family, Community Support, Civic Engagement, and Self/Peer Perception.</p>";
-    } else {
+    }
+    else if ($cat == 14) {
+        $title = "Physical Activity";
+        $qCodes = ['H3', 'H20', 'H2', 'H1'];
+        $labels = ['Had One Hour of Physical Activity at least 5 Days per Week', 'Got Eight or More Hours of Sleep on a School Night', 'Used Computer or Played Video Games for 3+ Hours per Day',
+            'Watched TV for 3+ Hours per Day'];
+        $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sweetened beverages, level of physical activity, and other questions related to physical health.</p>
+        <p>To learn more about behaviors related to nutrition and physical health, including unhealthy weight loss and food insecurity (hunger), <a href='graphs.php'>Explore the Data</a>.</p>";
+    }
+    else {
         die("Category chosen is invalid.");
     }
 

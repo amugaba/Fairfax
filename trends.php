@@ -7,7 +7,7 @@ require_once 'hidden/TrendGroups.php';
 $category = $_GET['cat'] ?? null;
 $questionCode = $_GET['question'] ?? null;
 $grp = $_GET['grp'] ?? null;
-$pyramid = $_GET['pyr'] ?? '';
+$pyramid = ''; //$_GET['pyr'] ?? ''; Uncomment to re-enable
 
 if($pyramid > 0 && $grp > 3)
     $grp = null;
@@ -35,6 +35,8 @@ if(!$showIntro)
 {
     $variable = $ds->getCutoffVariable($questionCode);
     $groupVar = $ds->getMultiVariable($groupCode);
+    if($groupVar != null)
+        $groupVar->labels[] = "Total";
     $graphName = $variable->summary;
     $filter = $ds->createFilterString(null, null, null, null, $pyramid, null);
 
@@ -170,7 +172,7 @@ if(!$showIntro)
                 <option value="8to12">8th-12th grade</option>
                 <option value="6th">6th grade</option>
             </select>
-            &nbsp;Pyramid:
+            <!--&nbsp;Pyramid:
             <select id="pyramidSelect" class="selector" onchange="changeDataset()" title="Change pyramid drop down">
                 <option value="">All</option>
                 <?php for($i=1; $i<=25; $i++) {
@@ -178,7 +180,7 @@ if(!$showIntro)
                 } ?>
             </select>
             <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
-                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>
+                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>-->
         </div>
         <div class="searchbar" style="max-width: 850px">
             <label class="shadow" style="width: 250px" for="question">1. Select a question:</label>

@@ -25,7 +25,7 @@ $gender = $_GET['gender'] ?? null;
 $race = $_GET['race'] ?? null;
 $race_simplified = $_GET['rsim'] ?? null;
 $sexual_orientation = $_GET['so'] ?? null;
-$pyramid = $_GET['pyr'] ?? '';
+$pyramid = ''; //$_GET['pyr'] ?? ''; Uncomment to re-enable
 
 if($pyramid > 0) {
     $race = null;
@@ -259,7 +259,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="2016">2016</option>
                 <option value="2015">2015</option>
             </select>
-            &nbsp;Pyramid:
+            <!--&nbsp;Pyramid:
             <select id="pyramidSelect" class="selector" onchange="changeDataset()" title="Change pyramid drop down">
                 <option value="">All</option>
                 <?php for($i=1; $i<=25; $i++) {
@@ -267,7 +267,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 } ?>
             </select>
             <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
-                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>
+                 title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>-->
         </div>
         <form id="searchform" class="searchbar">
             <label class="shadow" for="question1">1. Select primary question:</label>
@@ -404,7 +404,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                             <li>Race/Ethnicity</li>
                             <li>Language used at home</li>
                             <li>Sexual orientation</li>
-                            <li>Pyramid</li>
+                            <!--<li>Pyramid</li>-->
                         </ul>
                     </div>
                     <div class="grid-half">
@@ -435,6 +435,9 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
+                <?php if($q1 === 'A5' || $q1 === 'S3' || $q1 === 'S4' || $grp === 'A5' || $grp === 'S3' || $grp === 'S4') { ?>
+                    <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
+                <?php } ?>
                 <div>No Response: <?php echo number_format($noresponse,0);?></div>
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>

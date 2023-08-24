@@ -16,16 +16,20 @@ else
 $ds = DataService::getInstance($year, $dataset);
 $cat = $_GET['cat'] ?? 1;
 $grp = $_GET['grp'] ?? 'none';
-$pyramid = $_GET['pyr'] ?? '';
+$pyramid = ''; //$_GET['pyr'] ?? ''; Uncomment to re-enable
 
 $highlightGroup = getHighlightGroup($cat, $dataset, $year);
 $groupVar = $ds->getMultiVariable($grp);
+if($groupVar != null)
+    $groupVar->labels[] = "Total";
 $variablesInGraph = [];
 $filter = $ds->createFilterString(null,null,null,null,$pyramid);
 
 //get data for each question
 for($i = 0; $i < count($highlightGroup->codes); $i++)
 {
+    if(!$ds->isVariableInData($highlightGroup->codes[$i]))
+        continue;
     $variable = $ds->getCutoffVariable($highlightGroup->codes[$i]);
     $variable->initializeCounts($groupVar);
     $variable->summary = $highlightGroup->labels[$i];
@@ -207,7 +211,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                         <option value="6th">6th grade</option>
                     </select>
                 </div>
-                <div>
+                <!--<div>
                     <label for="pyramidSelect">Pyramid:</label>
                     <select id="pyramidSelect" class="selector" onchange="changePyramid(this.value)" title="Change pyramid drop down">
                         <option value="">All</option>
@@ -217,7 +221,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                     </select>
                     <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
                          title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>
-                </div>
+                </div>-->
             </div>
             <h2 class="shadowdeep">Select a Category
                 <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
@@ -232,7 +236,8 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                     <li><a data-category="6">Bullying and Cyberbullying</a></li>
                     <li class="hide6"><a data-category="7">Dating Aggression</a></li>
                     <li><a data-category="8">Harassment and Aggressive Behaviors</a></li>
-                    <li><a data-category="10">Nutrition and Physical Activity</a></li>
+                    <li><a data-category="10">Nutrition</a></li>
+                    <li><a data-category="14">Physical Activity</a></li>
                     <li><a data-category="11">Mental Health</a></li>
                     <li><a data-category="12">Civic Engagement and Time Use</a></li>
                     <li><a data-category="13">Assets that Build Resiliency</a></li>
@@ -268,6 +273,9 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 </table>
                 <?php if($grp == 'I3') { ?>
                     <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.</p>
+                <?php } ?>
+                <?php if($cat == 5) { ?>
+                    <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
                 <?php } ?>
                 <input type="button" onclick="exportCSV()" class="btn btn-blue" value="Export to CSV" style="margin-top: 10px">
             </div>
