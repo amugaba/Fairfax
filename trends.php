@@ -51,6 +51,7 @@ if(!$showIntro)
         if(!$ds->isVariableInData($variable->code)) //this is so slow
             $yearData['v0'] = null; //skip years where variable not in dataset
         else {
+            $variable->initializeCounts($groupVar);
             $ds->getCutoffPositives($variable, $groupVar, $filter);
             $ds->getCutoffTotal($variable, $groupVar, $filter);
             for ($i = 0; $i < count($variable->counts); $i++)
@@ -257,6 +258,9 @@ if(!$showIntro)
                 </table>
                 <?php if($groupCode == 'I3') { ?>
                     <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.</p>
+                <?php } ?>
+                <?php if($questionCode === 'A5' || $questionCode === 'S3' || $questionCode === 'S4') { ?>
+                    <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
                 <?php } ?>
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>
