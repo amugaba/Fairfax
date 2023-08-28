@@ -257,7 +257,12 @@ if(!$showIntro)
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <?php if($groupCode == 'I3') { ?>
-                    <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.</p>
+                    <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.<br>
+                        As such, the <b>Total</b> here only includes students that answered Male or Female.<br>
+                        To see the total for all students, set <b>Group By</b> to None.</p>
+                <?php } else if($groupCode > 0 && $groupCode !== 'I2') { ?>
+                    <p style="font-style: italic">*The <b>Total</b> here only includes students that answered the <b>Group By</b> question.<br>
+                        To see the total for all students, set Group By to None.</p>
                 <?php } ?>
                 <?php if($questionCode === 'A5' || $questionCode === 'S3' || $questionCode === 'S4') { ?>
                     <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>

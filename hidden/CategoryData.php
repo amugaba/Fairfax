@@ -187,7 +187,7 @@ function getHighlightGroup($cat, $dataset, $year)
             'Past Year Served as a Leader in a Group'];
         $explanation = "<p>The Youth Survey asks questions related to civic engagement and use of time outside of school hours, 
             including volunteering for community service and time spent on homework, working at a job, and participating in extracurricular 
-            activities. This page shows the percentage of students who volunteer regularly and spend 3 or more hours on selected activities outside of school hours.</p>
+            activities. This page shows the percentage of students who volunteer regularly and spend 1 or more hours on selected activities outside of school hours.</p>
         <p>To see more specific level of engagement of students, such as number of hours worked or number of times volunteered, <a href='graphs.php'>Explore the Data</a>.</p>";
     }
     else if ($cat == 13) {

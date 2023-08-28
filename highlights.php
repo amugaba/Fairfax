@@ -15,7 +15,7 @@ else
 
 $ds = DataService::getInstance($year, $dataset);
 $cat = $_GET['cat'] ?? 1;
-$grp = $_GET['grp'] ?? 'none';
+$grp = $_GET['grp'] ?? '';
 $pyramid = ''; //$_GET['pyr'] ?? ''; Uncomment to re-enable
 
 $highlightGroup = getHighlightGroup($cat, $dataset, $year);
@@ -53,15 +53,16 @@ foreach ($variablesInGraph as $variable) {
 //Also create data for display in graph and table
 $mainLabels = []; //labels for main variable
 $counts = []; //[[var1 counts], [var2 counts], ...] where [var1 counts] = [group1, group2, ...]
-$sumPositives = []; //sum positives/counts for a variable
 $variableTotals = []; //sum valid cases for a variable
 $tooltips = []; //mouse-over pop-ups to explain graph labels and bars
 
 foreach ($variablesInGraph as $variable) {
     $mainLabels[] = $variable->summary;
     $counts[] = $variable->counts;
-    $sumPositives[] = array_sum($variable->counts);
-    $variableTotals[] = array_sum($variable->totals);
+    if($groupVar !== null)
+        $variableTotals[] = end($variable->totals); //last element is the total
+    else
+        $variableTotals[] = array_sum($variable->totals);
     $tooltips[] = $variable->tooltip;
 }
 
@@ -100,7 +101,6 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
             groupLabels = <?php echo json_encode($groupLabels); ?>;
             counts = <?php echo json_encode($counts); ?>;
             percentData = <?php echo json_encode($percentData); ?>;
-            sumPositives = <?php echo json_encode($sumPositives); ?>;
             totals = <?php echo json_encode($variableTotals); ?>;
             tooltips = <?php echo json_encode($tooltips); ?>;
             isGrouped = groupLabels.length > 1;
@@ -155,17 +155,17 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
 
             //set category links, preserve year and dataset, reset grouping
             $('.categories li a').each(function(){
-                $(this).attr('href', generateHighlightLink(year, dataset, $(this).data('category'), 'none', pyramid));
+                $(this).attr('href', generateHighlightLink(year, dataset, $(this).data('category'), '', pyramid));
             });
         });
         function changeYear(yr) {
-            window.location = generateHighlightLink(yr, dataset, category, 'none', pyramid);
+            window.location = generateHighlightLink(yr, dataset, category, '', pyramid);
         }
         function changeDataset(ds) {
-            window.location = generateHighlightLink(year, ds, category, 'none', pyramid);
+            window.location = generateHighlightLink(year, ds, category, '', pyramid);
         }
         function changePyramid(pyramid) {
-            window.location = generateHighlightLink(year, dataset, category, 'none', pyramid);
+            window.location = generateHighlightLink(year, dataset, category, '', pyramid);
         }
         function exportCSV() {
             if(!isGrouped)
@@ -255,7 +255,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
 
             <div id="grouping" class="groupbox hideIfNoGraph" style="width:460px; margin: 20px auto 0">
                 <span style="font-weight: bold">Group data by:</span>
-                <input id="none" name="grouping" type="radio" value="none" checked="checked"/><label for="none">None</label>
+                <input id="none" name="grouping" type="radio" value="" checked="checked"/><label for="none">None</label>
                 <span id="gradeButton" class="hide6"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <?php if($pyramid == ''): ?><input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race</label>
@@ -272,7 +272,12 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <?php if($grp == 'I3') { ?>
-                    <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.</p>
+                    <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.<br>
+                        As such, the <b>Total</b> here only includes students that answered Male or Female.<br>
+                        To see the total for all students, set <b>Group By</b> to None.</p>
+                <?php } else if($grp > 0 && $grp !== 'I2') { ?>
+                    <p style="font-style: italic">*The <b>Total</b> here only includes students that answered the <b>Group By</b> question.<br>
+                        To see the total for all students, set Group By to None.</p>
                 <?php } ?>
                 <?php if($cat == 5) { ?>
                     <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
