@@ -93,7 +93,6 @@ if(!$showIntro && $variableAvailable){
             pyramid = <?php echo json_encode($pyramid); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
             year = <?php echo json_encode($year); ?>;
-            assetTotals = <?php echo json_encode($assetTotals); ?>;
 
             if(dataset === '6th')
                 $(".hide6").hide();
@@ -119,6 +118,7 @@ if(!$showIntro && $variableAvailable){
             labels = <?php echo json_encode($labels); ?>;
             percentData = <?php echo json_encode($percentData); ?>;
             assetLabels = <?php echo json_encode($assetLabels); ?>;
+            assetTotals = <?php echo json_encode($assetTotals); ?>;
 
             chart = createLineChart(percentData, labels, 'Number of Assets');
 

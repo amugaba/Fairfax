@@ -33,8 +33,8 @@ for($i = 0; $i < count($highlightGroup->codes); $i++)
     $variable = $ds->getCutoffVariable($highlightGroup->codes[$i]);
     $variable->initializeCounts($groupVar);
     $variable->summary = $highlightGroup->labels[$i];
-    $ds->getCutoffPositives($variable, $groupVar, $filter);
-    $ds->getCutoffTotal($variable, $groupVar, $filter);
+    $ds->getCutoffPositivesWithRollup($variable, $groupVar, $filter);
+    $ds->getCutoffTotalWithRollup($variable, $groupVar, $filter);
     $variable->calculatePercents();
     $variablesInGraph[] = $variable;
 }

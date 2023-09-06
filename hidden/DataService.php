@@ -321,6 +321,81 @@ class DataService {
         }
     }
 
+    /**Get the number of students that selected an answer within the cutoff points.
+     * @param CutoffVariable $variable
+     * @param Variable $groupVar
+     * @param string $filter    */
+    public function getCutoffPositivesWithRollup($variable, $groupVar, $filter)
+    {
+        $cutoffQuery = "1";
+        if($variable->lowCutoff != null) {
+            $cutoffQuery .= " AND $variable->code >= $variable->lowCutoff";
+        }
+        if($variable->highCutoff != null) {
+            $cutoffQuery .= " AND $variable->code <= $variable->highCutoff";
+        }
+
+        if($groupVar != null) {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupVar->code as subgroup
+                FROM $this->datatable 
+                WHERE $groupVar->code IS NOT NULL AND $cutoffQuery AND $filter
+                GROUP BY $groupVar->code WITH ROLLUP");
+        }
+        else {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num
+                FROM $this->datatable 
+                WHERE $cutoffQuery AND $filter");
+        }
+        $this->throwExceptionOnError();
+
+        while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+            if($groupVar == null)
+                $subgroup = 1;
+            else if($row['subgroup'] == null) //rollup total
+                $subgroup = count($groupVar->labels);
+            else
+                $subgroup = $row['subgroup'];
+            //$subgroup = $groupVar == null ? 1 : $row['subgroup'];
+            $variable->addCount($subgroup, $row['num']);
+        }
+    }
+
+    /**Get the total number of students, subject to the total cutoff.
+     * @param CutoffVariable $variable
+     * @param Variable $groupVar
+     * @param string $filter    */
+    public function getCutoffTotalWithRollup($variable, $groupVar, $filter)
+    {
+        $cutoffQuery = "1";
+        if($variable->totalCutoff != null) {
+            $cutoffQuery .= " AND $variable->code >= $variable->totalCutoff";
+        }
+
+        if($groupVar != null) {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupVar->code as subgroup
+                FROM $this->datatable 
+                WHERE $variable->code IS NOT NULL AND $groupVar->code IS NOT NULL AND $cutoffQuery AND $filter
+                GROUP BY $groupVar->code WITH ROLLUP");
+        }
+        else {
+            $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num
+                FROM $this->datatable 
+                WHERE $variable->code IS NOT NULL AND $cutoffQuery AND $filter");
+        }
+        $this->throwExceptionOnError();
+
+        while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
+            if($groupVar == null)
+                $subgroup = 1;
+            else if($row['subgroup'] == null) //rollup total
+                $subgroup = count($groupVar->labels);
+            else
+                $subgroup = $row['subgroup'];
+            //$subgroup = $groupVar == null ? 1 : $row['subgroup'];
+            $variable->addTotal($subgroup, $row['num']);
+        }
+    }
+
     /**
      * Get the total number of students that did not answer one of the questions (null response).
      * @param MultiVariable $mainVar
