@@ -87,7 +87,7 @@ function getHighlightGroup($cat, $dataset, $year)
             $qCodes = ['A5', 'S3', 'S4'];
             $labels = ['Past Month Driving after Drinking', 'Past Month Texting while Driving', 'Past Month Fell Asleep while Driving'];
             $explanation = "<p>The Youth Survey asks about behaviors that are associated with unsafe driving practices, such as driving
-            after drinking and texting while driving.</p><p style='font-style: italic; text-decoration: underline'>Data are for 12th grade students only.</p>
+            after drinking, texting while driving, and falling asleep while driving.</p><p style='font-style: italic; text-decoration: underline'>Data are for 12th grade students only.</p>
             <p>To compare vehicle safety with other behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
@@ -130,7 +130,8 @@ function getHighlightGroup($cat, $dataset, $year)
             $labels = ["Past Year Insulted Someone's Race or Culture", 'Past Year Had Race or Culture Insulted', 'Past Year Had Been Sexually Harassed', 'Past Month Carried a Weapon',
                 'Past Year Was Verbally Abused by Parent', 'Past Year Was Physically Hurt by Parent'];
             $explanation = "<p>The Youth Survey asks about harassment and aggression in a variety of forms, both verbal and physical. The highlights page 
-            provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who reported carrying a weapon.</p>
+            provides information on racial/cultural harassment and sexual harassment. It also provides information on youth who reported carrying a weapon
+            and youth who reported verbal and/or physical abuse by parent or adult at home.</p>
             <p>To learn more about other behaviors and experiences related to harassment and aggression, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
@@ -162,8 +163,8 @@ function getHighlightGroup($cat, $dataset, $year)
             }
             $explanation = "<p>The Youth Survey asks about a variety of different aspects related to mental health. This page 
             highlights students who reported high levels of stress, those who felt sad or helpless two or more weeks in a row 
-            (which may indicate risk for depression), and those who attempted suicide.</p>
-        <p>To learn more about these topics, as well as suicidal ideation and unhealthy weight loss behaviors, <a href='graphs.php'>Explore the Data</a>.</p>";
+            (which may indicate risk for depression), those who considered attempting suicide, and those who attempted suicide.</p>
+        <p>To learn more about these topics, as well as suicidal ideation, <a href='graphs.php'>Explore the Data</a>.</p>";
         }
         else {
             if($year >= 2021) {
@@ -206,8 +207,8 @@ function getHighlightGroup($cat, $dataset, $year)
         $qCodes = ['H3', 'H20', 'H2', 'H1'];
         $labels = ['Had One Hour of Physical Activity at least 5 Days per Week', 'Got Eight or More Hours of Sleep on a School Night', 'Used Computer or Played Video Games for 3+ Hours per Day',
             'Watched TV for 3+ Hours per Day'];
-        $explanation = "<p>The Youth Survey asks about eating fruits and vegetables, drinking sweetened beverages, level of physical activity, and other questions related to physical health.</p>
-        <p>To learn more about behaviors related to nutrition and physical health, including unhealthy weight loss and food insecurity (hunger), <a href='graphs.php'>Explore the Data</a>.</p>";
+        $explanation = "<p>The Youth Survey asks about level of physical activity and other questions related to physical health including getting 8 or more hours of sleep, time spent on computer for non-school activities, and time spent on TV.</p>
+        <p>To learn more about behaviors related to physical health, <a href='graphs.php'>Explore the Data</a>.</p>";
     }
     else {
         die("Category chosen is invalid.");

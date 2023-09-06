@@ -44,13 +44,12 @@ if(!$showIntro) {
 if(!$showIntro && $variableAvailable){
     $graphName = '"'.$variable->summary.'" by Number of Assets';
     $groupVar = $ds->getMultiVariable($groupCode);
-    if($groupVar != null)
-        $groupVar->labels[] = "Total";
 
     //Create the data structure used by AmCharts for line graphs
     //[['answer' => 0, 'v0' => Variable0 percent, 'v1' => Variable1 percent, ...], ['answer' => 1, ...]]
     //where 'answer' is number 3TS assets
     $percentData = [];
+    $assetTotals = [];
     for ($assetNum = 0; $assetNum <= 6; $assetNum++) {
         $assetData = ["answer" => $assetNum];
         $filter = $ds->createFilterString(null, null, null, null, $pyramid, null, $assetNum+1); //add 1 b/c answer1 = 0, answer2 = 1
@@ -60,8 +59,8 @@ if(!$showIntro && $variableAvailable){
 
         for ($j = 0; $j < count($variable->counts); $j++)
             $assetData['v'.$j] = round($variable->getPercent($j+1) * 100, 1);
-
         $percentData[] = $assetData;
+        $assetTotals[] = count($variable->totals) === 0 ? null : array_sum($variable->totals);
     }
 
     //get labels and counts for data table
@@ -94,6 +93,7 @@ if(!$showIntro && $variableAvailable){
             pyramid = <?php echo json_encode($pyramid); ?>;
             dataset = <?php echo json_encode($dataset); ?>;
             year = <?php echo json_encode($year); ?>;
+            assetTotals = <?php echo json_encode($assetTotals); ?>;
 
             if(dataset === '6th')
                 $(".hide6").hide();
@@ -125,14 +125,14 @@ if(!$showIntro && $variableAvailable){
             var titleString = "<h4>"+mainTitle+"</h4>";
             $("#graphTitle").html(titleString);
 
-            simpleTrendTable($('#datatable'), labels, assetLabels, percentData, 'Number of Assets');
+            simpleTrendTable($('#datatable'), labels, assetLabels, percentData, 'Number of Assets', assetTotals);
             <?php endif; ?>
 
             $('[data-toggle="tooltip"]').tooltip();
         });
         function exportCSV() {
             var title = "Question: "+mainTitle;
-            simpleTrendCSV(title, labels, assetLabels, percentData, year, dataset, "", 'Number of Assets', pyramid);
+            simpleTrendCSV(title, labels, assetLabels, percentData, year, dataset, "", 'Number of Assets', pyramid, assetTotals);
         }
         function exportGraph() {
             exportToPDF(chart, mainTitle, null, year, dataset, "", pyramid);
@@ -223,7 +223,7 @@ if(!$showIntro && $variableAvailable){
                 <option value="1" class="hide6">Grade</option>
                 <option value="2">Gender</option>
                 <option value="3" class="isPyramid">Race (simplified)</option>
-                <option value="4" class="notPyramid">Race</option>
+                <option value="4" class="notPyramid">Race/Ethnicity</option>
                 <option value="5" class="notPyramid hide6">Sexual Orientation</option>
             </select><br>
             <div style="text-align: center;">
@@ -235,16 +235,7 @@ if(!$showIntro && $variableAvailable){
     <div class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
             include "three-to-succeed-instructions.php";
-        elseif(!$variableAvailable): ?>
-            <div style="text-align: center; font-size: 18px">
-                <p>The group or question you selected was not asked during the year you selected.<br>Please choose a different year or a different question.</p>
-                <p><b>Question(s) not available this year:</b></p>
-                <p>
-                    <?php foreach ($unavailableVariables as $variable)
-                        echo $variable->summary.'<br>'; ?>
-                </p>
-            </div>
-        <?php else: ?>
+        else: ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
             </div>
@@ -275,10 +266,10 @@ if(!$showIntro && $variableAvailable){
                 <?php if($groupCode == 'I3') { ?>
                     <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.<br>
                         As such, the <b>Total</b> here only includes students that answered Male or Female.<br>
-                        To see the total for all students, set <b>Group By</b> to None.</p>
+                        To see the total for all students, set <b>Group Data By</b> to None.</p>
                 <?php } else if($groupCode > 0 && $groupCode !== 'I2') { ?>
-                    <p style="font-style: italic">*The <b>Total</b> here only includes students that answered the <b>Group By</b> question.<br>
-                        To see the total for all students, set Group By to None.</p>
+                    <p style="font-style: italic">*The <b>Total</b> here only includes students that answered the <b>Group Data By</b> question.<br>
+                        To see the total for all students, set Group Data By to None.</p>
                 <?php } ?>
                 <?php if($questionCode === 'A5' || $questionCode === 'S3' || $questionCode === 'S4') { ?>
                     <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>

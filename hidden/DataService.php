@@ -270,7 +270,7 @@ class DataService {
             $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupVar->code as subgroup
                 FROM $this->datatable 
                 WHERE $groupVar->code IS NOT NULL AND $cutoffQuery AND $filter
-                GROUP BY $groupVar->code WITH ROLLUP");
+                GROUP BY $groupVar->code");
         }
         else {
             $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num
@@ -282,11 +282,8 @@ class DataService {
         while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
             if($groupVar == null)
                 $subgroup = 1;
-            else if($row['subgroup'] == null) //rollup total
-                $subgroup = count($groupVar->labels);
             else
                 $subgroup = $row['subgroup'];
-            //$subgroup = $groupVar == null ? 1 : $row['subgroup'];
             $variable->addCount($subgroup, $row['num']);
         }
     }
@@ -306,7 +303,7 @@ class DataService {
             $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num, $groupVar->code as subgroup
                 FROM $this->datatable 
                 WHERE $variable->code IS NOT NULL AND $groupVar->code IS NOT NULL AND $cutoffQuery AND $filter
-                GROUP BY $groupVar->code WITH ROLLUP");
+                GROUP BY $groupVar->code");
         }
         else {
             $stmt = $this->connection->query("SELECT COALESCE(SUM(wgt),0) as num
@@ -318,11 +315,8 @@ class DataService {
         while($row = $stmt->fetch_array(MYSQLI_ASSOC)){
             if($groupVar == null)
                 $subgroup = 1;
-            else if($row['subgroup'] == null) //rollup total
-                $subgroup = count($groupVar->labels);
             else
                 $subgroup = $row['subgroup'];
-            //$subgroup = $groupVar == null ? 1 : $row['subgroup'];
             $variable->addTotal($subgroup, $row['num']);
         }
     }

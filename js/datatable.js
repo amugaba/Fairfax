@@ -83,22 +83,29 @@ function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset,
     tableToExcel(csv);
 }
 
-function simpleTrendCSV(mainTitle, labels, xAxisLabels, percents, year, dataset, filterString, xAxisLabel, pyramid) {
+function simpleTrendCSV(mainTitle, labels, xAxisLabels, percents, year, dataset, filterString, xAxisLabel, pyramid, totals) {
     var csv = getCSVHeader(mainTitle, null, year, dataset, filterString, pyramid);
 
     csv += ","+xAxisLabel+"\r\n";
-    for(var i=0; i<xAxisLabels.length; i++){
+    for(let i=0; i<xAxisLabels.length; i++){
         csv += ','+xAxisLabels[i];
     }
     csv += "\r\n";
 
-    for(var i=0; i<labels.length; i++)    {
+    for(let i=0; i<labels.length; i++)    {
         csv += '"'+labels[i]+'"';//escape commas
-        for(var j=0; j<xAxisLabels.length; j++) {
+        for(let j=0; j<xAxisLabels.length; j++) {
             let val = (percents[j]['v'+i] != null) ? percents[j]['v'+i].toFixed(1)+'%' : 'N/A';
             csv += ',' + val;
         }
         csv += "\r\n";
+    }
+
+    //totals
+    csv += "Total"
+    for(let j=0; j<xAxisLabels.length; j++) {
+        let val = (totals[j] != null) ? "\"" + Math.round(totals[j]).toLocaleString() + "\"" : 'N/A';
+        csv += ',' + val;
     }
 
     tableToExcel(csv);
@@ -224,7 +231,7 @@ function createSimpleExplorerTable(tableElem, labels, counts, sumTotal) {
         '<td>100.0%</td></tr>');
 }
 
-function simpleTrendTable(tableElem, labels, xAxisLabels, percents, xAxisHeader) {
+function simpleTrendTable(tableElem, labels, xAxisLabels, percents, xAxisHeader, totals) {
     var table = $(tableElem);
 
     //add "Year" in first row
@@ -232,19 +239,27 @@ function simpleTrendTable(tableElem, labels, xAxisLabels, percents, xAxisHeader)
         '<th colspan="'+xAxisLabels.length+'" style="text-align: center">'+xAxisHeader+'</th></tr>');
 
     //add individual xAxisLabels as headers in second row
-    var row = $('<tr></tr>').appendTo(table);
-    for(var i=0; i<xAxisLabels.length; i++){
+    let row = $('<tr></tr>').appendTo(table);
+    for(let i=0; i<xAxisLabels.length; i++){
         row.append('<th>'+xAxisLabels[i]+'</th>');
     }
 
     //add each question as a row
-    for(var i=0; i<labels.length; i++){
-        var row = $('<tr></tr>').appendTo(table);
+    for(let i=0; i<labels.length; i++){
+        row = $('<tr></tr>').appendTo(table);
         row.append('<th>'+labels[i]+'</th>');
-        for(var j=0; j<xAxisLabels.length; j++) {
+        for(let j=0; j<xAxisLabels.length; j++) {
             let val = (percents[j]['v'+i] != null) ? percents[j]['v'+i].toFixed(1)+'%' : 'N/A';
             row.append('<td>'+val+'</td>');
         }
+    }
+
+    //add Total row
+    row = $('<tr></tr>').appendTo(table);
+    row.append('<th>Total</th>');
+    for(let j=0; j<xAxisLabels.length; j++) {
+        let val = (totals[j] != null) ? Math.round(totals[j]).toLocaleString() : 'N/A';
+        row.append('<td>' + val + '</td>');
     }
 }
 
