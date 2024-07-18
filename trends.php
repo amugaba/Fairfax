@@ -18,6 +18,8 @@ $groupCode = match ($grp) {
     '3' => 'race',
     '4' => 'race_eth',
     '5' => 'X9',
+    '6' => 'I3A',
+    '7' => 'disability_cat',
     default => null
 };
 
@@ -47,7 +49,7 @@ if(!$showIntro)
         $ds = DataService::getInstance($year, $dataset);
         $yearData = ["answer" => $year];
         $availableYears[] = $year;
-        if(!$ds->isVariableInData($variable->code)) //this is so slow
+        if(!$ds->isVariableInData($variable->code) || !$ds->isVariableInData($groupVar->code)) //this is so slow
             $yearData['v0'] = null; //skip years where variable not in dataset
         else {
             $variable->initializeCounts($groupVar);
@@ -221,6 +223,8 @@ if(!$showIntro)
                 <option value="3" class="isPyramid">Race (simplified)</option>
                 <option value="4" class="notPyramid">Race/Ethnicity</option>
                 <option value="5" class="notPyramid hide6">Sexual Orientation</option>
+                <option value="6" class="hide6">Transgender Status</option>
+                <option value="7">Disability</option>
             </select><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">

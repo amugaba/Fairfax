@@ -119,9 +119,9 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 $("#gradeButton").hide(); //vehicle safety
 
             //set width of Group buttons box, depending on number of buttons
-            //530 = default, 450 = No Grade
+            //530 = default, 530 = No Grade
             if(dataset === '6th' || category === 5) {
-                $(".groupbox").width(450);
+                $(".groupbox").width(530);
             }
 
             if(percentData.length > 0) {
@@ -256,7 +256,13 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <?php if($pyramid == ''): ?><input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race/Ethnicity</label>
                 <?php else: ?><input id="raceSimple" name="grouping" type="radio" value="race"/><label for="raceSimple">Race (simplified)</label><?php endif; ?>
-                <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race/ethnicity to see how each group answered."></div>
+                <br class="hide6">
+
+                    <span class="hide6"><input id="transgender" name="grouping" type="radio" value="I3A"/><label for="transgender" style="margin-left: 104px">Transgender Status</label></span>
+                    <input id="disability" name="grouping" type="radio" value="disability_cat"/><label for="disability">Disability</label>
+                    <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race/ethnicity to see how each group answered."></div>
+
+
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">

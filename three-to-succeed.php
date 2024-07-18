@@ -18,6 +18,8 @@ $groupCode = match ($grp) {
     '3' => 'race',
     '4' => 'race_eth',
     '5' => 'X9',
+    '6' => 'I3A',
+    '7' => 'disability_cat',
     default => null
 };
 
@@ -227,6 +229,8 @@ if(!$showIntro && $variableAvailable){
                 <option value="3" class="isPyramid">Race (simplified)</option>
                 <option value="4" class="notPyramid">Race/Ethnicity</option>
                 <option value="5" class="notPyramid hide6">Sexual Orientation</option>
+                <option value="6" class="hide6">Transgender Status</option>
+                <option value="7">Disability</option>
             </select><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">

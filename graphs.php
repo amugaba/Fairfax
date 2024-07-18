@@ -25,6 +25,8 @@ $gender = $_GET['gender'] ?? null;
 $race = $_GET['race'] ?? null;
 $race_simplified = $_GET['rsim'] ?? null;
 $sexual_orientation = $_GET['so'] ?? null;
+$transgender = $_GET['trans'] ?? null;
+$disability = $_GET['disab'] ?? null;
 $pyramid = ''; //$_GET['pyr'] ?? ''; Uncomment to re-enable
 
 if($pyramid > 0) {
@@ -52,7 +54,7 @@ if(!$showIntro) {
 if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
     $mainVar->initializeCounts($groupVar);
     //Construct filter
-    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified);
+    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified, null, $transgender, $disability);
 
     //Load data into main Variable
     $ds->getMultiPositives($mainVar, $groupVar, $filter);
@@ -112,6 +114,8 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             var race = <?php echo json_encode($race); ?>;
             var raceSimplified = <?php echo json_encode($race_simplified); ?>;
             var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
+            var transgender = <?php echo json_encode($transgender); ?>;
+            var disability = <?php echo json_encode($disability); ?>;
             pyramid = <?php echo json_encode($pyramid); ?>;
             var cat1 = <?php echo json_encode($cat1); ?>;
             var cat2 = <?php echo json_encode($cat2); ?>;
@@ -152,6 +156,8 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             $('#filterrace').val(race);
             $('#filterracesimple').val(raceSimplified);
             $('#filtersex').val(sexOrientation);
+            $('#filtertransgender').val(transgender);
+            $('#filterdisability').val(disability);
 
             <?php if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable && !$below_threshold): ?>
             mainTitle = <?php echo json_encode($mainVar->question); ?>;
@@ -175,7 +181,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             else
                 createCrosstabExplorerTable($('#datatable'), mainSummary, groupSummary, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal);
 
-            filterString = makeFilterString(grade, gender, race, sexOrientation, raceSimplified);
+            filterString = makeFilterString(grade, gender, race, sexOrientation, raceSimplified, transgender, disability);
             titleString = "<h4>"+mainTitle+"</h4>";
             if(isGrouped)
                 titleString += "<i>compared to</i><h4>" + groupTitle + "</h4>";
@@ -210,6 +216,8 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             let race = $("#filterrace").val();
             let raceSimplified = $("#filterracesimple").val();
             let sexOrientation = $("#filtersex").val();
+            let transgender = $("#filtertransgender").val();
+            let disability = $("#filterdisability").val();
 
             if(q1 !== '') {
                 let url = 'graphs.php?ds='+dataset+"&year="+year+"&pyr="+pyramid+'&q1='+q1;
@@ -230,6 +238,10 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                     url += "&rsim="+raceSimplified;
                 if(sexOrientation !== '')
                     url += "&so="+sexOrientation;
+                if(transgender !== '')
+                    url += "&trans="+transgender;
+                if(disability !== '')
+                    url += "&disab="+disability;
 
                 window.location.href = url;
             }
@@ -329,7 +341,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             <select id="question2" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
-            <label class="shadow" style="margin: 10px 0 20px">3. (Optional) Filter data by:</label>
+            <label class="shadow" style="margin: 10px 0 0">3. (Optional) Filter data by:</label>
             <select id="filtergrade" class="filter selector hide6" title="Grade">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
@@ -360,8 +372,20 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="2">Gay or lesbian</option>
                 <option value="3">Bisexual</option>
                 <option value="4">Not sure</option>
-            </select><br>
-            <div style="text-align: center;">
+            </select><br class="hide6">
+            <select id="filtertransgender" class="filter selector hide6" title="Transgender Status" style="margin: 5px 0 0 224px;">
+                <option value="">Transgender Status</option>
+                <option value="1">Not transgender</option>
+                <option value="2">Transgender</option>
+                <option value="3">Not sure</option>
+            </select>
+            <select id="filterdisability" class="filter selector" title="Disability">
+                <option value="">Disability</option>
+                <option value="1">No disability</option>
+                <option value="2">One or more disability</option>
+                <option value="3">Not sure</option>
+            </select>
+            <div style="text-align: center; margin-top: 20px">
                 <input type="submit" value="Generate Graph" class="btn">
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'graphs.php'">
             </div>

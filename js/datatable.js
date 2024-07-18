@@ -5,12 +5,14 @@
  */
 "use strict";
 
-function makeFilterString(grade, gender, race, sexualOrientation, raceSimple) {
+function makeFilterString(grade, gender, race, sexualOrientation, raceSimple, transgender, disability) {
     let grades = ['8th grade','10th grade','12th grade'];
     let genders = ['Female','Male'];
     let races = ['White','Black','Hispanic','Asian/Pacific Islander','Other/Multiple'];
     let racesSimple = ['White','Non-white'];
     let orientations = ['Heterosexual','Gay or lesbian','Bisexual','Not sure'];
+    let transgenders = ['Not transgender','Transgender','Not sure'];
+    let disabilities = ['No disability','One or more disability','Not sure'];
 
     let clauses = [];
     if(grade != null)
@@ -23,6 +25,10 @@ function makeFilterString(grade, gender, race, sexualOrientation, raceSimple) {
         clauses.push("Race (simplified) = " + racesSimple[raceSimple-1]);
     if(sexualOrientation != null)
         clauses.push("Sexual Orientation = " + orientations[sexualOrientation-1]);
+    if(transgender != null)
+        clauses.push("Transgender Status = " + transgenders[transgender-1]);
+    if(disability != null)
+        clauses.push("Disability = " + disabilities[disability-1]);
 
     if(clauses.length > 0)
         return "Filtered by " + clauses.join(", ");

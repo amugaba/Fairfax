@@ -432,7 +432,7 @@ class DataService {
         return $stmt->fetch_row()[0];
     }
 
-    public function createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified = null, $num_assets = null) {
+    public function createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified = null, $num_assets = null, $transgender = null, $disability = null) {
         $filter = " 1 ";
         if ($grade != null)
             $filter .= " AND I2 = ".$this->connection->real_escape_string($grade);
@@ -448,6 +448,10 @@ class DataService {
             $filter .= " AND race = ".$this->connection->real_escape_string($race_simplified);
         if ($num_assets !== null)
             $filter .= " AND assets_3TS = ".$this->connection->real_escape_string($num_assets);
+        if ($transgender != null)
+            $filter .= " AND I3A = ".$this->connection->real_escape_string($transgender);
+        if ($disability !== null)
+            $filter .= " AND disability_cat = ".$this->connection->real_escape_string($disability);
         return $filter;
     }
 
