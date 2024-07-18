@@ -3,9 +3,9 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="4168503b-b570-4a35-aaf7-98dcad502420" name="Angstrom-Test" url="http://angstrom-software.com/fairfax">
-        <fileTransfer rootFolder="/home/davtid4/angstrom-software.com" accessType="SFTP" host="angstrom-software.com" port="22" sshConfigId="722e546d-1792-4b00-a575-4e30f56e68fc" sshConfig="Angstrom-Test" username="davtid4" password="dfcbdf8adfdcdfcfdfd8dfd3df8adfd9dfc7dfcbdfc6dfc6df8adfc4dfdfdfc7dfc8dfcfdfd8">
+        <fileTransfer rootFolder="/home/davtid4/angstrom-software.com" accessType="SFTP" host="angstrom-software.com" port="22" sshConfigId="9488524f-41d3-466b-bd4d-a468f591b724" sshConfig="Angstrom-Test" username="davtid4" password="dfcbdf8adfdcdfcfdfd8dfd3df8adfd9dfc7dfcbdfc6dfc6df8adfc4dfdfdfc7dfc8dfcfdfd8">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" />
           </advancedOptions>
         </fileTransfer>
       </webServer>

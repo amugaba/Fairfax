@@ -32,7 +32,7 @@ include_once "config/config.php";
                 <div style="margin-top: 30px;">
                     <img src="img/fairfaxlogo.png"  alt="Fairfax County Logo">
                 </div>
-                <h1 class="shadowdeep" style="margin-top: 20px">2022&ndash;2023 Youth Survey Interactive Data Explorer</h1>
+                <h1 class="shadowdeep" style="margin-top: 20px">2023&ndash;2024 Youth Survey Interactive Data Explorer</h1>
                 <div style="margin-top: 40px">
                     <h2 style="max-width: 700px; margin: 0 auto">Generate custom graphs and data tables on the questions you find most interesting!</h2>
                     <a href="highlights.php" class="button-link" style="margin: 30px auto">Check Out the Highlights</a>
@@ -43,7 +43,7 @@ include_once "config/config.php";
         </div>
         <div class="col-sm-6">
             <div style="text-align: left">
-                <img src="img/olderkids2022.jpg" alt="High school kids smiling">
+                <img src="img/olderkids2023.jpg" alt="High school kids smiling">
             </div>
         </div>
     </div>
@@ -68,14 +68,14 @@ include_once "config/config.php";
                         <img alt="Open books" src="img/keyboard-survey.jpg" style="width: 330px; height: 283px;">
                     </div>
                     <h2>New Survey Items</h2>
-                    <p>No new questions were added in this year's survey.</p><p></p>However, trends are now available for questions that were added in the previous year,
-                        such as falling asleep while driving, past month hookah use, overall vegetable consumption, and stress level.</p>
+                    <p>Questions on disabilities were added to this year's survey and the results are now available in the Explore the Data section.</p>
+                    <p>Select the <b>Disability</b> category to see all of the new questions.</p>
                 </div>
             </div>
             <div class="grid-third">
                 <div style="margin: 10px">
                     <div class="figure" style="margin-bottom: 10px">
-                        <img alt="Open books" src="img/sixthgrade2022-square.jpg" style="width: 100%">
+                        <img alt="Open books" src="img/sixthgrade2023-square.jpg" style="width: 100%">
                     </div>
                     <h2>6th Grade Survey</h2>
                     <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.</p>

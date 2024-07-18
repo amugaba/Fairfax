@@ -190,6 +190,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <div>
                     <label for="yearSelect" class="categories">Year:</label>
                     <select id="yearSelect" class="selector" onchange="changeYear(this.value)" title="Change year drop down">
+                        <option value="2023">2023</option>
                         <option value="2022">2022</option>
                         <option value="2021">2021</option>
                         <option value="2019">2019</option>

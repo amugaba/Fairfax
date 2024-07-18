@@ -208,6 +208,7 @@ if(!$showIntro)
                 <option value="16">Civic Engagement</option>
                 <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
+                <option value="21">Disability</option>
             </select>
             <select id="question" class="searchbox">
                 <option value="" selected="selected">Select a question</option>

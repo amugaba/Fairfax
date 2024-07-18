@@ -6,7 +6,7 @@
         <div style="float: left; margin-right: 50px">
             <a href="index.php">Home</a> | <a href="highlights.php">Highlights</a> | <a href="graphs.php">Explore</a><br>
             <span style="font-size: 10pt"><a href="contact.php">Contact</a> | <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Fairfax Survey Home</a></span><br><br>
-            <span class="text-muted" style="font-size: 10pt">&copy; 2022 - Fairfax County, Virginia</span>
+            <span class="text-muted" style="font-size: 10pt">&copy; 2024 - Fairfax County, Virginia</span>
         </div>
         <div style="float: left">
             <img src="img/fairfax_county_logo.png" alt="Fairfax County logo">

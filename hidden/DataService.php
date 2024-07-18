@@ -238,6 +238,11 @@ class DataService {
                 FROM $this->datatable 
                 WHERE $groupcode IS NOT NULL AND $filter AND $varcode IS NOT NULL 
                 GROUP BY $groupcode");
+            /* FLIP CROSSTAB GRAPH - Need to fix non-grouped graphs if doing this (total wrong)
+            $stmt = $this->connection->query("SELECT $counter as num, $varcode as subgroup
+                FROM $this->datatable
+                WHERE $groupcode IS NOT NULL AND $filter AND $varcode IS NOT NULL
+                GROUP BY $varcode");*/
         }
         else {
             $stmt = $this->connection->query("SELECT $counter as num 

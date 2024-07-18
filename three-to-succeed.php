@@ -171,6 +171,7 @@ if(!$showIntro && $variableAvailable){
             </select>
             &nbsp;Year:
             <select id="yearSelect" style="height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change year drop down">
+                <option value="2023">2023</option>
                 <option value="2022">2022</option>
                 <option value="2021">2021</option>
                 <option value="2019">2019</option>
@@ -213,6 +214,7 @@ if(!$showIntro && $variableAvailable){
                 <option value="16">Civic Engagement</option>
                 <option value="15">Time Use</option>
                 <option value="8">Self/Peer Perception</option>
+                <option value="21">Disability</option>
             </select>
             <select id="question" class="searchbox">
                 <option value="" selected="selected">Select a question</option>

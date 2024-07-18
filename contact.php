@@ -14,7 +14,7 @@ include_once "config/config.php";
     <div class="row title">
         <div style="width:750px; margin: -10px auto 10px;">
             <img src="img/fairfaxlogo.png" style="float: left; padding: 30px 30px 0 0" alt="Fairfax County Logo">
-            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2022&ndash;2023 Youth Survey Highlights and Data Explorer</span></h1>
+            <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2023&ndash;2024 Youth Survey Highlights and Data Explorer</span></h1>
         </div>
 
     </div>
@@ -25,7 +25,7 @@ include_once "config/config.php";
             </div>
             <div class="col-md-9">
                 <p style="font-size: 1.5em">For inquiries regarding the Fairfax County Youth Survey or the Data Explorer website, please contact
-                    <a href="mailto:OSMDataAnalytics@fairfaxcounty.gov">OSMDataAnalytics@fairfaxcounty.gov</a></p>
+                    <a href="mailto:DMBDataAnalytics@fairfaxcounty.gov">DMBDataAnalytics@fairfaxcounty.gov</a></p>
             </div>
         </div>
     </div>

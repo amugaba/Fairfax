@@ -31,6 +31,17 @@ class MultiVariable extends Variable
             }
         }
     }
+    /* FLIP CROSSTAB GRAPH - Need to fix non-grouped graphs if doing this (total wrong)
+    public function calculatePercents(){
+        for($i=0; $i < count($this->counts); $i++) {
+            for($j=0; $j < count($this->counts[$i]); $j++) {
+                if($this->totals[$i] == 0)
+                    $this->percents[$i][$j] = 0;
+                else
+                    $this->percents[$i][$j] = round($this->counts[$i][$j] / $this->totals[$i] * 100, 1);
+            }
+        }
+    }*/
     public function initializeCounts($groupVar){
         $groupLength = $groupVar == null ? 1 : count($groupVar->labels);
         for($i=0; $i < count($this->labels); $i++) {
