@@ -5,6 +5,10 @@
  */
 "use strict";
 
+function csvEscape(text) {
+    return '"'+text+'"';
+}
+
 function makeFilterString(grade, gender, race, sexualOrientation, raceSimple, transgender, disability) {
     let grades = ['8th grade','10th grade','12th grade'];
     let genders = ['Female','Male'];
@@ -66,7 +70,7 @@ function simpleHighlightCSV(mainTitle, mainLabels, percentData, totals, year, da
 
     for(var i=0; i<mainLabels.length; i++)
     {
-        csv += mainLabels[i].replace("<br>"," ")+",";
+        csv += csvEscape(mainLabels[i].replace("<br>"," "))+",";
         csv += percentData[i]['v0'].toFixed(1) + '%,';
         csv += Math.round(totals[i]) + "\r\n";
     }
@@ -81,7 +85,7 @@ function simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset,
 
     for(var i=0; i<mainLabels.length; i++)
     {
-        csv += mainLabels[i].replace("<br>"," ")+","+Math.round(counts[i][0]) + ",";
+        csv += csvEscape(mainLabels[i].replace("<br>"," "))+","+Math.round(counts[i][0]) + ",";
         csv += (counts[i][0]/totals[0]*100).toFixed(1) + "%\r\n";
     }
     csv += "Total," + Math.round(totals[0]) + ",100%";
@@ -94,12 +98,12 @@ function simpleTrendCSV(mainTitle, labels, xAxisLabels, percents, year, dataset,
 
     csv += ","+xAxisLabel+"\r\n";
     for(let i=0; i<xAxisLabels.length; i++){
-        csv += ','+xAxisLabels[i];
+        csv += ','+csvEscape(xAxisLabels[i]);
     }
     csv += "\r\n";
 
     for(let i=0; i<labels.length; i++)    {
-        csv += '"'+labels[i]+'"';//escape commas
+        csv += csvEscape(labels[i]);
         for(let j=0; j<xAxisLabels.length; j++) {
             let val = (percents[j]['v'+i] != null) ? percents[j]['v'+i].toFixed(1)+'%' : 'N/A';
             csv += ',' + val;
@@ -121,13 +125,13 @@ function crosstabHighlightCSV(mainTitle, groupTitle, mainLabels, groupLabels, pe
     var csv = getCSVHeader("Highlights: " + mainTitle, groupTitle, year, dataset, null, pyramid);
 
     csv += ',,"'+groupTitle+'"\r\n';
-    csv += ",,"+groupLabels.join(",");
+    csv += ',,"'+groupLabels.join('","')+'"';
     csv += ",Total Responses\r\n";
     csv += '"'+mainTitle+'"';
 
     for(var i=0; i<mainLabels.length; i++)
     {
-        csv += ',"'+mainLabels[i].replace("<br>"," ")+'",';
+        csv += ','+csvEscape(mainLabels[i].replace("<br>"," "))+',';
         for(var j=0; j<groupLabels.length; j++) {
             csv += percentData[i]['v'+j].toFixed(1) + '%,';
         }
@@ -141,13 +145,13 @@ function crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, cou
     var csv = getCSVHeader("Question: " + mainTitle, groupTitle, year, dataset, filterString, pyramid);
 
     csv += ',,"'+groupTitle+'"\r\n';
-    csv += ",,"+groupLabels.join(",");
+    csv += ',,"'+groupLabels.join('","')+'"';
     csv += ",Total,% Total\r\n";
     csv += '"'+mainTitle+'"';
 
     for(var i=0; i<mainLabels.length; i++)
     {
-        csv += ',"'+mainLabels[i].replace("<br>"," ")+'",';
+        csv += ','+csvEscape(mainLabels[i].replace("<br>"," "))+',';
         for(var j=0; j<groupLabels.length; j++) {
             csv += Math.round(counts[i][j]) + ",";
         }

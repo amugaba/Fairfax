@@ -335,7 +335,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="10">Community Support</option>
                 <option value="16">Civic Engagement</option>
                 <option value="15">Time Use</option>
-                <option value="8">Self/Peer Perception</option
+                <option value="8">Self/Peer Perception</option>
                 <option value="21">Disability</option>
             </select>
             <select id="question2" class="searchbox">

@@ -52,15 +52,34 @@ function createBarGraph(percentData, mainTitle, groupTitle, groupLabels, tooltip
         chart.addValueAxis(valueAxis);
 
         // GRAPHS
-        for(var i = 0; i < groupLabels.length; i++) {
-            var graph = new AmCharts.AmGraph();
+        for(let i = 0; i < groupLabels.length; i++) {
+            let graph = new AmCharts.AmGraph();
             graph.type = "column";
             graph.title = groupLabels[i];
             graph.valueField = 'v'+i;
             if(tooltips != null) {
                 graph.balloonFunction = function (graphDataItem, graph) {
-                    var title = graph.title == "Total" ? "" : graph.title;
-                    return graphDataItem.values.value.toFixed(1) +"% of "+title+" students reported " + tooltips[graphDataItem.index];
+                    let studentLabel = "";
+                    if(graph.title === "Total")
+                        studentLabel = "students";
+                    else if(groupTitle === "Transgender Status") {
+                        switch(i) {
+                            case 0: studentLabel = "students who do not identify as transgender"; break;
+                            case 1: studentLabel = "students who identify as transgender"; break;
+                            case 2: studentLabel = "students who are unsure whether they are transgender"; break;
+                            case 3: studentLabel = "students who answered \"don't know\""; break;
+                        }
+                    }
+                    else if(groupTitle === "Has one or more disability (calculated)") {
+                        switch(i) {
+                            case 0: studentLabel = "students with no disability"; break;
+                            case 1: studentLabel = "students with one or more disabilities"; break;
+                            case 2: studentLabel = "students who were unsure whether they have a disability"; break;
+                        }
+                    }
+                    else
+                        studentLabel = graph.title + " students";
+                    return graphDataItem.values.value.toFixed(1) +"% of "+studentLabel+" reported " + tooltips[graphDataItem.index];
                 };
             }
             else if(groupTitle == null)

@@ -184,7 +184,7 @@ function getHighlightGroup($cat, $dataset, $year)
     else if ($cat == 12) {
         $title = "Civic Engagement and Time Use";
         $qCodes = ['C2', 'C11', 'C12', 'extracurric', 'C4'];
-        $labels = ['Volunteered to do Community Service Regularly', 'Did Homework for 1+ Hours per Day', 'Went to Work for 1+ Hours per Day', 'Did Extracurriculars for 1+ Hours per Day',
+        $labels = ['Volunteered to do Community Service in the Past Year', 'Did Homework for 1+ Hours per Day', 'Went to Work for 1+ Hours per Day', 'Did Extracurriculars for 1+ Hours per Day',
             'Past Year Served as a Leader in a Group'];
         $explanation = "<p>The Youth Survey asks questions related to civic engagement and use of time outside of school hours, 
             including volunteering for community service and time spent on homework, working at a job, and participating in extracurricular 

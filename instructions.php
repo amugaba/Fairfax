@@ -17,8 +17,13 @@
     <h4>2. Additional Options</h4>
     <div class="row">
         <ul><li>You optionally can select a second question in the second row. This will compare the first question to the second one.
-            <ul><li>For instance, you can explore how cigarette use varies with alcohol use.</li></ul></li>
-        <li>You can filter the data by selecting a grade, gender, race/ethnicity, or sexual orientation in the last row. This will show only data for the selected group(s).</li></ul>
+            <ul><li>For instance, you can explore how cigarette use varies with alcohol use.</li></ul>
+            <ul><li>If you want to compare the responses to questions of different demographic groups, add it as a second question. For instance, if you would like to compare ‘alcohol use’ among grade levels, select ‘alcohol’ in the first question and ‘grade’ in the second question.</li></ul>
+            </li>
+            <li>You can filter the data by selecting
+                <?php if($dataset == '8to12'){ ?>grade, gender, race/ethnicity, sexual orientation, transgender status, or disability
+                <?php } else { ?>gender, race/ethnicity, or disability<?php } ?>
+                in the last row. This will show only data for the selected group(s).</li></ul>
     </div>
 </div>
 

@@ -113,15 +113,32 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
             pyramid = <?php echo json_encode($pyramid); ?>;
 
             //hide some inputs based on dataset or category
-            if(dataset === '6th')
+            if(dataset === '6th') {
                 $(".hide6").hide();
+            }
             if(category === 5)
                 $("#gradeButton").hide(); //vehicle safety
 
-            //set width of Group buttons box, depending on number of buttons
-            //530 = default, 530 = No Grade
-            if(dataset === '6th' || category === 5) {
-                $(".groupbox").width(530);
+            //change grouping box based on dataset and year
+            let groupOptions = [];
+            if(dataset === '8to12' && category !== 5)
+                groupOptions.push('grade');
+            groupOptions.push('gender');
+            groupOptions.push('race/ethnicity');
+            if(dataset === '8to12' && year >= 2021)
+                groupOptions.push('transgender status');
+            if(year >= 2023 )
+                groupOptions.push('disability');
+            groupOptions[groupOptions.length-1] = "or " + groupOptions[groupOptions.length-1];
+            let groupText = groupOptions.join(", ");
+            if(groupOptions.length <= 2)
+                groupText = groupOptions.join(" ");
+            $("#groupTooltip").attr("title", "You can separate students by " + groupText + " to see how each group answered.");
+
+            if(groupOptions.length >= 5) {
+                let splitLabel = $("#grouping > label:nth-child(8)"); //insert linebreak after this and indent
+                splitLabel.next().next().css("margin-left", "104px");
+                splitLabel.after("<br>");
             }
 
             if(percentData.length > 0) {
@@ -249,20 +266,16 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 </div>
             </div>
 
-            <div id="grouping" class="groupbox hideIfNoGraph" style="width:530px; margin: 20px auto 0">
+            <div id="grouping" class="groupbox hideIfNoGraph" style="width: max-content; margin: 20px auto 0; padding-right: 20px">
                 <span style="font-weight: bold">Group data by:</span>
                 <input id="none" name="grouping" type="radio" value="" checked="checked"/><label for="none">None</label>
                 <span id="gradeButton" class="hide6"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
                 <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
                 <?php if($pyramid == ''): ?><input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race/Ethnicity</label>
                 <?php else: ?><input id="raceSimple" name="grouping" type="radio" value="race"/><label for="raceSimple">Race (simplified)</label><?php endif; ?>
-                <br class="hide6">
-
-                    <span class="hide6"><input id="transgender" name="grouping" type="radio" value="I3A"/><label for="transgender" style="margin-left: 104px">Transgender Status</label></span>
-                    <input id="disability" name="grouping" type="radio" value="disability_cat"/><label for="disability">Disability</label>
-                    <div class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, or race/ethnicity to see how each group answered."></div>
-
-
+                <?php if($year >= 2021 && $dataset == "8to12"){ ?><input id="transgender" name="grouping" type="radio" value="I3A"/><label for="transgender">Transgender Status</label><?php } ?>
+                <?php if($year >= 2023){ ?><input id="disability" name="grouping" type="radio" value="disability_cat"/><label for="disability">Disability</label><?php } ?>
+                <div id="groupTooltip" class="tipbutton" style="margin:0 0 3px 17px"  data-toggle="tooltip" data-placement="top" title="You can separate students by grade, gender, race/ethnicity, transgender status, or disability to see how each group answered."></div>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">

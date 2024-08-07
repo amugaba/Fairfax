@@ -44,7 +44,10 @@
         <h4>2. (Optional) Group Data</h4>
         <div class="row">
             <ul>
-                <li>You optionally can group the data by grade, gender, race/ethnicity, or sexual orientation. The graph will display separate lines for each demographic group.</li>
+                <li>You optionally can group the data by
+                    <?php if($dataset == '8to12'){ ?>grade, gender, race/ethnicity, sexual orientation, transgender status, or disability.
+                    <?php } else { ?>gender, race/ethnicity, or disability.<?php } ?>
+                    The graph will display separate lines for each demographic group.</li>
                 <ul><li>For example, you can select 'Gender' to see separate lines for Female and Male.</li></ul>
             </ul>
         </div>

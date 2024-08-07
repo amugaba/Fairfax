@@ -68,7 +68,7 @@ include_once "config/config.php";
                         <img alt="Open books" src="img/keyboard-survey.jpg" style="width: 330px; height: 283px;">
                     </div>
                     <h2>New Survey Items</h2>
-                    <p>Questions on disabilities were added to this year's survey and the results are now available in the Explore the Data section.</p>
+                    <p>Questions on disabilities were added to this year's survey and the results are now available in the Highlights and Explore the Data sections.</p>
                     <p>Select the <b>Disability</b> category to see all of the new questions.</p>
                 </div>
             </div>
@@ -78,7 +78,7 @@ include_once "config/config.php";
                         <img alt="Open books" src="img/sixthgrade2023-square.jpg" style="width: 100%">
                     </div>
                     <h2>6th Grade Survey</h2>
-                    <p>The Fairfax County Youth Survey is administered in two forms: one for 8th to 12th grade students, and another for 6th grade students.</p>
+                    <p>The Fairfax County Youth Survey is administered in two forms: one for 8th, 10th, and 12th grade students, and a modified, shorter version of the survey for 6th grade students.</p>
                     <p>You can access the <b>6th grade data set</b> by selecting '6th grade' at the top of
                         <b><a href="highlights.php?ds=6th">Survey Highlights</a></b>, <b><a href="graphs.php?ds=6th">Explore the Data</a></b>,
                         <b><a href="trends.php?ds=6th">Trends over Time</a></b>, or <b><a href="three-to-succeed.php?ds=6th">Three to Succeed</a></b>.</p>

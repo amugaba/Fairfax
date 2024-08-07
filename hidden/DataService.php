@@ -124,7 +124,8 @@ class DataService {
     }
 
     public function isUnweighted($code) {
-        return in_array($code, ['I1','I2','I3','gender_c','I3A','I4','race_eth','race','I7','I7A','language','X9','Pyramid_Code']);
+        return in_array($code, ['I1','I2','I3','gender_c','I3A','I4','race_eth','race','I7','I7A','language','X9','Pyramid_Code', 'disability_cat',
+            'I10A','I10B','I10C','I10D','I10E','I10F','I10G','I10H','I10I','I11']);
     }
 
     public function isIdentifying($code) {

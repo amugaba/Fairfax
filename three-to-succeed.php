@@ -229,8 +229,8 @@ if(!$showIntro && $variableAvailable){
                 <option value="3" class="isPyramid">Race (simplified)</option>
                 <option value="4" class="notPyramid">Race/Ethnicity</option>
                 <option value="5" class="notPyramid hide6">Sexual Orientation</option>
-                <option value="6" class="hide6">Transgender Status</option>
-                <option value="7">Disability</option>
+                <?php if($year >= 2021 && $dataset == '8to12') { ?><option value="6">Transgender Status</option><?php } ?>
+                <?php if($year >= 2023) { ?><option value="7">Disability</option><?php } ?>
             </select><br>
             <div style="text-align: center;">
                 <input type="button" value="Generate Graph" class="btn" onclick="searchData()">
