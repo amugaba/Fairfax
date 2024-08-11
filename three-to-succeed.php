@@ -14,7 +14,7 @@ if($pyramid > 0 && $grp > 3)
 
 $groupCode = match ($grp) {
     '1' => 'I2',
-    '2' => 'I3',
+    '2' => 'gender_nb',
     '3' => 'race',
     '4' => 'race_eth',
     '5' => 'X9',
@@ -27,6 +27,9 @@ if(isset($_GET['year']))
     $year = intval($_GET['year']);
 else
     $year = getCurrentYear();
+//nonbinary doesn't exist in < 2022 surveys
+if($groupCode == "gender_nb" && $year < 2022)
+    $groupCode = "I3";
 
 if(isset($_GET['ds']) && $_GET['ds'] == '6th')
     $dataset = DataService::SIXTH;
@@ -270,7 +273,7 @@ if(!$showIntro && $variableAvailable){
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <?php if($groupCode == 'I3') { ?>
-                    <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.<br>
+                    <p style="font-style: italic">*For Gender, the Non-Binary response option is only avaiable for the 2022 survey and later.<br>
                         As such, the <b>Total</b> here only includes students that answered Male or Female.<br>
                         To see the total for all students, set <b>Group Data By</b> to None.</p>
                 <?php } else if($groupCode > 0 && $groupCode !== 'I2') { ?>

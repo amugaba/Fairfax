@@ -270,7 +270,11 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <span style="font-weight: bold">Group data by:</span>
                 <input id="none" name="grouping" type="radio" value="" checked="checked"/><label for="none">None</label>
                 <span id="gradeButton" class="hide6"><input id="grade" name="grouping" type="radio" value="I2"/><label for="grade">Grade</label></span>
-                <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
+                <?php if($year >= 2022) { ?>
+                    <input id="gender" name="grouping" type="radio" value="gender_nb"/><label for="gender">Gender</label>
+                <?php } else { ?>
+                    <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
+                <?php } ?>
                 <?php if($pyramid == ''): ?><input id="race" name="grouping" type="radio" value="race_eth"/><label for="race">Race/Ethnicity</label>
                 <?php else: ?><input id="raceSimple" name="grouping" type="radio" value="race"/><label for="raceSimple">Race (simplified)</label><?php endif; ?>
                 <?php if($year >= 2021 && $dataset == "8to12"){ ?><input id="transgender" name="grouping" type="radio" value="I3A"/><label for="transgender">Transgender Status</label><?php } ?>
@@ -287,7 +291,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <?php if($grp == 'I3') { ?>
-                    <p style="font-style: italic">*For Gender, the Non-Binary and Other categories will not be reported here to preserve respondents’ privacy and anonymity.<br>
+                    <p style="font-style: italic">*For Gender, the Non-Binary response option is only avaiable for the 2022 survey and later.<br>
                         As such, the <b>Total</b> here only includes students that answered Male or Female.<br>
                         To see the total for all students, set <b>Group Data By</b> to None.</p>
                 <?php } else if($grp > 0 && $grp !== 'I2') { ?>

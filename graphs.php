@@ -352,6 +352,9 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="">Gender</option>
                 <option value="1">Female</option>
                 <option value="2">Male</option>
+                <?php if($year >= 2022) { ?>
+                    <option value="3">Non-binary</option>
+                <?php } ?>
             </select>
             <select id="filterrace" class="filter selector" title="Race/Ethnicity">
                 <option value="">Race/Ethnicity</option>

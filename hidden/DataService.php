@@ -437,8 +437,12 @@ class DataService {
         $filter = " 1 ";
         if ($grade != null)
             $filter .= " AND I2 = ".$this->connection->real_escape_string($grade);
-        if ($gender != null)
-            $filter .= " AND I3 = ".$this->connection->real_escape_string($gender);
+        if ($gender != null) {
+            if($this->year >= 2022)
+                $filter .= " AND gender_nb = " . $this->connection->real_escape_string($gender);
+            else
+                $filter .= " AND I3 = " . $this->connection->real_escape_string($gender);
+        }
         if ($race != null)
             $filter .= " AND race_eth = ".$this->connection->real_escape_string($race);
         if ($sexual_orientation != null)
