@@ -290,12 +290,11 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
-                <?php if($grp == 'I3') { ?>
-                    <p style="font-style: italic">*For Gender, the Non-Binary response option is only avaiable for the 2022 survey and later.<br>
-                        As such, the <b>Total</b> here only includes students that answered Male or Female.<br>
-                        To see the total for all students, set <b>Group Data By</b> to None.</p>
-                <?php } else if($grp > 0 && $grp !== 'I2') { ?>
-                    <p style="font-style: italic">*The <b>Total</b> here only includes students that answered the <b>Group Data By</b> question.<br>
+                <?php if($grp == 'gender_nb') { ?>
+                    <p style="font-style: italic">Due to changes in the Gender categories for 2022, direct comparisons with previous years’ data is not recommended.</p>
+                <?php }
+                if($grp > 0) { ?>
+                    <p style="font-style: italic">The <b>Total</b> here only includes students that answered the <b>Group Data By</b> question.<br>
                         To see the total for all students, set Group Data By to None.</p>
                 <?php } ?>
                 <?php if($cat == 5) { ?>

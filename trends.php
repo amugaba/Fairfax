@@ -268,14 +268,13 @@ if(!$showIntro)
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
                 <?php if($groupCode == 'gender_nb') { ?>
-                    <p style="font-style: italic">*For Gender, the Non-Binary response option is only avaiable for the 2022 survey and later.<br>
-                        As such, the <b>Total</b> here only includes students that answered Male or Female.<br>
-                        To see the total for all students, set <b>Group Data By</b> to None.</p>
-                <?php } else if($groupCode > 0 && $groupCode !== 'I2') { ?>
-                    <p style="font-style: italic">*The <b>Total</b> here only includes students that answered the <b>Group Data By</b> question.<br>
+                    <p style="font-style: italic">Due to changes in the Gender categories for 2022, direct comparisons with previous years’ data is not recommended.</p>
+                <?php }
+                if($groupCode > 0) { ?>
+                    <p style="font-style: italic">The <b>Total</b> here only includes students that answered the <b>Group Data By</b> question.<br>
                         To see the total for all students, set Group Data By to None.</p>
-                <?php } ?>
-                <?php if($questionCode === 'A5' || $questionCode === 'S3' || $questionCode === 'S4') { ?>
+                <?php }
+                if($questionCode === 'A5' || $questionCode === 'S3' || $questionCode === 'S4') { ?>
                     <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
                 <?php } ?>
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
