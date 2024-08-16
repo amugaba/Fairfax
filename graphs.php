@@ -220,34 +220,34 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             let disability = $("#filterdisability").val();
 
             if(q1 !== '') {
-                let url = 'graphs.php?ds='+dataset+"&year="+year+"&pyr="+pyramid+'&q1='+q1;
+                let url = 'graphs.php?ds='+dataset+"&year="+year+'&q1='+q1;
 
-                if(q2 !== '')
+                if(q2 !== '' && q2 !== undefined)
                     url += '&grp='+q2;
-                if(cat1 !== '')
+                if(cat1 !== '' && cat1 !== undefined)
                     url += '&cat1='+cat1;
-                if(cat2 !== '')
+                if(cat2 !== '' && cat2 !== undefined)
                     url += '&cat2='+cat2;
-                if(grade !== '')
+                if(grade !== '' && grade !== undefined)
                     url += "&grade="+grade;
-                if(gender !== '')
+                if(gender !== '' && gender !== undefined)
                     url += "&gender="+gender;
-                if(race !== '')
+                if(race !== '' && race !== undefined)
                     url += "&race="+race;
-                if(raceSimplified !== '')
+                if(raceSimplified !== '' && raceSimplified !== undefined)
                     url += "&rsim="+raceSimplified;
-                if(sexOrientation !== '')
+                if(sexOrientation !== '' && sexOrientation !== undefined)
                     url += "&so="+sexOrientation;
-                if(transgender !== '')
+                if(transgender !== '' && transgender !== undefined)
                     url += "&trans="+transgender;
-                if(disability !== '')
+                if(disability !== '' && disability !== undefined)
                     url += "&disab="+disability;
 
                 window.location.href = url;
             }
         }
         function changeDataset() {
-            window.location.href = "graphs.php?ds="+$('#datasetSelect').val()+"&year="+$("#yearSelect").val()+"&pyr="+$("#pyramidSelect").val();
+            window.location.href = "graphs.php?ds="+$('#datasetSelect').val()+"&year="+$("#yearSelect").val();
         }
     </script>
 </head>
@@ -376,18 +376,22 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="3">Bisexual</option>
                 <option value="4">Not sure</option>
             </select><br class="hide6">
+            <?php if($year >= 2021) { ?>
             <select id="filtertransgender" class="filter selector hide6" title="Transgender Status" style="margin: 5px 0 0 224px;">
                 <option value="">Transgender Status</option>
                 <option value="1">Not transgender</option>
                 <option value="2">Transgender</option>
                 <option value="3">Not sure</option>
             </select>
+            <?php } ?>
+            <?php if($year >= 2023) { ?>
             <select id="filterdisability" class="filter selector" title="Disability">
                 <option value="">Disability</option>
                 <option value="1">No disability</option>
                 <option value="2">One or more disability</option>
                 <option value="3">Not sure</option>
             </select>
+            <?php } ?>
             <div style="text-align: center; margin-top: 20px">
                 <input type="submit" value="Generate Graph" class="btn">
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'graphs.php'">

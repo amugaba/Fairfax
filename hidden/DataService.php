@@ -453,9 +453,9 @@ class DataService {
             $filter .= " AND race = ".$this->connection->real_escape_string($race_simplified);
         if ($num_assets !== null)
             $filter .= " AND assets_3TS = ".$this->connection->real_escape_string($num_assets);
-        if ($transgender != null)
+        if ($transgender != null && $this->year >= 2021)
             $filter .= " AND I3A = ".$this->connection->real_escape_string($transgender);
-        if ($disability !== null)
+        if ($disability !== null && $this->year >= 2023)
             $filter .= " AND disability_cat = ".$this->connection->real_escape_string($disability);
         return $filter;
     }
