@@ -40,6 +40,7 @@ $ds = DataService::getInstance($year, $dataset);
 $variables = $ds->get3TSVariables();
 
 $showIntro = $questionCode == null;
+$hasSuppression = false;
 //$threeToSucceedCode = "assets_3TS";
 
 if(!$showIntro) {
@@ -62,8 +63,14 @@ if(!$showIntro && $variableAvailable){
         $ds->getCutoffPositives($variable, $groupVar, $filter);
         $ds->getCutoffTotal($variable, $groupVar, $filter);
 
-        for ($j = 0; $j < count($variable->counts); $j++)
-            $assetData['v'.$j] = round($variable->getPercent($j+1) * 100, 1);
+        for ($j = 0; $j < count($variable->counts); $j++) {
+            if($variable->getTotal($j + 1) <= 10) {
+                $assetData['v'.$j] = null;
+                $hasSuppression = true;
+            }
+            else
+                $assetData['v'.$j] = round($variable->getPercent($j + 1) * 100, 1);
+        }
         $percentData[] = $assetData;
         $assetTotals[] = count($variable->totals) === 0 ? null : array_sum($variable->totals);
     }
@@ -281,6 +288,9 @@ if(!$showIntro && $variableAvailable){
                 <?php } ?>
                 <?php if($questionCode === 'A5' || $questionCode === 'S3' || $questionCode === 'S4') { ?>
                     <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
+                <?php } ?>
+                <?php if($hasSuppression) { ?>
+                    <p style="font-style: italic">Some values have been marked <b>N/A</b> due to small sample size. It is difficult to meaningfully interpret data with a sample size that is too small.</p>
                 <?php } ?>
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>
