@@ -183,6 +183,7 @@ if(!$showIntro && $variableAvailable){
             </select>
             &nbsp;Year:
             <select id="yearSelect" style="height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset()" title="Change year drop down">
+                <option value="2024">2024</option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>
                 <option value="2021">2021</option>

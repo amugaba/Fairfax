@@ -13,8 +13,6 @@ require_once 'Variable.php';
 
 class MultiVariable extends Variable
 {
-    public $labels = [];
-
     public function addCount($answerCode, $groupCode, $num){
         $this->counts[intval($answerCode)-1][intval($groupCode)-1] = floatval($num);
     }

@@ -15,6 +15,13 @@ abstract class Variable
     public $percents;
     public $totals;
 
+    public $lowCutoff;
+    public $highCutoff;
+    public $totalCutoff;
+    public $tooltip;
+
+    public $labels = [];
+
     public function __construct()
     {
         $this->counts = array();

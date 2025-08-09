@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  * Enter your MySQL database connection info below.
  * Username and password are for the user account your created with privileges
  * to edit the database
@@ -14,25 +14,18 @@
 
 class ConnectionManager
 {
-    public $username;
-    public $password;
-    public $server;
-    public $databasename;
-    public $port = "3306";
+    public string $port;
+    public string $username;
+    public string $password;
+    public string $server;
+    public string $databasename;
 
     public function __construct ()
     {
-        if(strpos($_SERVER['HTTP_HOST'], "localhost") === false) {
-            $this->username = "amugaba";
-            $this->password = "overalls are in style";
-            $this->server = "mysql.angstrom-software.com";
-            $this->databasename = "fairfaxdb";
-        }
-        else {
-            $this->username = "root";
-            $this->password = "asdf2423";
-            $this->server = "127.0.0.1";
-            $this->databasename = "fairfaxdb";
-        }
+        $this->username = $_ENV['MYSQL_USERNAME'];
+        $this->password = $_ENV['MYSQL_PASSWORD'];
+        $this->server = $_ENV['MYSQL_HOST'];
+        $this->databasename = $_ENV['MYSQL_DATABASE'];
+        $this->port = $_ENV['MYSQL_PORT'];
     }
 }

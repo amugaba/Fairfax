@@ -33,6 +33,10 @@ else {
     //error_reporting(E_ERROR);
 }
 
+require_once __DIR__ . '/../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
+$dotenv->load();
+
 function include_styles() {
     $root = HTTP_ROOT;
     echo "
@@ -66,8 +70,8 @@ function echo_self() {
     echo htmlspecialchars($_SERVER["PHP_SELF"]);
 }
 function getCurrentYear() {
-    return 2023;
+    return 2024;
 }
 function getAllYears() {
-    return [2015,2016,2017,2018,2019,2021,2022,2023];
+    return [2015,2016,2017,2018,2019,2021,2022,2023,2024];
 }

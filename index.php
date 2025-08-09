@@ -32,7 +32,7 @@ include_once "config/config.php";
                 <div style="margin-top: 30px;">
                     <img src="img/fairfaxlogo.png"  alt="Fairfax County Logo">
                 </div>
-                <h1 class="shadowdeep" style="margin-top: 20px">2023&ndash;2024 Youth Survey Interactive Data Explorer</h1>
+                <h1 class="shadowdeep" style="margin-top: 20px">2024&ndash;2025 Youth Survey Interactive Data Explorer</h1>
                 <div style="margin-top: 40px">
                     <h2 style="max-width: 700px; margin: 0 auto">Generate custom graphs and data tables on the questions you find most interesting!</h2>
                     <a href="highlights.php" class="button-link" style="margin: 30px auto">Check Out the Highlights</a>

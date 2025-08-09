@@ -15,11 +15,6 @@ require_once 'Variable.php';
 
 class CutoffVariable extends Variable
 {
-    public $lowCutoff;
-    public $highCutoff;
-    public $totalCutoff;
-    public $tooltip;
-
     public function getCount($groupCode){
         return $this->counts[intval($groupCode)-1];
     }
