@@ -47,6 +47,7 @@ function include_styles() {
     <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
     <script src='//code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
     ";
+    //TBD - change Bootstrap to https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css
 
     if(!DEBUG) {
         echo "<!-- Global site tag (gtag.js) - Google Analytics -->

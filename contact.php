@@ -11,14 +11,14 @@ include_once "config/config.php";
 <body>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row title">
+    <header class="row title">
         <div style="width:750px; margin: -10px auto 10px;">
             <img src="img/fairfaxlogo.png" style="float: left; padding: 30px 30px 0 0" alt="Fairfax County Logo">
             <h1 class="shadowdeep" style="color:#ffffff; padding: 10px 0 10px 0;">2024&ndash;2025 Youth Survey Highlights and Data Explorer</span></h1>
         </div>
 
-    </div>
-    <div style="max-width: 1000px; margin: 20px auto;">
+    </header>
+    <main style="max-width: 1000px; margin: 20px auto;">
         <div class="row">
             <div class="col-md-3">
                 <h2 style="color:#767676">Contact Us</h2>
@@ -28,7 +28,7 @@ include_once "config/config.php";
                     <a href="mailto:DMBDataAnalytics@fairfaxcounty.gov">DMBDataAnalytics@fairfaxcounty.gov</a></p>
             </div>
         </div>
-    </div>
+    </main>
 </div>
 <?php include_footer(); ?>
 </body>

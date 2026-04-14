@@ -26,7 +26,7 @@ include_once "config/config.php";
 </style>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row title" style="padding-top: 20px; padding-bottom: 20px">
+    <header class="row title" style="padding-top: 20px; padding-bottom: 20px">
         <div class="col-sm-6" style="color: white">
             <div style="text-align: center; margin: 0 0 0 auto">
                 <div style="margin-top: 30px;">
@@ -36,7 +36,7 @@ include_once "config/config.php";
                 <div style="margin-top: 40px">
                     <h2 style="max-width: 700px; margin: 0 auto">Generate custom graphs and data tables on the questions you find most interesting!</h2>
                     <a href="highlights.php" class="button-link" style="margin: 30px auto">Check Out the Highlights</a>
-                    <p style="font-size: 22px">Or build your own graphs at:<br> <a href="graphs.php" class="text-link">Explore the Data</a>,
+                    <p style="font-size: 1.57em">Or build your own graphs at:<br> <a href="graphs.php" class="text-link">Explore the Data</a>,
                         <a href="trends.php" class="text-link">Trends Over Time</a>, and <a href="three-to-succeed.php" class="text-link">Three to Succeed</a>.</p>
                 </div>
             </div>
@@ -46,8 +46,8 @@ include_once "config/config.php";
                 <img src="img/olderkids2024.jpg" alt="High school kids smiling">
             </div>
         </div>
-    </div>
-    <div class="row" style="padding-top: 20px; max-width: 1050px; margin: 0 auto; font-size: 16px">
+    </header>
+    <main class="row" style="padding-top: 20px; max-width: 1050px; margin: 0 auto; font-size: 16px">
         <h1 style="text-align: center">Learn More About the Survey and Data Explorer</h1>
         <div class="grid">
             <div class="grid-third">
@@ -84,8 +84,8 @@ include_once "config/config.php";
                 </div>
             </div>
         </div>
-    </div>
-    <div style="max-width: 1050px; margin: 20px auto;">
+    </main>
+    <section aria-label="About the Survey" style="max-width: 1050px; margin: 20px auto;">
         <div class="row">
             <div class="col-md-12">
                 <hr>
@@ -102,7 +102,7 @@ include_once "config/config.php";
                 <p>For more information, please see the <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Youth Survey homepage</a>.</p>
             </div>
         </div>
-    </div>
+    </section>
 </div>
 <?php include_footer(); ?>
 </body>

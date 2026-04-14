@@ -323,3 +323,8 @@ th.clearcell {
     padding-top: 1px;
     margin-left: 5px;
 }
+
+/* ACCESSIBILITY */
+p {
+    line-height: 1.5;
+}

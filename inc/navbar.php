@@ -10,7 +10,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="index.php" style="padding: 11px 20px; color: white; font-size: 25px;">
+            <a class="navbar-brand" href="index.php" aria-label="Home" style="padding: 11px 20px; color: white; font-size: 25px;">
                 <span class="glyphicon glyphicon-home"></span>
             </a>
         </div>

@@ -254,7 +254,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
 <body>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row title">
+    <section class="row title" aria-label="Control Panel">
         <div class="dataset-controls shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">
             Dataset:
             <select id="datasetSelect" class="selector" onchange="changeDataset()" title="Change dataset drop down">
@@ -398,8 +398,8 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'graphs.php'">
             </div>
         </form>
-    </div>
-    <div class="row" style="margin: 10px auto; max-width: 1400px">
+    </section>
+    <main class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
             include "instructions.php";
         elseif(!$mainVariableAvailable || !$groupVariableAvailable): ?>
@@ -437,7 +437,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>
         <?php endif; ?>
-    </div>
+    </main>
 </div>
 <?php include_footer(); ?>
 </body>

@@ -201,7 +201,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
 <?php include_header(); ?>
 <div class="container" id="main">
     <div class="row">
-        <div class="col-md-3 sidebar">
+        <section class="col-md-3 sidebar" aria-label="Control Panel">
             <div class="dataset-controls">
                 <p class="shadowdeep" style="font-size: 18px; margin-top: 15px;">Showing highlights for</p>
                 <div>
@@ -256,8 +256,8 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                     <li><a data-category="12">Civic Engagement and Time Use</a></li>
                     <li><a data-category="13">Assets that Build Resiliency</a></li>
                 </ul>
-        </div>
-        <div class="col-md-9 mainbar">
+        </section>
+        <main class="col-md-9 mainbar">
             <div style="text-align: center;">
                 <h2 id="graphTitle"></h2>
                 <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $highlightGroup->explanation;?></div>
@@ -303,7 +303,7 @@ $graphHeight = min(900,max(600,(count($groupLabels)+1)*count($highlightGroup->co
                 <?php } ?>
                 <input type="button" onclick="exportCSV()" class="btn btn-blue" value="Export to CSV" style="margin-top: 10px">
             </div>
-        </div>
+        </main>
     </div>
 </div>
 <?php include_footer(); ?>

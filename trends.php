@@ -174,7 +174,7 @@ if(!$showIntro)
 <body>
 <?php include_header(); ?>
 <div class="container" id="main">
-    <div class="row title">
+    <section class="row title" aria-label="Control Panel">
         <div class="dataset-controls shadow" style="font-size: 22px; margin-top: 15px; color: white; text-align: center">
             Dataset:
             <select id="datasetSelect" style="width:150px; height: 28px; font-size: 18px; padding-top: 1px; margin-left: 5px" class="selector" onchange="changeDataset(this.value)" title="Change dataset drop down">
@@ -236,8 +236,8 @@ if(!$showIntro)
                 <input type="button" value="Reset" class="btn" onclick="location.href = 'trends.php'">
             </div>
         </div>
-    </div>
-    <div class="row" style="margin: 10px auto; max-width: 1400px">
+    </section>
+    <main class="row" style="margin: 10px auto; max-width: 1400px">
         <?php if($showIntro):
             include "trends-instructions.php";
         else: ?>
@@ -280,7 +280,7 @@ if(!$showIntro)
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>
         <?php endif; ?>
-    </div>
+    </main>
 </div>
 <?php include_footer(); ?>
 </body>
