@@ -21,11 +21,11 @@ include_once "config/config.php";
     <main style="max-width: 1000px; margin: 20px auto;">
         <div class="row">
             <div class="col-md-3">
-                <h2 style="color:#767676">Contact Us</h2>
+                <h2 style="color:#515151">Contact Us</h2>
             </div>
             <div class="col-md-9">
                 <p style="font-size: 1.5em">For inquiries regarding the Fairfax County Youth Survey or the Data Explorer website, please contact
-                    <a href="mailto:DMBDataAnalytics@fairfaxcounty.gov">DMBDataAnalytics@fairfaxcounty.gov</a></p>
+                    <b><a href="mailto:DMBDataAnalytics@fairfaxcounty.gov">DMBDataAnalytics@fairfaxcounty.gov</a></b></p>
             </div>
         </div>
     </main>

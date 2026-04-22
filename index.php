@@ -99,7 +99,7 @@ include_once "config/config.php";
                 <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in sixth, eighth, tenth, and twelfth grades.
                     It examines behaviors, experiences, and other factors that influence the health and well-being of the county's youth.
                     The survey is co-sponsored by the Fairfax County Board of Supervisors and the Fairfax County School Board, and has been administered since 2001.</p>
-                <p>For more information, please see the <a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Youth Survey homepage</a>.</p>
+                <p>For more information, please see the <b><a href="http://www.fairfaxcounty.gov/youthsurvey" target="_blank">Youth Survey homepage</a></b>.</p>
             </div>
         </div>
     </section>

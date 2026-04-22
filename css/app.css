@@ -103,7 +103,7 @@ table.datatable {
 .datatable th {
     border: 1px solid black;
     padding: 5px;
-    background-color:grey;
+    background-color: #6a6a6a;
     color: white;
     text-align:right;
 }
@@ -158,10 +158,10 @@ table.datatable {
     color: white !important;
 }
 .bg-fill {
-    background: #265c8a;
+    background: #24547e;
 }
 .row.title {
-    background: #265c8a;
+    background: #24547e;
 }
 
 #bottombar {
@@ -184,7 +184,7 @@ table.datatable {
 .sidebar {
     margin-bottom: -9999px;
     padding-bottom: 9999px;
-    background-color: #265c8a;
+    background-color: #24547e;
     color: #ffffff;
 }
 
@@ -273,7 +273,7 @@ th.clearcell {
 }
 
 .btn-blue {
-    background-color: #265c8a;
+    background-color: #24547e;
     border-color: #3276b2;
     color: #ffffff;
 }
@@ -327,4 +327,13 @@ th.clearcell {
 /* ACCESSIBILITY */
 p {
     line-height: 1.5;
+}
+a {
+    color: #24547e;
+}
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #717171 !important;
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+    overflow: auto !important;
 }
