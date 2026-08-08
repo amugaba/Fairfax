@@ -56,17 +56,4 @@ class CutoffVariable extends Variable
                 $this->percents[] = round($this->counts[$i] / $this->totals[$i] * 100, 1);
         }
     }
-
-    public function fill($dbobj)
-    {
-        $this->autoid = isset($dbobj->autoid) ? $dbobj->autoid : null;
-        $this->code = isset($dbobj->code) ? $dbobj->code : null;
-        $this->question = isset($dbobj->question) ? $dbobj->question : null;
-        $this->summary = isset($dbobj->cutoff_summary) ? $dbobj->cutoff_summary : null;
-        $this->category = isset($dbobj->category) ? $dbobj->category : null;
-        $this->lowCutoff = isset($dbobj->low_cutoff) ? $dbobj->low_cutoff : null;
-        $this->highCutoff = isset($dbobj->high_cutoff) ? $dbobj->high_cutoff : null;
-        $this->totalCutoff = isset($dbobj->total_cutoff) ? $dbobj->total_cutoff : null;
-        $this->tooltip = isset($dbobj->cutoff_tooltip) ? $dbobj->cutoff_tooltip : null;
-    }
 }

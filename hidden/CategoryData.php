@@ -1,12 +1,101 @@
 <?php
 require_once "HighlightGroup.php";
 require_once "DataService.php";
+
+function getHighlightLinks(int $year) {
+    if($year <= 2024)
+        return '<li><a data-category="1">Alcohol</a></li>
+            <li><a data-category="2">Tobacco</a></li>
+            <li><a data-category="3">Drugs</a></li>
+            <li><a data-category="20">Vaping</a></li>
+            <li class="hide6"><a data-category="4">Sexual Health</a></li>
+            <li class="hide6"><a data-category="5">Vehicle Safety</a></li>
+            <li><a data-category="6">Bullying and Cyberbullying</a></li>
+            <li class="hide6"><a data-category="7">Dating Aggression</a></li>
+            <li><a data-category="8">Harassment and Aggressive Behaviors</a></li>
+            <li><a data-category="10">Nutrition</a></li>
+            <li><a data-category="14">Physical Activity</a></li>
+            <li><a data-category="11">Mental Health</a></li>
+            <li><a data-category="12">Civic Engagement and Time Use</a></li>
+            <li><a data-category="13">Assets that Build Resiliency</a></li>';
+    else
+        return '<li><a data-category="1">Alcohol Use</a></li>
+            <li><a data-category="2">Cannabis Use</a></li>
+            <li><a data-category="3">Vaping and Tobacco Use</a></li>
+            <li><a data-category="4">Other Drug Use</a></li>
+            <li><a data-category="5">Peer Harm</a></li>
+            <li><a data-category="6">Family <span class="hide6">and Dating </span>Violence</a></li>
+            <li class="hide6"><a data-category="7">Unwanted Sexual Behaviors</a></li>
+            <li><a data-category="8">Weapons<span class="hide6"> and Gang Membership</span></a></li>
+            <li><a data-category="9">Mental Health</a></li>
+            <li><a data-category="10">Nutrition<span class="hide6"> and Unhealthy Weight Loss Behaviors</span></a></li>
+            <li class="hide6"><a data-category="11">Risk and Safety Behaviors</a></li>
+            <li><a data-category="12">Academics and School Life</a></li>
+            <li><a data-category="13">Activities, Work and Sleep</a></li>
+            <li><a data-category="14">Screen and Social Media Use</a></li>
+            <li><a data-category="15">Assets that Build Resiliency</a></li>';
+}
+
+function getHighlightGroup2025($cat, $dataset, $year)
+{
+    if ($cat == 1) {
+        $title = "Alcohol Use";
+        if($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['A2A', 'A3A', 'A4'];
+            $labels = ['Lifetime Alcohol Use', 'Past Month Alcohol Use', 'Past Month Binge Drinking (5+ Drinks in a Row)'];
+        }
+        else {
+            $qCodes = ['A2B', 'A3B'];
+            $labels = ['Lifetime Alcohol Use', 'Past Month Alcohol Use'];
+        }
+        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on alcohol, the most commonly used substance by Fairfax County youth.</p>
+        <p>To learn about other substances or to compare alcohol use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+    }
+    else if ($cat == 2) {
+        $title = "Cannabis Use";
+        if($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['T3', 'T4A', 'T5', 'T2', 'T6'];
+            $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month E-Cigarette Use', 'Past Month Smokeless Tobacco Use', 'Past Month Hookah Use'];
+            $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco, including e-cigarettes.</p>
+            <p>To learn about other substances or to compare tobacco use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+        }
+        else {
+            $qCodes = ['T3', 'T4B'];
+            $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use'];
+            $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco.</p>
+            <p>To learn about other substances or to compare tobacco use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+        }
+    }
+    else if ($cat == 3) {
+        $title = "Drugs";
+        if($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['D3A', 'D9A', 'D17', 'D15'];
+            $labels = ['Past Month Marijuana Use', 'Past Month Inhalant Use', 'Past Month Painkiller Use (without doctor\'s order)', 'Past Month Heroin Use'];
+        }
+        else {
+            $qCodes = ['D3B', 'D9B', 'D25'];
+            $labels = ['Past Month Marijuana Use', 'Past Month Inhalant Use', 'Past Month Other Illegal Drug Use'];
+        }
+        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on selected substances of interest to the Fairfax County community.</p>
+        <p>To learn about other substances or to compare substance use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+    }
+
+    $var = new HighlightGroup();
+    $var->title = $title;
+    $var->explanation = $explanation;
+    $var->codes = $qCodes;
+    $var->labels = $labels;
+    return $var;
+}
+
 /**
  * Provides variables for 2015 categories
  */
 function getHighlightGroup($cat, $dataset, $year)
 {
-    $connector = "";
+    if($year >= 2025)
+        return getHighlightGroup2025($cat, $dataset, $year);
+
     if ($cat == 1) {
         $title = "Alcohol";
         if($dataset == DataService::EIGHT_TO_TWELVE) {

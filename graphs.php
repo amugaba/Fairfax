@@ -2,91 +2,24 @@
 require_once "config/config.php";
 require_once 'hidden/DataService.php';
 
-if(isset($_GET['year']))
-    $year = intval($_GET['year']);
-else
-    $year = getCurrentYear();
+//Get query inputs
+$year = getInput('year') ? intval(getInput('year')) : getCurrentYear();
+$dataset = getInput('ds') ?? DataService::EIGHT_TO_TWELVE;
+$pyramid = getInput('pyr');
+$cat1 = getInput('cat1');
+$cat2 = getInput('cat2');
 
-if(isset($_GET['ds']) && $_GET['ds'] == '6th')
-    $dataset = DataService::SIXTH;
-else
-    $dataset = DataService::EIGHT_TO_TWELVE;
+$graph = null; //If graph is null (no query run), show the instructions page
 
+if(getInput('q1') != null) {
+    $graph = Graph::createExploreGraph($year, $dataset, getInput('q1'), getInput('grp'), getInput('grade'), getInput('gender'), getInput('race'),
+            getInput('so'), getInput('pyramid'), getInput('rsim'), getInput('trans'), getInput('disab'));
+}
+
+//Get variables and categories for dropdowns
 $ds = DataService::getInstance($year, $dataset);
 $variables = $ds->getVariables();
-
-//Process user input
-$q1 = $_GET['q1'] ?? null;
-$grp = $_GET['grp'] ?? 'none';
-$cat1 = $_GET['cat1'] ?? null;
-$cat2 = $_GET['cat2'] ?? null;
-$grade = $_GET['grade'] ?? null;
-$gender = $_GET['gender'] ?? null;
-$race = $_GET['race'] ?? null;
-$race_simplified = $_GET['rsim'] ?? null;
-$sexual_orientation = $_GET['so'] ?? null;
-$transgender = $_GET['trans'] ?? null;
-$disability = $_GET['disab'] ?? null;
-$pyramid = ''; //$_GET['pyr'] ?? ''; Uncomment to re-enable
-
-if($pyramid > 0) {
-    $race = null;
-    $sexual_orientation = null;
-}
-
-$showIntro = $q1 == null;
-$below_threshold = false;
-$mainVariableAvailable = false;
-$groupVariableAvailable = false;
-
-if(!$showIntro) {
-    //Get Variables
-    $mainVar = $ds->getMultiVariable($q1);
-    if($ds->isUnweighted($q1))
-        $mainVar->question .= " (Data are unweighted)";
-    $groupVar = $ds->getMultiVariable($grp);
-    if ($mainVar == null)
-        die("User input was invalid.");
-
-    $mainVariableAvailable = $ds->isVariableInData($q1);
-    $groupVariableAvailable = $grp == 'none' || $ds->isVariableInData($grp);
-}
-if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
-    $mainVar->initializeCounts($groupVar);
-    //Construct filter
-    $filter = $ds->createFilterString($grade, $gender, $race, $sexual_orientation, $pyramid, $race_simplified, null, $transgender, $disability);
-
-    //Load data into main Variable
-    $ds->getMultiPositives($mainVar, $groupVar, $filter);
-    $ds->getMultiTotals($mainVar, $groupVar, $filter);
-    $below_threshold = $ds->checkAnonymityThreshold($mainVar, $groupVar);
-    $mainVar->calculatePercents();
-
-    //Group variables
-    if ($groupVar != null) {
-        $groupLabels = $groupVar->getLabels();
-        $groupSummary = $groupVar->summary;
-        $groupQuestion = $groupVar->question;
-    } else {
-        $groupLabels = ['Total'];
-        $groupSummary = null;
-        $groupQuestion = null;
-    }
-
-    //Create the data structure used by AmCharts for bar graphs
-    //[['answer' => Var1 label, 'v0' => Group0 percent, 'v1' => Group1 percent, ...], ['answer' => Var 2 label, ...]]
-    $percentData = [];
-    for ($i=0; $i < count($mainVar->labels); $i++) {
-        $percentArray['answer'] = $mainVar->labels[$i];
-        for($j=0; $j<count($groupLabels); $j++) {
-            $percentArray['v'.$j] = $mainVar->percents[$i][$j];
-        }
-        $percentData[] = $percentArray;
-    }
-
-    $graphHeight = min(900, max(600, (count($groupLabels) + 1) * count($mainVar->getLabels()) * 30 + 100));//height is (labels*(labels+spacing)*bar height + header height
-    $noresponse = $ds->getNoResponseCount($mainVar, $groupVar, $filter);
-}
+$categories = $ds->getCategories();
 ?>
 
 <!DOCTYPE html>
@@ -95,161 +28,6 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
     <meta charset="UTF-8">
     <title>Explore the Data - Fairfax County Youth Survey</title>
     <?php include_styles() ?>
-    <script src="js/amcharts3/amcharts.js"></script>
-    <script src="js/amcharts3/serial.js"></script>
-    <script src="js/amcharts3/plugins/export/export.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css" rel="stylesheet"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.full.js"></script>
-    <script src="js/variableSelector.js"></script>
-    <script src="js/graph.js"></script>
-    <script src="js/datatable.js"></script>
-    <script>
-        $(function() {
-            questions = <?php echo json_encode($variables); ?>;
-            //get user inputs
-            mainCode = <?php echo json_encode($q1); ?>;
-            groupCode = <?php echo json_encode($grp); ?>;
-            var grade = <?php echo json_encode($grade); ?>;
-            var gender = <?php echo json_encode($gender); ?>;
-            var race = <?php echo json_encode($race); ?>;
-            var raceSimplified = <?php echo json_encode($race_simplified); ?>;
-            var sexOrientation = <?php echo json_encode($sexual_orientation); ?>;
-            var transgender = <?php echo json_encode($transgender); ?>;
-            var disability = <?php echo json_encode($disability); ?>;
-            pyramid = <?php echo json_encode($pyramid); ?>;
-            var cat1 = <?php echo json_encode($cat1); ?>;
-            var cat2 = <?php echo json_encode($cat2); ?>;
-            year = <?php echo json_encode($year); ?>;
-            dataset = <?php echo json_encode($dataset); ?>;
-            if(dataset === '6th') {
-                $(".hide6").hide();
-            }
-            if(pyramid > 0) {
-                $("#filterrace").hide();
-                $("#filtersex").hide();
-                $("#filterracesimple").show();
-            }
-
-            //persist user inputs in search form
-            if(cat1 != null)
-                $('#category1').val(cat1);
-            if(cat2 != null)
-                $('#category2').val(cat2);
-
-            enableSelect2(questions, "#category1", "#question1");
-            enableSelect2(questions, "#category2", "#question2", true);
-
-            if(mainCode != null) {
-                $('#question1').val(mainCode);
-                $("#question1").trigger('change');
-            }
-            if(groupCode != null && groupCode !== 'none') {
-                $('#question2').val(groupCode);
-                $("#question2").trigger('change');
-            }
-
-            $('#datasetSelect').val(dataset);
-            $('#yearSelect').val(year);
-            $('#pyramidSelect').val(pyramid);
-            $('#filtergrade').val(grade);
-            $('#filtergender').val(gender);
-            $('#filterrace').val(race);
-            $('#filterracesimple').val(raceSimplified);
-            $('#filtersex').val(sexOrientation);
-            $('#filtertransgender').val(transgender);
-            $('#filterdisability').val(disability);
-
-            <?php if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable && !$below_threshold): ?>
-            mainTitle = <?php echo json_encode($mainVar->question); ?>;
-            mainSummary = <?php echo json_encode($mainVar->summary); ?>;
-            groupTitle = <?php echo json_encode($groupQuestion); ?>;
-            groupSummary = <?php echo json_encode($groupSummary); ?>;
-            mainLabels = <?php echo json_encode($mainVar->labels); ?>;
-            groupLabels = <?php echo json_encode($groupLabels); ?>;
-            counts = <?php echo json_encode($mainVar->counts); ?>;
-            percentData = <?php echo json_encode($percentData); ?>;
-            sumPositives = <?php echo json_encode($mainVar->getSumPositives()); ?>;
-            totals = <?php echo json_encode($mainVar->totals); ?>;
-            groupTotals = <?php echo json_encode($mainVar->getGroupTotals()); ?>;
-            sumTotal = <?php echo json_encode($mainVar->getSumTotal()); ?>;
-            isGrouped = groupLabels.length > 1;
-
-            createBarGraph(percentData, mainTitle, groupTitle, groupLabels, null, mainSummary);
-
-            if(!isGrouped)
-                createSimpleExplorerTable($('#datatable'), mainLabels, counts, sumTotal);
-            else
-                createCrosstabExplorerTable($('#datatable'), mainSummary, groupSummary, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal);
-
-            filterString = makeFilterString(grade, gender, race, sexOrientation, raceSimplified, transgender, disability);
-            titleString = "<h4>"+mainTitle+"</h4>";
-            if(isGrouped)
-                titleString += "<i>compared to</i><h4>" + groupTitle + "</h4>";
-            if(filterString != null)
-                titleString += "<i>" + filterString + "</i>";
-            $("#graphTitle").html(titleString);
-            <?php endif; ?>
-
-            $('[data-toggle="tooltip"]').tooltip();
-
-            $("#searchform").on( "submit", searchData);
-        });
-        function exportCSV() {
-            if(!isGrouped)
-                simpleExplorerCSV(mainTitle, mainLabels, counts, totals, year, dataset, filterString, pyramid);
-            else
-                crosstabExplorerCSV(mainTitle, groupTitle, mainLabels, groupLabels, counts, sumPositives, groupTotals, sumTotal, filterString, year, dataset, pyramid);
-        }
-        function exportGraph() {
-            exportToPDF(chart, mainTitle, groupTitle, year, dataset, filterString, pyramid);
-        }
-
-
-        function searchData(e) {
-            e.preventDefault();
-            let q1 = $('#question1').val();
-            let q2 = $('#question2').val();
-            let cat1 = $('#category1').val();
-            let cat2 = $('#category2').val();
-            let grade = $("#filtergrade").val();
-            let gender = $("#filtergender").val();
-            let race = $("#filterrace").val();
-            let raceSimplified = $("#filterracesimple").val();
-            let sexOrientation = $("#filtersex").val();
-            let transgender = $("#filtertransgender").val();
-            let disability = $("#filterdisability").val();
-
-            if(q1 !== '') {
-                let url = 'graphs.php?ds='+dataset+"&year="+year+'&q1='+q1;
-
-                if(q2 !== '' && q2 !== undefined)
-                    url += '&grp='+q2;
-                if(cat1 !== '' && cat1 !== undefined)
-                    url += '&cat1='+cat1;
-                if(cat2 !== '' && cat2 !== undefined)
-                    url += '&cat2='+cat2;
-                if(grade !== '' && grade !== undefined)
-                    url += "&grade="+grade;
-                if(gender !== '' && gender !== undefined)
-                    url += "&gender="+gender;
-                if(race !== '' && race !== undefined)
-                    url += "&race="+race;
-                if(raceSimplified !== '' && raceSimplified !== undefined)
-                    url += "&rsim="+raceSimplified;
-                if(sexOrientation !== '' && sexOrientation !== undefined)
-                    url += "&so="+sexOrientation;
-                if(transgender !== '' && transgender !== undefined)
-                    url += "&trans="+transgender;
-                if(disability !== '' && disability !== undefined)
-                    url += "&disab="+disability;
-
-                window.location.href = url;
-            }
-        }
-        function changeDataset() {
-            window.location.href = "graphs.php?ds="+$('#datasetSelect').val()+"&year="+$("#yearSelect").val();
-        }
-    </script>
 </head>
 <body>
 <?php include_header(); ?>
@@ -263,15 +41,9 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             </select>
             &nbsp;Year:
             <select id="yearSelect" class="selector" onchange="changeDataset()" title="Change year drop down">
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
+                <?php foreach (getAllYearsReversed() as $yearOption) {
+                    echo "<option>$yearOption</option>";
+                }?>
             </select>
             <!--&nbsp;Pyramid:
             <select id="pyramidSelect" class="selector" onchange="changeDataset()" title="Change pyramid drop down">
@@ -283,32 +55,13 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             <div class="tipbutton" style="margin-left:5px; position: absolute" data-toggle="tooltip" data-placement="top"
                  title="When a pyramid is selected, data can only be grouped by grade, gender, and race (simplified) to preserve anonymity."></div>-->
         </div>
-        <form id="searchform" class="searchbar">
+        <form id="searchForm" class="searchbar">
             <label class="shadow" for="question1">1. Select primary question:</label>
             <select id="category1" style="width:160px" class="selector" title="Select category to filter primary question">
                 <option value="" selected="selected">All categories</option>
-                <option value="99">Demographics</option>
-                <option value="1">Alcohol</option>
-                <option value="12">Tobacco</option>
-                <option value="5">Drugs</option>
-                <option value="20">Vaping</option>
-                <option value="2">Bullying & Cyberbullying</option>
-                <option value="14">Harassment</option>
-                <option value="3" class="hide6">Dating Aggression</option>
-                <option value="13">Other Aggressive Behaviors</option>
-                <option value="17" class="hide6">Vehicle Safety</option>
-                <option value="6">Physical Activity</option>
-                <option value="7">Nutrition</option>
-                <option value="19" class="hide6">Unhealthy Weight Loss Behaviors</option>
-                <option value="9">Mental Health</option>
-                <option value="18" class="hide6">Sexual Health</option>
-                <option value="4">School</option>
-                <option value="11">Family</option>
-                <option value="10">Community Support</option>
-                <option value="16">Civic Engagement</option>
-                <option value="15">Time Use</option>
-                <option value="8">Self/Peer Perception</option>
-                <option value="21">Disability</option>
+                <?php foreach ($categories as $category) {
+                    echo "<option value='$category->code'>$category->name</option>";
+                }?>
             </select>
             <select id="question1" class="searchbox" required>
                 <option value="" selected="selected">Select a question</option>
@@ -316,40 +69,21 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             <label class="shadow" for="question2">2. (Optional) Separate data &nbsp; &nbsp; &nbsp; by another question:</label>
             <select id="category2" style="width:160px" class="selector" title="Select category to filter secondary question">
                 <option value="" selected="selected">All categories</option>
-                <option value="99">Demographics</option>
-                <option value="1">Alcohol</option>
-                <option value="12">Tobacco</option>
-                <option value="5">Drugs</option>
-                <option value="20">Vaping</option>
-                <option value="2">Bullying & Cyberbullying</option>
-                <option value="14">Harassment</option>
-                <option value="3" class="hide6">Dating Aggression</option>
-                <option value="13">Other Aggressive Behaviors</option>
-                <option value="17" class="hide6">Vehicle Safety</option>
-                <option value="6">Physical Activity</option>
-                <option value="7">Nutrition</option>
-                <option value="19" class="hide6">Unhealthy Weight Loss Behaviors</option>
-                <option value="9">Mental Health</option>
-                <option value="18" class="hide6">Sexual Health</option>
-                <option value="4">School</option>
-                <option value="11">Family</option>
-                <option value="10">Community Support</option>
-                <option value="16">Civic Engagement</option>
-                <option value="15">Time Use</option>
-                <option value="8">Self/Peer Perception</option>
-                <option value="21">Disability</option>
+                <?php foreach ($categories as $category) {
+                    echo "<option value='$category->code'>$category->name</option>";
+                }?>
             </select>
             <select id="question2" class="searchbox">
                 <option value="" selected="selected">Select a question</option>
             </select><br>
             <label class="shadow" style="margin: 10px 0 0">3. (Optional) Filter data by:</label>
-            <select id="filtergrade" class="filter selector hide6" title="Grade">
+            <select id="filterGrade" class="filter selector hide6" title="Grade">
                 <option value="">Grade</option>
                 <option value="1">8th</option>
                 <option value="2">10th</option>
                 <option value="3">12th</option>
             </select>
-            <select id="filtergender" class="filter selector" title="Gender">
+            <select id="filterGender" class="filter selector" title="Gender">
                 <option value="">Gender</option>
                 <option value="1">Female</option>
                 <option value="2">Male</option>
@@ -357,7 +91,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                     <option value="3">Non-binary</option>
                 <?php } ?>
             </select>
-            <select id="filterrace" class="filter selector" title="Race/Ethnicity">
+            <select id="filterRace" class="filter selector" title="Race/Ethnicity">
                 <option value="">Race/Ethnicity</option>
                 <option value="1">White</option>
                 <option value="2">Black</option>
@@ -365,12 +99,12 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="4">Asian/Pacific Islander</option>
                 <option value="5">Other/Multiple</option>
             </select>
-            <select id="filterracesimple" class="filter selector" title="Race" style="display: none">
+            <select id="filterRaceSimple" class="filter selector" title="Race" style="display: none">
                 <option value="">Race</option>
                 <option value="1">White</option>
                 <option value="2">Non-white</option>
             </select>
-            <select id="filtersex" class="filter selector hide6" title="Sexual Orientation">
+            <select id="filterSexOrientation" class="filter selector hide6" title="Sexual Orientation">
                 <option value="">Sexual Orientation</option>
                 <option value="1">Heterosexual</option>
                 <option value="2">Gay or lesbian</option>
@@ -378,7 +112,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <option value="4">Not sure</option>
             </select><br class="hide6">
             <?php if($year >= 2021) { ?>
-            <select id="filtertransgender" class="filter selector hide6" title="Transgender Status" style="margin: 5px 0 0 224px;">
+            <select id="filterTransgender" class="filter selector hide6" title="Transgender Status" style="margin: 5px 0 0 224px;">
                 <option value="">Transgender Status</option>
                 <option value="1">Not transgender</option>
                 <option value="2">Transgender</option>
@@ -386,7 +120,7 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
             </select>
             <?php } ?>
             <?php if($year >= 2023) { ?>
-            <select id="filterdisability" class="filter selector" title="Disability">
+            <select id="filterDisability" class="filter selector" title="Disability">
                 <option value="">Disability</option>
                 <option value="1">No disability</option>
                 <option value="2">One or more disability</option>
@@ -400,23 +134,27 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
         </form>
     </section>
     <main class="row" style="margin: 10px auto; max-width: 1400px">
-        <?php if($showIntro):
+        <?php
+        if($graph == null) {
             include "instructions.php";
-        elseif(!$mainVariableAvailable || !$groupVariableAvailable): ?>
+        }
+        else if($graph->mainVarUnavailable || $graph->groupingVarUnavailable)
+        { ?>
             <div style="text-align: center; font-size: 18px">
                 <p>The variable you selected was not collected during the year you selected.<br>Please choose a different year or different variable.</p>
-                <p><b>Variable(s) not available this year:</b>
-                    <?php if(!$mainVariableAvailable) echo '<br>'.$mainVar->summary;
-                    if(!$groupVariableAvailable) echo '<br>'.$groupVar->summary; ?></p>
             </div>
-        <?php elseif($below_threshold): ?>
+        <?php }
+        else if($graph->belowThreshold)
+        { ?>
             <div style="font-size: 18px; width: 800px; margin: 0 auto">
                 <p>The graph and table cannot be displayed because the query contains one or more sensitive variables and/or too many filters,
                     making the sample size too small. We do this to protect the privacy and anonymity of our respondents.</p>
                 <p>Additionally, it is difficult to meaningfully interpret data with a sample size that is too small. Consider choosing different
                     variables or removing some of the demographic filters to increase the sample size.</p>
             </div>
-        <?php else: ?>
+        <?php }
+        else //Display the graph and table
+        { ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
             </div>
@@ -424,21 +162,182 @@ if(!$showIntro && $mainVariableAvailable && $groupVariableAvailable) {
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">
             </div>
 
-            <div id="chartdiv" style="width100%; height:<?php echo $graphHeight;?>px;"></div>
+            <div id="chartdiv" style="width: 100%; height:<?php echo $graph->graphHeight;?>px;"></div>
 
             <div style="text-align: center; margin-bottom: 20px;">
-                <h3>Data Table<div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div></h3>
+                <h3 style="display: inline">Data Table</h3>
+                <div class="tipbutton" style="margin-left:15px" data-toggle="tooltip" data-placement="top" title="This table shows the number of students in each category. To save this data, click Export to CSV."></div>
                 <table id="datatable" class="datatable" style="margin: 0 auto; text-align: right; border:none">
                 </table>
-                <?php if($q1 === 'A5' || $q1 === 'S3' || $q1 === 'S4' || $grp === 'A5' || $grp === 'S3' || $grp === 'S4') { ?>
+
+                <?php $vehicleCodes = ['A5','S3','S4'];
+                if(in_array($graph->mainVariable->code, $vehicleCodes) || in_array($graph->groupingVariable?->code, $vehicleCodes)) { ?>
                     <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
                 <?php } ?>
-                <div>No Response: <?php echo number_format($noresponse,0);?></div>
+
+                <div>No Response: <?php echo number_format($graph->noResponse);?></div>
                 <input type="button" onclick="exportCSV()" value="Export to CSV" class="btn btn-blue" style="margin-top: 10px">
             </div>
-        <?php endif; ?>
+        <?php } ?>
     </main>
 </div>
-<?php include_footer(); ?>
+<?php include_footer();
+include_js(); ?>
+<script>
+    let graph = {
+        year: null, dataset: null, pyramidFilter: null, belowThreshold: null, mainVarUnavailable: null, groupVarUnavailable: null,
+        mainVariable: { code:null, question:null, summary:null, labels:null, counts:null, totals:null },
+        groupingVariable: {},
+        percentData: null, noResponse: null, sumTotal: null, sumPositives: null,
+        gradeFilter: null, genderFilter: null, raceFilter: null, raceSimplifiedFilter: null, sexOrientationFilter: null, transgenderFilter: null, disabilityFilter: null
+    }
+    let filterString;
+
+    //import data from php
+    graph = <?= json_encode($graph); ?>;
+    let questions = <?= json_encode($variables); ?>;
+    let year = <?= json_encode($year); ?>; //These are set even when graph is null
+    let dataset = <?= json_encode($dataset); ?>;
+    let pyramid = <?= json_encode($pyramid); ?>;
+    let cat1 = <?= json_encode($cat1); ?>;
+    let cat2 = <?= json_encode($cat2); ?>;
+
+    $(function() {
+        //Enable jQuery elements
+        enableSelect2(questions, "#category1", "#question1");
+        enableSelect2(questions, "#category2", "#question2", true);
+        $('[data-toggle="tooltip"]').tooltip();
+        $("#searchForm").on( "submit", searchData);
+
+        showHideFields();
+        persistInputs();
+
+        if(graph != null && !graph.belowThreshold && !graph.mainVarUnavailable && !graph.groupVarUnavailable)
+        {
+            createBarGraph(graph.percentData, graph.mainVariable.question, graph.groupingVariable?.question,
+                graph.groupingVariable?.labels || ['Total'], null, graph.mainVariable.summary);
+
+            if(graph.groupingVariable == null)
+                createSimpleExplorerTable($('#datatable'), graph.mainVariable.labels, graph.mainVariable.counts, graph.sumTotal);
+            else
+                createCrosstabExplorerTable($('#datatable'), graph.mainVariable.summary, graph.groupingVariable.summary,
+                    graph.mainVariable.labels, graph.groupingVariable.labels, graph.mainVariable.counts,
+                    graph.sumPositives, graph.mainVariable.totals, graph.sumTotal);
+
+            filterString = makeFilterString(graph.gradeFilter, graph.genderFilter, graph.raceFilter, graph.sexOrientationFilter, graph.raceSimplifiedFilter,
+                graph.transgenderFilter, graph.disabilityFilter);
+
+            createGraphTitle();
+        }
+    });
+
+    //Persist user inputs in search form
+    function persistInputs() {
+        $('#yearSelect').val(year);
+        $('#datasetSelect').val(dataset);
+        $('#pyramidSelect').val(pyramid);
+        $('#category1').val(cat1);
+        $("#category1").trigger('change');
+        $('#category2').val(cat2);
+        $("#category2").trigger('change');
+
+        if(graph != null) {
+            $('#question1').val(graph.mainVariable.code);
+            $("#question1").trigger('change');
+            if (graph.groupingVariable != null) {
+                $('#question2').val(graph.groupingVariable.code);
+                $("#question2").trigger('change');
+            }
+            $('#filterGrade').val(graph.gradeFilter);
+            $('#filterGender').val(graph.genderFilter);
+            $('#filterRace').val(graph.raceFilter);
+            $('#filterRaceSimple').val(graph.raceSimplifiedFilter);
+            $('#filterSexOrientation').val(graph.sexOrientationFilter);
+            $('#filterTransgender').val(graph.transgenderFilter);
+            $('#filterDisability').val(graph.disabilityFilter);
+        }
+    }
+
+    //Hide/show fields based on dataset and pyramid
+    function showHideFields() {
+        if(dataset === '6th') {
+            $(".hide6").hide();
+        }
+        if(pyramid > 0) {
+            $("#filterRace").hide();
+            $("#filterSexOrientation").hide();
+            $("#filterRaceSimple").show();
+        }
+    }
+
+    //Create a string and write it to the title DIV
+    function createGraphTitle() {
+        let titleString = "<h4>"+graph.mainVariable.question+"</h4>";
+        if(graph.groupingVariable != null)
+            titleString += "<h4><i>compared to</i></h4><h4>" + graph.groupingVariable.question + "</h4>";
+        if(filterString != null)
+            titleString += "<h4><i>" + filterString + "</i></h4>";
+        $("#graphTitle").html(titleString);
+    }
+
+    function exportCSV() {
+        if(graph.groupingVariable == null)
+            simpleExplorerCSV(graph.mainVariable.question, graph.mainVariable.labels, graph.mainVariable.counts, graph.mainVariable.totals, graph.year,
+                graph.dataset, filterString, graph.pyramidFilter);
+        else
+            crosstabExplorerCSV(graph.mainVariable.question, graph.groupingVariable.question, graph.mainVariable.labels, graph.groupingVariable.labels,
+                graph.mainVariable.counts, graph.sumPositives, graph.mainVariable.totals, graph.sumTotal, filterString, graph.year, graph.dataset, graph.pyramidFilter);
+    }
+
+    function exportGraph() {
+        exportToPDF(chart, graph.mainVariable.question, graph.groupingVariable?.question, graph.year, graph.dataset, filterString, graph.pyramidFilter);
+    }
+
+    function searchData(e) {
+        e.preventDefault();
+        let q1 = $('#question1').val();
+        let q2 = $('#question2').val();
+        let cat1 = $('#category1').val();
+        let cat2 = $('#category2').val();
+        let grade = $("#filterGrade").val();
+        let gender = $("#filterGender").val();
+        let race = $("#filterRace").val();
+        let raceSimplified = $("#filterRaceSimple").val();
+        let sexOrientation = $("#filterSexOrientation").val();
+        let transgender = $("#filterTransgender").val();
+        let disability = $("#filterDisability").val();
+
+        if(q1 !== '') {
+            let url = 'graphs.php?ds='+$('#datasetSelect').val()+"&year="+$("#yearSelect").val()+'&q1='+q1;
+
+            if(q2 !== '' && q2 !== undefined)
+                url += '&grp='+q2;
+            if(cat1 !== '' && cat1 !== undefined)
+                url += '&cat1='+cat1;
+            if(cat2 !== '' && cat2 !== undefined)
+                url += '&cat2='+cat2;
+            if(grade !== '' && grade !== undefined)
+                url += "&grade="+grade;
+            if(gender !== '' && gender !== undefined)
+                url += "&gender="+gender;
+            if(race !== '' && race !== undefined)
+                url += "&race="+race;
+            if(raceSimplified !== '' && raceSimplified !== undefined)
+                url += "&rsim="+raceSimplified;
+            if(sexOrientation !== '' && sexOrientation !== undefined)
+                url += "&so="+sexOrientation;
+            if(transgender !== '' && transgender !== undefined)
+                url += "&trans="+transgender;
+            if(disability !== '' && disability !== undefined)
+                url += "&disab="+disability;
+
+            window.location.href = url;
+        }
+    }
+
+    function changeDataset() {
+        window.location.href = "graphs.php?ds="+$('#datasetSelect').val()+"&year="+$("#yearSelect").val();
+    }
+</script>
 </body>
 </html>

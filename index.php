@@ -32,7 +32,8 @@ include_once "config/config.php";
                 <div style="margin-top: 30px;">
                     <img src="img/fairfaxlogo.png"  alt="Fairfax County Logo">
                 </div>
-                <h1 class="shadowdeep" style="margin-top: 20px">2024&ndash;2025 Youth Survey Interactive Data Explorer</h1>
+                <h1 class="shadowdeep" style="margin-top: 20px">Youth Survey Interactive Data Explorer<br>FY 2025-2026</h1>
+                <h2 class="shadowdeep">NEW AND UPDATED SURVEY QUESTIONS</h2>
                 <div style="margin-top: 40px">
                     <h2 style="max-width: 700px; margin: 0 auto">Generate custom graphs and data tables on the questions you find most interesting!</h2>
                     <a href="highlights.php" class="button-link" style="margin: 30px auto">Check Out the Highlights</a>
@@ -43,7 +44,7 @@ include_once "config/config.php";
         </div>
         <div class="col-sm-6">
             <div style="text-align: left">
-                <img src="img/olderkids2024.jpg" alt="High school kids smiling">
+                <img src="img/olderkids2025.jpg" alt="High school kids smiling">
             </div>
         </div>
     </header>
@@ -65,20 +66,26 @@ include_once "config/config.php";
             <div class="grid-third">
                 <div style="margin: 10px">
                     <div class="figure" style="margin-bottom: 10px">
-                        <img alt="Open books" src="img/keyboard-survey.jpg" style="width: 330px; height: 283px;">
+                        <img alt="Keyboard that says survey" src="img/keyboard-survey.jpg" style="width: 330px; height: 283px;">
                     </div>
-                    <h2>New Survey Items</h2>
-                    <p>No new questions were added in this year's survey.</p>
+                    <h2>Survey Updates</h2>
+                    <p>In 2025, the Youth Survey was revised to improve its relevance, clarity, and usefulness for understanding youth wellbeing in Fairfax County.
+                        Some less critical or outdated questions were removed or revised, and new questions were added on mental health, social media, risky behaviors,
+                        nutrition, and protective factors.</p>
+                    <p>Data from previous years remain available on this website. However, because of these changes, many results from 2025 and later should not be directly
+                        compared with data from 2024 and earlier. Questions that did not change in 2025 remain comparable over time. For details on specific data changes,
+                        see the annotations on the tables in the <b><a href="https://www.fairfaxcounty.gov/data/youth-survey-results">2025 report</a></b>.</p>
                 </div>
             </div>
             <div class="grid-third">
                 <div style="margin: 10px">
                     <div class="figure" style="margin-bottom: 10px">
-                        <img alt="Open books" src="img/sixthgrade2024.jpg" style="width: 100%">
+                        <img alt="Open books" src="img/sixthgrade2025.jpg" style="width: 100%">
                     </div>
                     <h2>6th Grade Survey</h2>
-                    <p>The Fairfax County Youth Survey is administered in two forms: one for 8th, 10th, and 12th grade students, and a modified, shorter version of the survey for 6th grade students.</p>
-                    <p>You can access the <b>6th grade data set</b> by selecting '6th grade' at the top of
+                    <p>The Fairfax County Youth Survey is administered in two forms: one for 8th, 10th, and 12th grade students, and a modified, shorter version of the survey
+                        for 6th grade students. Changes to the 6th grade version were also introduced in 2025.</p>
+                    <p>You can access the 6th grade data by selecting <b>'6th grade'</b> in the <b>Dataset</b> option at the top of
                         <b><a href="highlights.php?ds=6th">Survey Highlights</a></b>, <b><a href="graphs.php?ds=6th">Explore the Data</a></b>,
                         <b><a href="trends.php?ds=6th">Trends over Time</a></b>, or <b><a href="three-to-succeed.php?ds=6th">Three to Succeed</a></b>.</p>
                 </div>

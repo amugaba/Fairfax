@@ -13,7 +13,9 @@ require_once 'Variable.php';
 
 class MultiVariable extends Variable
 {
-    public function addCount($answerCode, $groupCode, $num){
+
+    public function addCount($answerCode, $groupCode, $num): void
+    {
         $this->counts[intval($answerCode)-1][intval($groupCode)-1] = floatval($num);
     }
     public function addTotal($groupCode, $num){
@@ -106,17 +108,5 @@ class MultiVariable extends Variable
             $divisors[] = array_sum($answer->totals);
         }
         return $divisors;
-    }
-
-    public function fill($dbobj)
-    {
-        $this->autoid = isset($dbobj->autoid) ? $dbobj->autoid : null;
-        $this->code = isset($dbobj->code) ? $dbobj->code : null;
-        $this->question = isset($dbobj->question) ? $dbobj->question : null;
-        $this->summary = isset($dbobj->summary) ? $dbobj->summary : null;
-        $this->category = isset($dbobj->category) ? $dbobj->category : null;
-        $this->lowCutoff = isset($dbobj->low_cutoff) ? $dbobj->low_cutoff : null;
-        $this->highCutoff = isset($dbobj->high_cutoff) ? $dbobj->high_cutoff : null;
-        $this->totalCutoff = isset($dbobj->total_cutoff) ? $dbobj->total_cutoff : null;
     }
 }

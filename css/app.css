@@ -189,7 +189,7 @@ table.datatable {
 }
 
 .searchbar {
-    max-width: 815px;
+    max-width: 865px;
     border: thin white solid;
     padding: 10px;
     margin: 10px auto;
@@ -201,7 +201,7 @@ table.datatable {
     font-size: 12pt;
 }
 .searchbox {
-    width: 400px;
+    width: 450px;
 }
 .select2-selection__clear {
     font-size: 20px;
@@ -323,10 +323,28 @@ th.clearcell {
     padding-top: 1px;
     margin-left: 5px;
 }
+.ui-icon-blank.ui-icon-blank.ui-icon-blank {
+    background-image: none;
+    display: none;
+}
+.assetsBox {
+    text-align: left;
+    display: inline-block;
+    max-width:950px;
+    width:100%;
+    padding: 10px 10px 0 10px;
+    border-radius: 20px;
+    border: 2px solid;
+}
+.assetsBox li {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 /* ACCESSIBILITY */
 p {
     line-height: 1.5;
+    font-size: 16px;
 }
 a {
     color: #24547e;
@@ -336,4 +354,19 @@ a {
 }
 .select2-container .select2-selection--single .select2-selection__rendered {
     overflow: auto !important;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    line-height: 1.5;
+}
+ul {
+    line-height: 1.5;
+    font-size: 16px;
+}
+li {
+    line-height: 1.5;
+    font-size: inherit;
+}
+ul.spaced li {
+    margin-bottom: 10px;
 }

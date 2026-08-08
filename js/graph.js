@@ -219,7 +219,7 @@ function createLineChart(percentData, labels, xAxisLabel) {
         });
     }
 
-    var chart = AmCharts.makeChart("chartdiv", {
+    chart = AmCharts.makeChart("chartdiv", {
         "type": "serial",
         "theme": "light",
         "marginRight": 30,

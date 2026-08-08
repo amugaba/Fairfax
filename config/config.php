@@ -37,16 +37,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../");
 $dotenv->load();
 
-function include_styles() {
+function include_styles(): void
+{
     $root = HTTP_ROOT;
-    echo "
-    <link rel='stylesheet' href='//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.min.css'>
-    <script src='//code.jquery.com/jquery-1.10.2.min.js'></script>
+    echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.14.2/themes/smoothness/jquery-ui.min.css'>
     <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'>
-    <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
-    <script src='//code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
-    <link rel='stylesheet' href='$root/css/app.css'>
-    ";
+    <link rel='stylesheet' href='$root/css/app.css'>";
     //TBD - change Bootstrap to https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css
 
     if(!DEBUG) {
@@ -61,18 +57,56 @@ function include_styles() {
         </script>";
     }
 }
-function include_header() {
+
+function include_js(): void
+{
+    $root = HTTP_ROOT;
+    echo "<script src='https://code.jquery.com/jquery-3.7.1.min.js'></script>
+        <script src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
+        <script src='//code.jquery.com/ui/1.14.2/jquery-ui.min.js'></script>
+        <script src='$root/js/amcharts3/amcharts.js'></script>
+        <script src='$root/js/amcharts3/serial.js'></script>
+        <script src='$root/js/amcharts3/plugins/export/export.min.js'></script>
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css' rel='stylesheet'/>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.full.js'></script>
+        <script src='$root/js/variableSelector.js'></script>
+        <script src='$root/js/graph.js'></script>
+        <script src='$root/js/datatable.js'></script>";
+}
+
+function include_header(): void
+{
     include ROOT_PATH."inc/navbar.php";
 }
-function include_footer() {
+function include_footer(): void
+{
     include ROOT_PATH."inc/footer.php";
 }
-function echo_self() {
+function echo_self(): void
+{
     echo htmlspecialchars($_SERVER["PHP_SELF"]);
 }
-function getCurrentYear() {
-    return 2024;
+function getCurrentYear(): int
+{
+    return 2025;
 }
-function getAllYears() {
-    return [2015,2016,2017,2018,2019,2021,2022,2023,2024];
+function getAllYears(): array
+{
+    return [2015,2016,2017,2018,2019,2021,2022,2023,2024,2025];
+}
+function getAllYearsReversed(): array
+{
+    return array_reverse(getAllYears());
+}
+
+/**
+ * Get input and convert unassigned and empty string to null
+ * @param string $key
+ * @return mixed
+ */
+function getInput(string $key): mixed
+{
+    if(($_GET[$key] ?? null) == null || $_GET[$key] === '')
+        return null;
+    return $_GET[$key];
 }
