@@ -68,7 +68,7 @@ $graph = Graph::createHighlightsGraph($year, $dataset, $category, $group);
         <main class="col-md-9 mainbar text-center">
             <div style="text-align: center;">
                 <h2 id="graphTitle"></h2>
-                <div id="explanation" style="max-width:800px; margin: 0 auto"><?php echo $highlightGroup->explanation;?></div>
+                <div id="explanation" style="max-width:1200px; margin: 0 auto"><?php echo $highlightGroup->explanation;?></div>
                 <p class="hideIfNoGraph"><b>Mouse over</b> the graph's labels and bars to see in more detail what each element represents.</p>
                 <div class="showIfNoGraph" style="font-size: 1.3em; margin-top: 20px; display: none">
                     The survey did not ask about this topic in <?php echo $year ?>. Please select a different year, grade level, or topic.

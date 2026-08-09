@@ -40,51 +40,201 @@ function getHighlightGroup2025($cat, $dataset, $year)
 {
     if ($cat == 1) {
         $title = "Alcohol Use";
-        if($dataset == DataService::EIGHT_TO_TWELVE) {
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
             $qCodes = ['A2A', 'A3A', 'A4'];
-            $labels = ['Lifetime Alcohol Use', 'Past Month Alcohol Use', 'Past Month Binge Drinking (5+ Drinks in a Row)'];
         }
         else {
             $qCodes = ['A2B', 'A3B'];
-            $labels = ['Lifetime Alcohol Use', 'Past Month Alcohol Use'];
         }
-        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on alcohol, the most commonly used substance by Fairfax County youth.</p>
-        <p>To learn about other substances or to compare alcohol use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  This page focuses on alcohol, the most commonly used substance by Fairfax County youth.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
     }
-    else if ($cat == 2) {
+
+    if ($cat == 2) {
         $title = "Cannabis Use";
-        if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['T3', 'T4A', 'T5', 'T2', 'T6'];
-            $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use', 'Past Month E-Cigarette Use', 'Past Month Smokeless Tobacco Use', 'Past Month Hookah Use'];
-            $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco, including e-cigarettes.</p>
-            <p>To learn about other substances or to compare tobacco use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['D2A', 'D3A', 'V3'];
         }
         else {
-            $qCodes = ['T3', 'T4B'];
-            $labels = ['Lifetime Cigarette Use', 'Past Month Cigarette Use'];
-            $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on tobacco.</p>
-            <p>To learn about other substances or to compare tobacco use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+            $qCodes = ['D2B', 'D3B', 'V3B'];
+        }
+        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  This page focuses on cannabis (marijuana).</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 3) {
+        $title = "Vaping and Tobacco Use";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['T3', 'T4A', 'T2', 'V2', 'V4'];
+        }
+        else {
+            $qCodes = ['T3', 'T4B', 'V2B', 'V4B'];
+        }
+        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  This page focuses on vaping and tobacco.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Tobacco Use\" or \"Vaping\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 4) {
+        $title = "Other Drug Use";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['D9A', 'D19', 'D23', 'D7', 'D11'];
+        }
+        else {
+            $qCodes = ['D9B', 'D24', 'D25'];
+        }
+        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  This page focuses on other drugs besides alcohol, cannabis, and nicotine.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" or \"Prescription Painkiller Use\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 5) {
+        $title = "Peer Harm";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['BS1A', 'BS2A', 'BS1B', 'BS2B', 'BS7A', 'BS7B'];
+        }
+        else {
+            $qCodes = ['BS1A', 'BS2A', 'BS1B', 'BS2B', 'BS7A', 'BS7B'];
+        }
+        $explanation = "<p>The Youth Survey asks questions about peer harm, including feeling left out, physical violence, and cyberbullying.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 6) {
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $title = "Family and Dating Violence";
+            $qCodes = ['BH1', 'BH2', 'RF32A', 'B16', 'B27', 'B28'];
+            $explanation = "<p>The Youth Survey asks questions about domestic violence, bullying at home, and harm from dating partners.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Family Violence\" or \"Dating Violence\" to see all questions related to this topic.</p>";
+        }
+        else {
+            $title = "Family Violence";
+            $qCodes = ['BH1', 'BH2'];
+            $explanation = "<p>The Youth Survey asks questions about domestic violence and bullying at home.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Family Violence\" to see all questions related to this topic.</p>";
         }
     }
-    else if ($cat == 3) {
-        $title = "Drugs";
-        if($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['D3A', 'D9A', 'D17', 'D15'];
-            $labels = ['Past Month Marijuana Use', 'Past Month Inhalant Use', 'Past Month Painkiller Use (without doctor\'s order)', 'Past Month Heroin Use'];
+
+    if ($cat == 7) {
+        $title = "Unwanted Sexual Behaviors";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['SHD10', 'B18A', 'SHD11'];
         }
         else {
-            $qCodes = ['D3B', 'D9B', 'D25'];
-            $labels = ['Past Month Marijuana Use', 'Past Month Inhalant Use', 'Past Month Other Illegal Drug Use'];
+            $qCodes = [];
         }
-        $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  The highlights page focuses on selected substances of interest to the Fairfax County community.</p>
-        <p>To learn about other substances or to compare substance use with other behaviors, <b><a href='graphs.php'>Explore the Data</a></b>.</p>";
+        $explanation = "<p>The Youth Survey asks questions about unwanted sexual behaviors.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 8) {
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $title = "Weapons and Gang Membership";
+            $qCodes = ['W7', 'W5A', 'W6A', 'G3'];
+            $explanation = "<p>The Youth Survey asks questions about access to weapons and membership in a gang.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+        }
+        else {
+            $title = "Weapons";
+            $qCodes = ['W7', 'W5A', 'W6A'];
+            $explanation = "<p>The Youth Survey asks questions about access to weapons and carrying of weapons.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+        }
+    }
+
+    if ($cat == 9) {
+        $title = "Mental Health";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['M1', 'M2', 'M4', 'M5A', 'M6'];
+            $explanation = "<p>The Youth Survey asks questions about mental health, including depression, suicide, stress, and loneliness.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+        }
+        else {
+            $qCodes = ['M1', 'M5A', 'M6'];
+            $explanation = "<p>The Youth Survey asks questions about mental health, including depression, stress, and loneliness.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+        }
+    }
+
+    if ($cat == 10) {
+        $title = "Nutrition and Unhealthy Weight Loss Behaviors";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['H5', 'H6', 'H25', 'H13', 'H14', 'H15'];
+        }
+        else {
+            $qCodes = ['H5', 'H6', 'H25', 'H26'];
+        }
+        $explanation = "<p>The Youth Survey asks questions about nutrition (including fruit, vegetable, and surgar consumption) and unhealthy weight loss behaviors.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Nutrition\" or \"Unhealthy Weight Loss Behaviors\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 11) {
+        $title = "Risk and Safety Behaviors";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['S2', 'S3', 'S10'];
+        }
+        else {
+            $qCodes = [];
+        }
+        $explanation = "<p>The Youth Survey asks questions about risk behavior related to driving, including driving after drinking, texting while driving, and wearing a seatbelt.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Vehicle Safety\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 12) {
+        $title = "Academics and School Life";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['C11', 'RS2', 'RS3A', 'RS3C', 'PI8A'];
+        }
+        else {
+            $qCodes = ['C11', 'PI8A', 'PS3A', 'PS6A', 'PS14'];
+        }
+        $explanation = "<p>The Youth Survey asks questions about academics and school behaviors, including doing homework, missing school, and cheating.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 13) {
+        $title = "Activities, Work and Sleep";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['H3', 'H31', 'C2', 'C12', 'C13', 'H20'];
+        }
+        else {
+            $qCodes = ['H3', 'H16', 'C2', 'C12', 'C13', 'H20'];
+        }
+        $explanation = "<p>The Youth Survey asks questions about out-of-school activities, including physical exercise, social activities, work, and sleep.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 14) {
+        $title = "Screen and Social Media Use";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['H1', 'ST1', 'ST2', 'SM1', 'SM2', 'SM3'];
+        }
+        else {
+            $qCodes = ['H1', 'ST1'];
+        }
+        $explanation = "<p>The Youth Survey asks questions about screen time and social media use, including TV watching, computer use, social media use, and stress from social media.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+    }
+
+    if ($cat == 15) {
+        $title = "Assets that Build Resiliency";
+        if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $qCodes = ['PC2A', 'PC1A', 'PF9A', 'PF4A', 'PS3A', 'PS14'];
+        }
+        else {
+            $qCodes = ['PC2A', 'PC1A', 'PF9A', 'PF4A', 'PS3A', 'PS14'];
+        }
+        $explanation = "<p>The Youth Survey asks about assets that are strengths in young people, their families, schools, and 
+            communities that help them thrive in health, in school, and daily life, and in a safe environment.  The more assets an individual 
+            has in his or her life, the fewer risk behaviors are reported.  This page focuses on selected assets that build resiliency in youth.</p>
+            <p>Visit <b><a href='three-to-succeed.php'>Three to Succeed</a></b> to see how students' behaviors vary in relation to their number of assets.</p>
+            <p>Or visit <b><a href='graphs.php'>Explore the Data</a></b> and choose one of the following categories:  
+            School Assets, Family Assets, Community Assets, and Individual Assets.</p>";
     }
 
     $var = new HighlightGroup();
     $var->title = $title;
     $var->explanation = $explanation;
     $var->codes = $qCodes;
-    $var->labels = $labels;
+    //$var->labels = $labels;
     return $var;
 }
 
