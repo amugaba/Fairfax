@@ -59,7 +59,8 @@ $graph = Graph::createHighlightsGraph($year, $dataset, $category, $group);
                 </div>-->
             </div>
             <h2 class="shadowdeep">Select a Category
-                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students that engaged in those behaviors."></div>
+                <div class="tipbutton"  data-toggle="tooltip" data-placement="top" title="Each category highlights several significant behaviors and shows the percentage of students
+                that engaged in those behaviors. Note that the categories have changed in 2025."></div>
             </h2>
                 <ul class="categories shadow">
                     <?= $categoryLinks ?>
@@ -79,8 +80,9 @@ $graph = Graph::createHighlightsGraph($year, $dataset, $category, $group);
                 <p style="font-weight: bold; margin-right: 10px; display: inline">Group data by:</p>
                 <div id="grouping">
                     <input id="none" name="grouping" type="radio" value="" checked="checked"/><label for="none">None</label>
+                    <?php if($dataset == DataService::EIGHT_TO_TWELVE) { ?>
                     <input id="gradeButton" name="grouping" class="hide6" type="radio" value="I2"/><label for="gradeButton">Grade</label>
-                    <?php if($year >= 2022) { ?>
+                    <?php } if($year >= 2022) { ?>
                         <input id="gender" name="grouping" type="radio" value="gender_nb"/><label for="gender">Gender</label>
                     <?php } else { ?>
                         <input id="gender" name="grouping" type="radio" value="I3"/><label for="gender">Gender</label>
@@ -108,8 +110,8 @@ $graph = Graph::createHighlightsGraph($year, $dataset, $category, $group);
                     <p style="font-style: italic">The <b>Total</b> here only includes students that answered the <b>Group Data By</b> question.<br>
                         To see the total for all students, set Group Data By to None.</p>
                 <?php } ?>
-                <?php if($category == 5) { ?>
-                    <p style="font-style: italic">*For Vehicle Safety questions, only 12th-grade students were asked.</p>
+                <?php if(($year < 2025 && $category == 5) || ($year >= 2025 && $category == 11)) { ?>
+                    <p style="font-style: italic">*For driving-related questions, only 12th-grade students were asked.</p>
                 <?php } ?>
                 <input type="button" onclick="exportCSV()" class="btn btn-blue" value="Export to CSV" style="margin-top: 10px">
             </div>
@@ -127,7 +129,7 @@ include_js(); ?>
     let pyramid = <?php echo json_encode($pyramid); ?>;
 
     $(function() {
-        graph = <?= json_encode($graph); ?>;
+        graph = <?php echo json_encode($graph); ?>;
         mainTitle = <?php echo json_encode($highlightGroup->title); ?>;
 
         //hide some inputs based on dataset or category

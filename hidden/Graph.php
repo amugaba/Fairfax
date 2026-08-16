@@ -259,7 +259,7 @@ class Graph
         $graph->mainVariable->initializeCounts($graph->groupingVariable);
         $graph->ds->getMultiPositives($graph->mainVariable, $graph->groupingVariable, $filter);
         $graph->ds->getMultiTotals($graph->mainVariable, $graph->groupingVariable, $filter);
-        //$graph->belowThreshold = $graph->ds->checkAnonymityThreshold($graph->mainVariable, $graph->groupingVariable);
+        $graph->belowThreshold = $graph->ds->checkAnonymityThreshold($graph->mainVariable, $graph->groupingVariable);
         $graph->mainVariable->calculatePercents();
 
         //Group variables NOT SURE IF NEEDED

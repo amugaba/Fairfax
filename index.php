@@ -32,7 +32,7 @@ include_once "config/config.php";
                 <div style="margin-top: 30px;">
                     <img src="img/fairfaxlogo.png"  alt="Fairfax County Logo">
                 </div>
-                <h1 class="shadowdeep" style="margin-top: 20px">Youth Survey Interactive Data Explorer<br>FY 2025-2026</h1>
+                <h1 class="shadowdeep" style="margin-top: 20px">Youth Survey Interactive Data Explorer<br>SY 2025-2026</h1>
                 <h2 class="shadowdeep">NEW AND UPDATED SURVEY QUESTIONS</h2>
                 <div style="margin-top: 40px">
                     <h2 style="max-width: 700px; margin: 0 auto">Generate custom graphs and data tables on the questions you find most interesting!</h2>
@@ -100,7 +100,7 @@ include_once "config/config.php";
         </div>
         <div class="row">
             <div class="col-md-3">
-                <h2 style="color:#767676">About the Survey</h2>
+                <h2>About the Survey</h2>
             </div>
             <div class="col-md-9" style="font-size: 16px">
                 <p>The Fairfax County, VA Youth Survey is a comprehensive, voluntary, and anonymous survey of youth in sixth, eighth, tenth, and twelfth grades.

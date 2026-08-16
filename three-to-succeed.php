@@ -23,6 +23,19 @@ $cat = getInput('cat');
 $trendGroup = getInput('group');
 $variables = $ds->getTrendVariablesByYear();
 $categories = $ds->getTrendCategoriesByYear($year);
+
+//For 2025 forwards, exclude variables in Family, Community, and School Assets (22-24) and Disabilities (25)
+//Individual assets (24) are allowed for some reason
+if($year >= 2025) {
+    $forbidden_categories = [21,22,23,25];
+    $variables = array_filter($variables, function($var) use ($forbidden_categories) {
+        return !in_array($var->category, $forbidden_categories);
+    });
+    $variables = array_values($variables); //Convert back to an indexed array
+    $categories = array_filter($categories, function($cat) use ($forbidden_categories) {
+        return !in_array($cat->code, $forbidden_categories);
+    });
+}
 ?>
 
 <!DOCTYPE html>

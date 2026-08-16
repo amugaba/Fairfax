@@ -8,9 +8,9 @@
     <div style="margin-bottom: 40px">
         <h2 style="text-align: center">Updates in 2025</h2>
         <ul style="font-size: 18px;" class="spaced">
-            <li>Question Categories have been updated.</li>
+            <li>The question categories have been updated starting in 2025. The original categories used in 2024 and prior years remain the same.</li>
             <li>For some questions, direct comparison of some historical data (i.e., data from 2024 and earlier) with the data from 2025 and onwards for many variables is not
-                recommended due to the changes the question. Questions that were unchanged in the 2025 version of the survey are still comparable to historical data.
+                recommended due to the changes in the question. Questions that were unchanged in the 2025 version of the survey are still comparable to historical data.
             </li>
         </ul>
     </div>

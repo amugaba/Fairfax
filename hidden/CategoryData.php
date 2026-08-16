@@ -53,10 +53,10 @@ function getHighlightGroup2025($cat, $dataset, $year)
     if ($cat == 2) {
         $title = "Cannabis Use";
         if ($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['D2A', 'D3A', 'V3'];
+            $qCodes = ['D2A', 'D3A'];
         }
         else {
-            $qCodes = ['D2B', 'D3B', 'V3B'];
+            $qCodes = ['D2B', 'D3B'];
         }
         $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  This page focuses on cannabis (marijuana).</p>
             <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
@@ -65,10 +65,10 @@ function getHighlightGroup2025($cat, $dataset, $year)
     if ($cat == 3) {
         $title = "Vaping and Tobacco Use";
         if ($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['T3', 'T4A', 'T2', 'V2', 'V4'];
+            $qCodes = ['T3', 'T4A', 'T2', 'V2', 'V3', 'V4'];
         }
         else {
-            $qCodes = ['T3', 'T4B', 'V2B', 'V4B'];
+            $qCodes = ['T3', 'T4B', 'V2B', 'V3B', 'V4B'];
         }
         $explanation = "<p>The Youth Survey asks about use of a wide variety of licit and illicit substances.  This page focuses on vaping and tobacco.</p>
             <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Tobacco Use\" or \"Vaping\" to see all questions related to this topic.</p>";
@@ -94,7 +94,7 @@ function getHighlightGroup2025($cat, $dataset, $year)
         else {
             $qCodes = ['BS1A', 'BS2A', 'BS1B', 'BS2B', 'BS7A', 'BS7B'];
         }
-        $explanation = "<p>The Youth Survey asks questions about peer harm, including feeling left out, physical violence, and cyberbullying.</p>
+        $explanation = "<p>The Youth Survey asks questions about peer harm, including feeling left out, physical violence, and receiving unwanted or harmful messages online.</p>
             <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
     }
 
@@ -157,24 +157,24 @@ function getHighlightGroup2025($cat, $dataset, $year)
     if ($cat == 10) {
         $title = "Nutrition and Unhealthy Weight Loss Behaviors";
         if ($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['H5', 'H6', 'H25', 'H13', 'H14', 'H15'];
+            $qCodes = ['fruitveg2021', 'H25', 'H13', 'H14', 'H15'];
         }
         else {
-            $qCodes = ['H5', 'H6', 'H25', 'H26'];
+            $qCodes = ['fruitveg', 'H25', 'H26'];
         }
-        $explanation = "<p>The Youth Survey asks questions about nutrition (including fruit, vegetable, and surgar consumption) and unhealthy weight loss behaviors.</p>
+        $explanation = "<p>The Youth Survey asks questions about nutrition (including fruit, vegetable, and sugar consumption) and unhealthy weight loss behaviors.</p>
             <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Nutrition\" or \"Unhealthy Weight Loss Behaviors\" to see all questions related to this topic.</p>";
     }
 
     if ($cat == 11) {
         $title = "Risk and Safety Behaviors";
         if ($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['S2', 'S3', 'S10'];
+            $qCodes = ['S3', 'S10'];
         }
         else {
             $qCodes = [];
         }
-        $explanation = "<p>The Youth Survey asks questions about risk behavior related to driving, including driving after drinking, texting while driving, and wearing a seatbelt.</p>
+        $explanation = "<p>The Youth Survey asks questions about risk and safety behavior related to sexual activity, vehicle safety, and gambling behaviors.</p>
             <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Vehicle Safety\" to see all questions related to this topic.</p>";
     }
 

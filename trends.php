@@ -93,9 +93,16 @@ $categories = $ds->getTrendCategoriesByYear($latestYear);
         else { ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
+                <?php //TBD - REMOVE THIS IN 2026 once there are trends for 2025
+                if($yearRange == Trend::POST_2025) { ?>
+                    <div class="showIfOneYearData" style="font-size: 1.3em; margin-top: 20px; display: none">
+                        Trends will be available next year when the 2026 survey results are published.
+                    </div>
+                <?php } else { ?>
                 <div class="showIfOneYearData" style="font-size: 1.3em; margin-top: 20px; display: none">
                     This variable was added in <?= getCurrentYear()?>. Trends will not be available until the <?= getCurrentYear()+1?> survey results are published.
                 </div>
+                <?php } ?>
                 <div class="showIfNoData" style="font-size: 1.3em; margin-top: 20px; display: none">
                     Trends are not available for this item currently.
                 </div>
