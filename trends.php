@@ -93,6 +93,9 @@ $categories = $ds->getTrendCategoriesByYear($latestYear);
         else { ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
+                <?php if($graph->notes != null) {
+                    echo "<p><b>Note:</b> $graph->notes</p>";
+                } ?>
                 <?php //TBD - REMOVE THIS IN 2026 once there are trends for 2025
                 if($yearRange == Trend::POST_2025) { ?>
                     <div class="showIfOneYearData" style="font-size: 1.3em; margin-top: 20px; display: none">
@@ -160,6 +163,9 @@ include_js(); ?>
     let category = <?= json_encode($cat); ?>;
     let group = <?= json_encode($group); ?>;
 
+    if(graph != null && graph.yearsInGraph.length > 1 && graph.labels.length > 0)
+        createLineChart(graph.percentData, graph.labels);
+
     $(function() {
         //Enable jQuery elements
         enableSelect2(questions, "#category", "#question");
@@ -179,7 +185,6 @@ include_js(); ?>
                 $(".showIfNoData").show();
             }
             else {
-                createLineChart(graph.percentData, graph.labels);
                 createGraphTitle();
                 simpleTrendTable($('#datatable'), graph.labels, graph.yearsInGraph, graph.percentData, "Years", graph.yearlyTotals);
             }

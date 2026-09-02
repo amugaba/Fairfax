@@ -155,21 +155,24 @@ function getHighlightGroup2025($cat, $dataset, $year)
     }
 
     if ($cat == 10) {
-        $title = "Nutrition and Unhealthy Weight Loss Behaviors";
         if ($dataset == DataService::EIGHT_TO_TWELVE) {
+            $title = "Nutrition and Unhealthy Weight Loss Behaviors";
             $qCodes = ['fruitveg2021', 'H25', 'H13', 'H14', 'H15'];
+            $explanation = "<p>The Youth Survey asks questions about nutrition (including fruit, vegetable, and sugar consumption) and unhealthy weight loss behaviors.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Nutrition\" or \"Unhealthy Weight Loss Behaviors\" to see all questions related to this topic.</p>";
         }
         else {
+            $title = "Nutrition";
             $qCodes = ['fruitveg', 'H25', 'H26'];
+            $explanation = "<p>The Youth Survey asks questions about nutrition (including fruit, vegetable, and sugar consumption).</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Nutrition\" to see all questions related to this topic.</p>";
         }
-        $explanation = "<p>The Youth Survey asks questions about nutrition (including fruit, vegetable, and sugar consumption) and unhealthy weight loss behaviors.</p>
-            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"Nutrition\" or \"Unhealthy Weight Loss Behaviors\" to see all questions related to this topic.</p>";
     }
 
     if ($cat == 11) {
         $title = "Risk and Safety Behaviors";
         if ($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['S3', 'S10'];
+            $qCodes = ['S3', 'S10','gambling'];
         }
         else {
             $qCodes = [];
@@ -181,13 +184,15 @@ function getHighlightGroup2025($cat, $dataset, $year)
     if ($cat == 12) {
         $title = "Academics and School Life";
         if ($dataset == DataService::EIGHT_TO_TWELVE) {
-            $qCodes = ['C11', 'RS2', 'RS3A', 'RS3C', 'PI8A'];
+            $qCodes = ['C11', 'RS2', 'RS3C', 'PI8A'];
+            $explanation = "<p>The Youth Survey asks questions about academics and school behaviors, including doing homework, skipping school, and cheating.</p>
+            <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
         }
         else {
             $qCodes = ['C11', 'PI8A', 'PS3A', 'PS6A', 'PS14'];
-        }
-        $explanation = "<p>The Youth Survey asks questions about academics and school behaviors, including doing homework, missing school, and cheating.</p>
+            $explanation = "<p>The Youth Survey asks questions about academics and school behaviors, including doing homework and cheating.</p>
             <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";
+        }
     }
 
     if ($cat == 13) {
@@ -196,7 +201,7 @@ function getHighlightGroup2025($cat, $dataset, $year)
             $qCodes = ['H3', 'H31', 'C2', 'C12', 'C13', 'H20'];
         }
         else {
-            $qCodes = ['H3', 'H16', 'C2', 'C12', 'C13', 'H20'];
+            $qCodes = ['H3', 'H16', 'C2', 'C13', 'H20'];
         }
         $explanation = "<p>The Youth Survey asks questions about out-of-school activities, including physical exercise, social activities, work, and sleep.</p>
             <p>Visit <b><a href='graphs.php'>Explore the Data</a></b> and set the category to \"$title\" to see all questions related to this topic.</p>";

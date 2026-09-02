@@ -127,11 +127,13 @@ include_js(); ?>
     let dataset = <?php echo json_encode($dataset); ?>;
     let group = <?php echo json_encode($group); ?>;
     let pyramid = <?php echo json_encode($pyramid); ?>;
+    graph = <?php echo json_encode($graph); ?>;
+    mainTitle = <?php echo json_encode($highlightGroup->title); ?>;
+
+    if(graph.percentData.length > 0)
+        createBarGraph(graph.percentData, mainTitle, graph.groupingVariable?.summary, graph.groupingVariable?.labels || ['Total'], graph.tooltips);
 
     $(function() {
-        graph = <?php echo json_encode($graph); ?>;
-        mainTitle = <?php echo json_encode($highlightGroup->title); ?>;
-
         //hide some inputs based on dataset or category
         if(dataset === '6th')
             $(".hide6").hide();
@@ -141,8 +143,6 @@ include_js(); ?>
         SetGroupOptions(dataset, year, category);
 
         if(graph.percentData.length > 0) {
-            createBarGraph(graph.percentData, mainTitle, graph.groupingVariable?.summary, graph.groupingVariable?.labels || ['Total'], graph.tooltips);
-
             if (graph.groupingVariable == null)
                 createSimpleHighlightTable($('#datatable'), graph.mainVariable.labels, graph.percentData, graph.sumTotals);
             else

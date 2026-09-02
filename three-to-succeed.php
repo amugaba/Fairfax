@@ -107,18 +107,15 @@ if($year >= 2025) {
         else { ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
+                <?php if($graph->notes != null) {
+                    echo "<p><b>Note:</b> $graph->notes</p>";
+                } ?>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right" class="hideIfNoGraph">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100; margin-right: 80px">
             </div>
 
             <div id="chartdiv" style="width: 100%; height:700px;"></div>
-
-            <?php if($graph->notes != null) {
-                echo "<div style='text-align: center'>
-                        <p><b>**Note:</b> $graph->notes</p>
-                      </div>";
-            } ?>
 
             <div style="text-align: center">
                 <div class="grid assetsBox">
@@ -200,6 +197,9 @@ include_js(); ?>
     let category = <?= json_encode($cat); ?>;
     let group = <?= json_encode($group); ?>;
 
+    if(graph != null && graph.labels.length > 0)
+        createLineChart(graph.percentData, graph.labels, 'Number of Assets');
+
     $(function() {
         //Enable jQuery elements
         enableSelect2(questions, "#category", "#question");
@@ -215,7 +215,6 @@ include_js(); ?>
                 $(".showIfNoData").show();
             }
             else {
-                createLineChart(graph.percentData, graph.labels, 'Number of Assets');
                 createGraphTitle();
                 simpleTrendTable($('#datatable'), graph.labels, graph.assetLabels, graph.percentData, "Number of Assets", graph.assetTotals);
             }

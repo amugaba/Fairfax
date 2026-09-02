@@ -157,6 +157,9 @@ $categories = $ds->getCategories();
         { ?>
             <div style="text-align: center;">
                 <div id="graphTitle"></div>
+                <?php if($graph->notes != null) {
+                    echo "<p><b>Note:</b> $graph->notes</p>";
+                } ?>
             </div>
             <div style="overflow: visible; height: 1px; width: 100%; text-align: right">
                 <input type="button" onclick="exportGraph()" value="Export to PDF" class="btn btn-blue" style="position: relative; z-index: 100">
@@ -202,6 +205,11 @@ include_js(); ?>
     let cat1 = <?= json_encode($cat1); ?>;
     let cat2 = <?= json_encode($cat2); ?>;
 
+    if(graph != null && !graph.belowThreshold && !graph.mainVarUnavailable && !graph.groupVarUnavailable) {
+        createBarGraph(graph.percentData, graph.mainVariable.question, graph.groupingVariable?.question,
+            graph.groupingVariable?.labels || ['Total'], null, graph.mainVariable.summary);
+    }
+
     $(function() {
         //Enable jQuery elements
         enableSelect2(questions, "#category1", "#question1");
@@ -214,9 +222,6 @@ include_js(); ?>
 
         if(graph != null && !graph.belowThreshold && !graph.mainVarUnavailable && !graph.groupVarUnavailable)
         {
-            createBarGraph(graph.percentData, graph.mainVariable.question, graph.groupingVariable?.question,
-                graph.groupingVariable?.labels || ['Total'], null, graph.mainVariable.summary);
-
             if(graph.groupingVariable == null)
                 createSimpleExplorerTable($('#datatable'), graph.mainVariable.labels, graph.mainVariable.counts, graph.sumTotal);
             else
